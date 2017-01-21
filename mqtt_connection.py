@@ -7,11 +7,11 @@ import paho.mqtt.client as paho
 
 
 class MqttConnection(object):
-    def __init__(self, hostname, port):
+    def __init__(self, hostname, port, userdata=None):
         self.__hostname = hostname
         self.__port = port
         self.__retry = True
-        self.__client = paho.Client(userdata={"hostname": hostname, "port": port})
+        self.__client = paho.Client(userdata=userdata)
         self.__thread = None
 
     @property
