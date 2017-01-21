@@ -1,5 +1,6 @@
 import platform
 import sys
+import time
 
 
 def mqtt_broker_info(val):
@@ -13,3 +14,7 @@ def is_raspi():
 
 def is_python3():
     return sys.version_info[0] >= 3
+
+
+def sleep():
+    time.sleep(60)
