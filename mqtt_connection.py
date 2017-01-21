@@ -29,7 +29,7 @@ class MqttConnection(object):
                     logging.error("Cannot connect to MQTT broker {0}:{1}".format(self.__hostname, self.__port))
                     time.sleep(1)
                 except BaseException as e:
-                    logging.error("Cannot connect to MQTT broker {0}:{1} [e]".format(self.__hostname, self.__port, e))
+                    logging.error("Cannot connect to MQTT broker {0}:{1} [{2}]".format(self.__hostname, self.__port, e))
                     time.sleep(1)
 
         if self.__thread is not None:
