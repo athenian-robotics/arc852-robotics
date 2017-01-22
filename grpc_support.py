@@ -1,3 +1,4 @@
+import traceback
 from logging import error
 from logging import info
 from threading import Event
@@ -47,6 +48,9 @@ class GenericServer(object):
                             yield val
                     else:
                         info("Skipped sending data to client {0}".format(name))
+        except BaseException as e:
+            traceback.print_exc()
+            error("Unknown error generating values [{0}]".format(e))
         finally:
             info("Discontinued streaming values for client {0}".format(name))
             with self._lock:

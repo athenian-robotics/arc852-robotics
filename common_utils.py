@@ -17,4 +17,5 @@ def is_python3():
 
 
 def sleep():
-    time.sleep(60)
+    while True:
+        time.sleep(60)
