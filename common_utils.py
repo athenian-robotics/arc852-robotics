@@ -12,6 +12,10 @@ def is_raspi():
     return platform.system() == "Linux"
 
 
+def is_windows():
+    return sys.platform == "win32"
+
+
 def is_python3():
     return sys.version_info[0] >= 3
 
