@@ -2,19 +2,6 @@ import cv2
 import numpy as np
 
 
-def find_max_contour(contours, minimum):
-    max_index = -1
-    max_val = 0
-    if contours:
-        for i, c in enumerate(contours):
-            moments = cv2.moments(c)
-            area = moments["m00"]
-            if area >= minimum and 0 <= max_val < area:
-                max_val = area
-                max_index = i
-    return contours[max_index] if max_index != -1 else None
-
-
 class ContourFinder(object):
     def __init__(self, bgr_color, hsv_range):
         bgr_img = np.uint8([[bgr_color]])
@@ -23,7 +10,26 @@ class ContourFinder(object):
         self.__lower = np.array([hsv_value - hsv_range, 100, 100])
         self.__upper = np.array([hsv_value + hsv_range, 255, 255])
 
-    def get_max_contour(self, image, minimum):
+    @staticmethod
+    def old_find_max_contour(contours, minimum):
+        max_index = -1
+        max_val = 0
+        if contours:
+            for i, c in enumerate(contours):
+                moments = cv2.moments(c)
+                area = moments["m00"]
+                if area >= minimum and 0 <= max_val < area:
+                    max_val = area
+                    max_index = i
+        return contours[max_index] if max_index != -1 else None
+
+    @staticmethod
+    def find_max_contour(contours, minimum, count=1):
+        eligible = [c for c in contours if cv2.moments(c)["m00"] > minimum]
+        val = sorted(eligible, key=lambda c: cv2.moments(c)["m00"], reverse=True)[:count]
+        return val if val else None
+
+    def get_max_contours(self, image, minimum, count=1):
         # Convert from BGR to HSV colorspace
         hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
@@ -44,5 +50,5 @@ class ContourFinder(object):
         # cv2.imshow("Res", in_range_result)
         # cv2.imshow("Grayscale", grayscale)
 
-        # Return max contour
-        return find_max_contour(contours, minimum)
+        # Return max contours
+        return ContourFinder.find_max_contour(contours, minimum, count=count)
