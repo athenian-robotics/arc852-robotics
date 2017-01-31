@@ -63,6 +63,10 @@ def camera(parser):
     parser.add_argument("-c", "--camera", required=True, help="Camera name")
 
 
+def camera_optional(parser):
+    parser.add_argument("-c", "--camera", required=False, help="Camera name")
+
+
 def mqtt(parser):
     parser.add_argument("-m", "--mqtt", required=True, help="MQTT server hostname")
 
