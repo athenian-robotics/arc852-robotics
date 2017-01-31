@@ -1,4 +1,12 @@
+import argparse
 import logging
+
+
+def setup_cli_args(*args):
+    parser = argparse.ArgumentParser()
+    for arg in args:
+        arg(parser)
+    return vars(parser.parse_args())
 
 
 def bgr(parser):
