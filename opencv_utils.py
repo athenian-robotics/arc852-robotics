@@ -21,3 +21,7 @@ def save_image(frame):
     file_name = "ct-{0}.png".format(datetime.datetime.now().strftime("%H-%M-%S"))
     cv2.imwrite(file_name, frame)
     info("Wrote image to {0}".format(file_name))
+
+
+def get_list_arg(val):
+    return eval(val if "[" in val else "[{0}]".format(val))
