@@ -17,10 +17,16 @@ def get_moment(contour):
     return contour, area, x, y
 
 
-def save_image(frame):
-    file_name = "ct-{0}.png".format(datetime.datetime.now().strftime("%H-%M-%S"))
+def write_image(frame, file_name=None, log_info=False):
+    fname = file_name if file_name is not None else "ct-{0}.png".format(datetime.datetime.now().strftime("%H-%M-%S"))
     cv2.imwrite(file_name, frame)
-    info("Wrote image to {0}".format(file_name))
+    if log_info:
+        info("Wrote image to {0}".format(fname))
+
+
+def encode_image(frame, ext=".jpg"):
+    retval, buf = cv2.imencode(ext, frame)
+    return retval, buf
 
 
 def get_list_arg(val):

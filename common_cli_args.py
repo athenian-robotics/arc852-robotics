@@ -73,3 +73,7 @@ def calib(parser):
 
 def alternate(parser):
     parser.add_argument("-a", "--alternate", default=False, action="store_true", help="Alternate servo actions [false]")
+
+
+def http(parser):
+    parser.add_argument("-t", "--http", default=False, action="store_true", help="Enable HTTP server [false]")

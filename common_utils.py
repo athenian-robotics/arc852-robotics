@@ -23,3 +23,7 @@ def is_python3():
 def sleep():
     while True:
         time.sleep(60)
+
+
+def currentTimeMillis():
+    return int(round(time.time() * 1000))
