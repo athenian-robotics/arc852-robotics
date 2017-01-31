@@ -81,3 +81,7 @@ def alternate(parser):
 
 def http(parser):
     parser.add_argument("-t", "--http", default=False, action="store_true", help="Enable HTTP server [false]")
+
+
+def pause(parser):
+    parser.add_argument("-s", "--pause", default=0.5, type=float, help="HTTP pause secs [0.5]")
