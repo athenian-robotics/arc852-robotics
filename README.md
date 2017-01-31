@@ -15,5 +15,5 @@ as described [here](http://www.athenian-robotics.org/numpy/)
 
 * To include this package in `PYTHONPATH` use:
 ```bash
-$ export PYTHONPATH=${PYTHONPATH}:../common_robotics_python
+$ export PYTHONPATH=${PYTHONPATH}:../common_robotics
 ```
