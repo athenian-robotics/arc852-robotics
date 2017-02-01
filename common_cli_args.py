@@ -79,9 +79,13 @@ def alternate(parser):
     parser.add_argument("-a", "--alternate", default=False, action="store_true", help="Alternate servo actions [false]")
 
 
-def http(parser):
+def http_enable(parser):
     parser.add_argument("-t", "--http", default=False, action="store_true", help="Enable HTTP server [false]")
 
 
-def pause(parser):
+def http_host(parser):
+    parser.add_argument("-o", "--host", default="localhost", required=False, help="HTTP hostname [localhost]")
+
+
+def http_pause(parser):
     parser.add_argument("-s", "--pause", default=0.5, type=float, help="HTTP pause secs [0.5]")
