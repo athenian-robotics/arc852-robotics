@@ -11,7 +11,7 @@ from common_utils import is_windows
 DEFAULT_BAUD = 115200
 
 
-class ArduinoReader(object):
+class SerialReader(object):
     def __init__(self):
         self.lock = Lock()
         self.event = Event()
@@ -20,7 +20,7 @@ class ArduinoReader(object):
 
     # Read data from serial port and pass it along to the consumer
     # If the consumer runs slower than the producer, then values will be dropped
-    def produce_data(self, port, baudrate):
+    def read_serial_port(self, port, baudrate):
         ser = None
         try:
             # Open serial port
@@ -29,6 +29,7 @@ class ArduinoReader(object):
             while not self.stopped:
                 try:
                     # Read data from serial port.  Ignore the trailing two chars with [:-2]
+                    # Do not call readline() inside mutex because it might block
                     bytes = ser.readline()[:-2]
 
                     # Update data with mutex
@@ -50,9 +51,9 @@ class ArduinoReader(object):
             if ser is not None:
                 ser.close()
 
-    # Consume data without doing a busy wait
-    # If the consumer runs faster than the producer, it will wait on self.event
-    def consume_data(self, func):
+    # Process data without doing a busy wait
+    # If process_data() runs faster than read_serial_port(), it will wait on self.event
+    def process_data(self, func):
         while not self.stopped:
             try:
                 # Wait for data
@@ -72,12 +73,13 @@ class ArduinoReader(object):
                 traceback.print_exc()
                 time.sleep(1)
 
-    def start_producer(self, port, baudrate=DEFAULT_BAUD):
+    def start(self, func, port, baudrate=DEFAULT_BAUD):
+        # Start read_serial_port()
         port_path = ("" if is_windows() or "/dev/" in port else "/dev/") + port
-        Thread(target=self.produce_data, args=(port_path, baudrate)).start()
+        Thread(target=self.read_serial_port, args=(port_path, baudrate)).start()
 
-    def start_consumer(self, func):
-        Thread(target=self.consume_data, args=(func,)).start()
+        # Start process_data()
+        Thread(target=self.process_data, args=(func,)).start()
 
     def stop(self):
         self.stopped = True
