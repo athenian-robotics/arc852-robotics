@@ -81,5 +81,7 @@ class SerialReader(object):
         # Start process_data()
         Thread(target=self.process_data, args=(func,)).start()
 
+        self.stopped = False
+
     def stop(self):
         self.stopped = True
