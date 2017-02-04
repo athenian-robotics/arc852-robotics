@@ -37,7 +37,7 @@ def range(parser):
     parser.add_argument("-r", "--range", default=20, type=int, help="HSV range")
 
 
-def port(parser):
+def grpc_port(parser):
     parser.add_argument("-p", "--port", default=50051, type=int, help="gRPC port [50051]")
 
 
@@ -79,12 +79,9 @@ def alternate(parser):
     parser.add_argument("-a", "--alternate", default=False, action="store_true", help="Alternate servo actions [false]")
 
 
-def http_enable(parser):
-    parser.add_argument("-t", "--http", default=False, action="store_true", help="Enable HTTP server [false]")
-
-
 def http_host(parser):
-    parser.add_argument("-o", "--host", default="localhost", required=False, help="HTTP hostname [localhost]")
+    parser.add_argument("-t", "--http", default="localhost:8080", required=False,
+                        help="HTTP hostname:port [localhost:8080]")
 
 
 def http_pause(parser):
