@@ -64,10 +64,10 @@ class SerialReader(object):
 
                 # Read data with mutex
                 with self.lock:
-                    tuple = eval(self.data)
+                    str = self.data
 
                 # Call func with data
-                func(tuple)
+                func(str)
 
             except BaseException as e:
                 traceback.print_exc()
