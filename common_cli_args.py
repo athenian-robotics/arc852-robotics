@@ -17,8 +17,12 @@ def usb(parser):
     parser.add_argument("-u", "--usb", default=False, action="store_true", help="Use USB Raspi camera [false]")
 
 
-def flip(parser):
-    parser.add_argument("-f", "--flip", default=False, action="store_true", help="Flip image [false]")
+def flip_x(parser):
+    parser.add_argument("-x", "--flipx", default=False, action="store_true", help="Flip image on X axis[false]")
+
+
+def flip_y(parser):
+    parser.add_argument("-y", "--flipy", default=False, action="store_true", help="Flip image on Y axis[false]")
 
 
 def width(parser):

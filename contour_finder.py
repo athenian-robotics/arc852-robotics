@@ -11,19 +11,6 @@ class ContourFinder(object):
         self.__upper = np.array([hsv_value + hsv_range, 255, 255])
 
     @staticmethod
-    def old_find_max_contour(contours, minimum):
-        max_index = -1
-        max_val = 0
-        if contours:
-            for i, c in enumerate(contours):
-                moments = cv2.moments(c)
-                area = moments["m00"]
-                if area >= minimum and 0 <= max_val < area:
-                    max_val = area
-                    max_index = i
-        return contours[max_index] if max_index != -1 else None
-
-    @staticmethod
     def find_max_contour(contours, minimum, count=1):
         eligible = [c for c in contours if cv2.moments(c)["m00"] > minimum]
         val = sorted(eligible, key=lambda c: cv2.moments(c)["m00"], reverse=True)[:count]
