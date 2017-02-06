@@ -88,5 +88,5 @@ def http_host(parser):
                         help="HTTP hostname:port [localhost:8080]")
 
 
-def http_pause(parser):
-    parser.add_argument("-s", "--pause", default=0.5, type=float, help="HTTP pause secs [0.5]")
+def http_delay(parser):
+    parser.add_argument("-s", "--delay", default=0.25, type=float, help="HTTP delay secs [0.25]")
