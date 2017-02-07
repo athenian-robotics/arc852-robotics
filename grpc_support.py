@@ -6,10 +6,12 @@ from threading import Lock
 
 from dict_utils import itervalues
 
+grpc_port_default = 50051
+
 
 class GenericClient(object):
     def __init__(self, hostname):
-        self._hostname = hostname if ":" in hostname else hostname + ":50051"
+        self._hostname = hostname if ":" in hostname else hostname + ":{0}".format(grpc_port_default)
         self._lock = Lock()
         self._stopped = False
 

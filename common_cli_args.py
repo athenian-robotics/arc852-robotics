@@ -1,6 +1,8 @@
 import argparse
 import logging
 
+import grpc_support
+
 
 def setup_cli_args(*args):
     parser = argparse.ArgumentParser()
@@ -42,7 +44,8 @@ def range(parser):
 
 
 def grpc_port(parser):
-    parser.add_argument("-p", "--port", default=50051, type=int, help="gRPC port [50051]")
+    parser.add_argument("-p", "--port", default=grpc_support.grpc_port_default, type=int,
+                        help="gRPC port [{0}]".format(grpc_support.grpc_port_default))
 
 
 def leds(parser):
@@ -90,3 +93,7 @@ def http_host(parser):
 
 def http_delay(parser):
     parser.add_argument("-s", "--delay", default=0.25, type=float, help="HTTP delay secs [0.25]")
+
+
+def http_path(parser):
+    parser.add_argument("-i", "--path", default="./html", help="HTTP template dir or file [./html]")
