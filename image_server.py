@@ -20,6 +20,7 @@ path = os.path.abspath(sys.modules[__name__].__file__)
 dir = os.path.dirname(path)
 http_file_default = dir + "/html/image-reader.html"
 
+logger = logging.getLogger(__name__)
 
 class ImageServer(object):
     def __init__(self, camera_name, http_host, http_delay_secs, http_file):
@@ -64,7 +65,7 @@ class ImageServer(object):
         if self.__launched or not self.enabled:
             return
 
-        logging.info("Using template file {0}".format(self.__http_file))
+        logger.info("Using template file {0}".format(self.__http_file))
 
         flask = Flask(__name__)
 
@@ -85,7 +86,7 @@ class ImageServer(object):
                     .replace("_WIDTH_", str(width)) \
                     .replace("_HEIGHT_", str(height))
             except BaseException as e:
-                logging.error("Unable to create template file with {0} [{1}]".format(self.__http_file, e))
+                logger.error("Unable to create template file with {0} [{1}]".format(self.__http_file, e))
                 traceback.print_exc()
                 time.sleep(1)
 
@@ -119,13 +120,13 @@ class ImageServer(object):
                 try:
                     flask_server.run(host=host, port=port)
                 except BaseException as e:
-                    logging.error("Restarting HTTP server [{0}]".format(e))
+                    logger.error("Restarting HTTP server [{0}]".format(e))
                     traceback.print_exc()
                     time.sleep(1)
                 finally:
-                    logging.info("HTTP server shutdown")
+                    logger.info("HTTP server shutdown")
 
         # Run HTTP server in a thread
         Thread(target=run_http, kwargs={"flask_server": flask, "host": self.__host, "port": self.__port}).start()
         self.__launched = True
-        logging.info("Started HTTP server listening on {0}:{1}".format(self.__host, self.__port))
+        logger.info("Started HTTP server listening on {0}:{1}".format(self.__host, self.__port))

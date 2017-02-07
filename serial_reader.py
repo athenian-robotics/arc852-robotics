@@ -11,6 +11,7 @@ from common_utils import is_windows
 
 DEFAULT_BAUD = 115200
 
+logger = logging.getLogger(__name__)
 
 class SerialReader(object):
     def __init__(self):
@@ -41,12 +42,12 @@ class SerialReader(object):
                     self.event.set()
 
                 except BaseException as e:
-                    logging.error("Unable to read serial data [{0}]".format(e))
+                    logger.error("Unable to read serial data [{0}]".format(e))
                     traceback.print_exc()
                     time.sleep(1)
 
         except serial.serialutil.SerialException as e:
-            logging.error("Unable to open serial port [{0}]".format(e))
+            logger.error("Unable to open serial port [{0}]".format(e))
             traceback.print_exc()
             sys.exit(0)
 
@@ -73,7 +74,7 @@ class SerialReader(object):
                 func(str)
 
             except BaseException as e:
-                logging.error("Error while calling func [{0}]".format(e))
+                logger.error("Error while calling func [{0}]".format(e))
                 traceback.print_exc()
                 time.sleep(1)
 

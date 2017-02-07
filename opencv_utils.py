@@ -1,5 +1,5 @@
 import datetime
-from logging import info
+import logging
 
 import cv2
 
@@ -8,6 +8,7 @@ GREEN = (0, 255, 0)
 BLUE = (255, 0, 0)
 YELLOW = (0, 255, 255)
 
+logger = logging.getLogger(__name__)
 
 def get_moment(contour):
     moment1 = cv2.moments(contour)
@@ -21,7 +22,7 @@ def write_image(frame, file_name=None, log_info=False):
     fname = file_name if file_name is not None else "ct-{0}.png".format(datetime.datetime.now().strftime("%H-%M-%S"))
     cv2.imwrite(file_name, frame)
     if log_info:
-        info("Wrote image to {0}".format(fname))
+        logger.info("Wrote image to {0}".format(fname))
 
 
 def encode_image(frame, ext=".jpg"):

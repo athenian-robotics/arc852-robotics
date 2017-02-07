@@ -1,6 +1,5 @@
+import logging
 import traceback
-from logging import error
-from logging import info
 from threading import Event
 from threading import Lock
 
@@ -8,6 +7,7 @@ from dict_utils import itervalues
 
 grpc_port_default = 50051
 
+logger = logging.getLogger(__name__)
 
 class GenericClient(object):
     def __init__(self, hostname):
@@ -49,19 +49,19 @@ class GenericServer(object):
                         if val is not None:
                             yield val
                     else:
-                        info("Skipped sending data to client {0}".format(name))
+                        logger.info("Skipped sending data to client {0}".format(name))
         except BaseException as e:
-            error("Unknown error generating values [{0}]".format(e))
+            logger.error("Unknown error generating values [{0}]".format(e))
             traceback.print_exc()
         finally:
-            info("Discontinued streaming values for client {0}".format(name))
+            logger.info("Discontinued streaming values for client {0}".format(name))
             with self._lock:
                 if self._clients.pop(name, None) is None:
-                    error("Error releasing client {0}".format(name))
+                    logger.error("Error releasing client {0}".format(name))
 
     def stop(self):
         if not self._stopped:
-            info("Stopping server")
+            logger.info("Stopping server")
             self._stopped = True
             self.set_currval(None)
             self._grpc_server.stop(0)
