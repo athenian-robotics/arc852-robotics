@@ -3,8 +3,10 @@ import os
 import sys
 import time
 import traceback
+from threading import Lock
 from threading import Thread
 
+import opencv_utils as utils
 import requests
 from flask import Flask
 from flask import redirect
@@ -20,33 +22,49 @@ http_file_default = dir + "/html/image-reader.html"
 
 
 class ImageServer(object):
-    def __init__(self, camera_name, http_host, http_delay_secs, http_path, image_src):
+    def __init__(self, camera_name, http_host, http_delay_secs, http_file):
         self.__camera_name = camera_name
         self.__http_host = http_host
         self.__http_delay_secs = http_delay_secs
-        self.__image_src = image_src
+        self.__http_file = http_file
 
         vals = self.__http_host.split(":")
         self.__host = vals[0]
         self.__port = vals[1] if len(vals) == 2 else 8080
-        self.__http_path = http_path
 
+        self.__current_image_lock = Lock()
+        self.__current_image = None
         self.__launched = False
         self.__stopped = False
         self.__ready_to_stop = False
 
-    def is_enabled(self):
+    @property
+    def enabled(self):
         return len(self.__http_host) > 0
+
+    @property
+    def image(self):
+        with self.__current_image_lock:
+            if self.__current_image is None:
+                return []
+            retval, buf = utils.encode_image(self.__current_image)
+            return buf.tobytes()
+
+    @image.setter
+    def image(self, image):
+        if self.enabled:
+            with self.__current_image_lock:
+                self.__current_image = image
 
     def stop(self):
         self.__ready_to_stop = True
         requests.post("http://{0}:{1}/__shutdown__".format(self.__host, self.__port))
 
     def serve_images(self, width, height):
-        if self.__launched or not self.is_enabled():
+        if self.__launched or not self.enabled:
             return
 
-        logging.info("Using html page template {0}".format(self.__http_path))
+        logging.info("Using template file {0}".format(self.__http_file))
 
         flask = Flask(__name__)
 
@@ -57,17 +75,17 @@ class ImageServer(object):
         def get_page(delay):
             delay_secs = float(delay) if delay else self.__http_delay_secs
             try:
-                with open(self.__http_path) as f:
+                with open(self.__http_file) as f:
                     html = f.read()
 
-                name = self.__camera_name if self.__camera_name else "UNNAMED"
-                return html.replace("_TITLE_", "Camera " + name) \
+                name = self.__camera_name if self.__camera_name else "Unnamed"
+                return html.replace("_TITLE_", name + " camera") \
                     .replace("_DELAY_SECS_", str(delay_secs)) \
                     .replace("_NAME_", name) \
                     .replace("_WIDTH_", str(width)) \
                     .replace("_HEIGHT_", str(height))
             except BaseException as e:
-                logging.error("Unable to generate html page for {0} [{1}]".format(self.__http_path, e))
+                logging.error("Unable to create template file with {0} [{1}]".format(self.__http_file, e))
                 traceback.print_exc()
                 time.sleep(1)
 
@@ -81,8 +99,7 @@ class ImageServer(object):
 
         @flask.route("/image.jpg")
         def image_jpg():
-            b = self.__image_src()
-            response = Response(b, mimetype="image/jpeg")
+            response = Response(self.image, mimetype="image/jpeg")
             response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
             response.headers['Pragma'] = 'no-cache'
             return response
