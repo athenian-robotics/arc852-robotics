@@ -3,20 +3,15 @@ import numpy as np
 
 
 class ContourFinder(object):
-    def __init__(self, bgr_color, hsv_range):
+    def __init__(self, bgr_color, hsv_range, minimum):
+        self.__minimum = minimum
         bgr_img = np.uint8([[bgr_color]])
         hsv_img = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2HSV)
         hsv_value = hsv_img[0, 0, 0]
         self.__lower = np.array([hsv_value - hsv_range, 100, 100])
         self.__upper = np.array([hsv_value + hsv_range, 255, 255])
 
-    @staticmethod
-    def find_max_contour(contours, minimum, count=1):
-        eligible = [c for c in contours if cv2.moments(c)["m00"] > minimum]
-        val = sorted(eligible, key=lambda c: cv2.moments(c)["m00"], reverse=True)[:count]
-        return val if val else None
-
-    def get_max_contours(self, image, minimum, count=1):
+    def get_max_contours(self, image, count=1):
         # Convert from BGR to HSV colorspace
         hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
@@ -38,4 +33,6 @@ class ContourFinder(object):
         # cv2.imshow("Grayscale", grayscale)
 
         # Return max contours
-        return ContourFinder.find_max_contour(contours, minimum, count=count)
+        eligible = [c for c in contours if cv2.moments(c)["m00"] > self.__minimum]
+        val = sorted(eligible, key=lambda c: cv2.moments(c)["m00"], reverse=True)[:count]
+        return val if val else None

@@ -56,10 +56,6 @@ class ImageServer(object):
             with self.__current_image_lock:
                 self.__current_image = image
 
-    def stop(self):
-        self.__ready_to_stop = True
-        requests.post("http://{0}:{1}/__shutdown__".format(self.__host, self.__port))
-
     def serve_images(self, width, height):
         if self.__launched or not self.enabled:
             return
@@ -127,3 +123,7 @@ class ImageServer(object):
         Thread(target=run_http, kwargs={"flask_server": flask, "host": self.__host, "port": self.__port}).start()
         self.__launched = True
         logger.info("Started HTTP server listening on {0}:{1}".format(self.__host, self.__port))
+
+    def stop(self):
+        self.__ready_to_stop = True
+        requests.post("http://{0}:{1}/__shutdown__".format(self.__host, self.__port))
