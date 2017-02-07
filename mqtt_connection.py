@@ -1,12 +1,12 @@
 import logging
 import socket
 import time
-import traceback
 from threading import Thread
 
 import paho.mqtt.client as paho
 
 logger = logging.getLogger(__name__)
+
 
 class MqttConnection(object):
     def __init__(self, hostname, port, userdata=None):
@@ -31,8 +31,8 @@ class MqttConnection(object):
                     logger.error("Cannot connect to MQTT broker {0}:{1}".format(self.__hostname, self.__port))
                     time.sleep(1)
                 except BaseException as e:
-                    logger.error("Cannot connect to MQTT broker {0}:{1} [{2}]".format(self.__hostname, self.__port, e))
-                    traceback.print_exc()
+                    logger.error("Cannot connect to MQTT broker {0}:{1} [{2}]".format(self.__hostname, self.__port, e),
+                                 exc_info=True)
                     time.sleep(1)
 
         if self.__thread is not None:

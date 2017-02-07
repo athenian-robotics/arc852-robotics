@@ -1,5 +1,4 @@
 import logging
-import traceback
 from threading import Event
 from threading import Lock
 
@@ -51,8 +50,7 @@ class GenericServer(object):
                     else:
                         logger.info("Skipped sending data to client {0}".format(name))
         except BaseException as e:
-            logger.error("Unknown error generating values [{0}]".format(e))
-            traceback.print_exc()
+            logger.error("Unknown error generating values [{0}]".format(e), exc_info=True)
         finally:
             logger.info("Discontinued streaming values for client {0}".format(name))
             with self._lock:

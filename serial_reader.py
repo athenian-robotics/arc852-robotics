@@ -1,7 +1,6 @@
 import logging
 import sys
 import time
-import traceback
 from threading import Event
 from threading import Lock
 from threading import Thread
@@ -42,13 +41,11 @@ class SerialReader(object):
                     self.event.set()
 
                 except BaseException as e:
-                    logger.error("Unable to read serial data [{0}]".format(e))
-                    traceback.print_exc()
+                    logger.error("Unable to read serial data [{0}]".format(e), exc_info=True)
                     time.sleep(1)
 
         except serial.serialutil.SerialException as e:
-            logger.error("Unable to open serial port [{0}]".format(e))
-            traceback.print_exc()
+            logger.error("Unable to open serial port [{0}]".format(e), exc_info=True)
             sys.exit(0)
 
         finally:
@@ -74,8 +71,7 @@ class SerialReader(object):
                 func(str)
 
             except BaseException as e:
-                logger.error("Error while calling func [{0}]".format(e))
-                traceback.print_exc()
+                logger.error("Error while calling func [{0}]".format(e), exc_info=True)
                 time.sleep(1)
 
     def start(self, func, port, baudrate=DEFAULT_BAUD):

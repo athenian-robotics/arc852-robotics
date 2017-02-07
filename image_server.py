@@ -2,7 +2,6 @@ import logging
 import os
 import sys
 import time
-import traceback
 from threading import Lock
 from threading import Thread
 
@@ -86,8 +85,7 @@ class ImageServer(object):
                     .replace("_WIDTH_", str(width)) \
                     .replace("_HEIGHT_", str(height))
             except BaseException as e:
-                logger.error("Unable to create template file with {0} [{1}]".format(self.__http_file, e))
-                traceback.print_exc()
+                logger.error("Unable to create template file with {0} [{1}]".format(self.__http_file, e), exc_info=True)
                 time.sleep(1)
 
         @flask.route('/image')
@@ -120,8 +118,7 @@ class ImageServer(object):
                 try:
                     flask_server.run(host=host, port=port)
                 except BaseException as e:
-                    logger.error("Restarting HTTP server [{0}]".format(e))
-                    traceback.print_exc()
+                    logger.error("Restarting HTTP server [{0}]".format(e), exc_info=True)
                     time.sleep(1)
                 finally:
                     logger.info("HTTP server shutdown")
