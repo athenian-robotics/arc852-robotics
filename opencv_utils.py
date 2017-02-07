@@ -29,6 +29,3 @@ def encode_image(frame, ext=".jpg"):
     retval, buf = cv2.imencode(ext, frame)
     return retval, buf
 
-
-def get_list_arg(val):
-    return eval(val if "[" in val else "[{0}]".format(val))
