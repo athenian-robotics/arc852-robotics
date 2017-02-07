@@ -13,7 +13,7 @@ as described [here](http://www.athenian-robotics.org/numpy/)
 
 ## Notes
 
-* To include this package in `PYTHONPATH` use:
+* Include this package in `PYTHONPATH` with:
 ```bash
 $ export PYTHONPATH=${PYTHONPATH}:../common_robotics
 ```

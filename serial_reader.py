@@ -1,3 +1,4 @@
+import logging
 import sys
 import time
 import traceback
@@ -40,10 +41,12 @@ class SerialReader(object):
                     self.event.set()
 
                 except BaseException as e:
-                    print(e)
+                    logging.error("Unable to read serial data [{0}]".format(e))
+                    traceback.print_exc()
                     time.sleep(1)
 
         except serial.serialutil.SerialException as e:
+            logging.error("Unable to open serial port [{0}]".format(e))
             traceback.print_exc()
             sys.exit(0)
 
@@ -70,6 +73,7 @@ class SerialReader(object):
                 func(str)
 
             except BaseException as e:
+                logging.error("Error while calling func [{0}]".format(e))
                 traceback.print_exc()
                 time.sleep(1)
 

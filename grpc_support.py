@@ -51,8 +51,8 @@ class GenericServer(object):
                     else:
                         info("Skipped sending data to client {0}".format(name))
         except BaseException as e:
-            traceback.print_exc()
             error("Unknown error generating values [{0}]".format(e))
+            traceback.print_exc()
         finally:
             info("Discontinued streaming values for client {0}".format(name))
             with self._lock:

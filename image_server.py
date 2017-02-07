@@ -1,4 +1,6 @@
 import logging
+import os
+import sys
 import time
 import traceback
 from threading import Thread
@@ -11,12 +13,13 @@ from werkzeug.wrappers import Response
 
 http_host_default = "localhost:8080"
 http_delay_secs_default = 0.5
-http_path_default = "./html"
+
+path = os.path.abspath(sys.modules[__name__].__file__)
+dir = os.path.dirname(path)
+http_file_default = dir + "/html/image-reader.html"
 
 
 class ImageServer(object):
-    template_name = "image-reader.html"
-
     def __init__(self, camera_name, http_host, http_delay_secs, http_path, image_src):
         self.__camera_name = camera_name
         self.__http_host = http_host
@@ -26,25 +29,24 @@ class ImageServer(object):
         vals = self.__http_host.split(":")
         self.__host = vals[0]
         self.__port = vals[1] if len(vals) == 2 else 8080
-        self.__url = "http://{0}:{1}".format(self.__host, self.__port)
+        self.__http_path = http_path
 
         self.__launched = False
         self.__stopped = False
         self.__ready_to_stop = False
-        self.__path = (http_path if http_path.endswith(".html")
-                       else "{0}/{1}".format(http_path, self.template_name)).replace("//", "/")
-        logging.info("Using html page template {0}".format(self.__path))
 
     def is_enabled(self):
         return len(self.__http_host) > 0
 
     def stop(self):
         self.__ready_to_stop = True
-        requests.post('{0}/__shutdown__'.format(self.__url))
+        requests.post("http://{0}:{1}/__shutdown__".format(self.__host, self.__port))
 
     def serve_images(self, width, height):
         if self.__launched or not self.is_enabled():
             return
+
+        logging.info("Using html page template {0}".format(self.__http_path))
 
         flask = Flask(__name__)
 
@@ -55,16 +57,17 @@ class ImageServer(object):
         def get_page(delay):
             delay_secs = float(delay) if delay else self.__http_delay_secs
             try:
-                with open(self.__path) as f:
+                with open(self.__http_path) as f:
                     html = f.read()
-                    name = self.__camera_name if self.__camera_name else "UNNAMED"
-                    return html.replace("_TITLE_", "Camera: " + name) \
-                        .replace("_DELAY_SECS_", str(delay_secs)) \
-                        .replace("_NAME_", name) \
-                        .replace("_WIDTH_", str(width)) \
-                        .replace("_HEIGHT_", str(height))
+
+                name = self.__camera_name if self.__camera_name else "UNNAMED"
+                return html.replace("_TITLE_", "Camera " + name) \
+                    .replace("_DELAY_SECS_", str(delay_secs)) \
+                    .replace("_NAME_", name) \
+                    .replace("_WIDTH_", str(width)) \
+                    .replace("_HEIGHT_", str(height))
             except BaseException as e:
-                logging.error("Unable to generate html page for {0} [{1}]".format(self.__path, e))
+                logging.error("Unable to generate html page for {0} [{1}]".format(self.__http_path, e))
                 traceback.print_exc()
                 time.sleep(1)
 

@@ -31,8 +31,8 @@ class MqttConnection(object):
                     error("Cannot connect to MQTT broker {0}:{1}".format(self.__hostname, self.__port))
                     time.sleep(1)
                 except BaseException as e:
-                    traceback.print_exc()
                     error("Cannot connect to MQTT broker {0}:{1} [{2}]".format(self.__hostname, self.__port, e))
+                    traceback.print_exc()
                     time.sleep(1)
 
         if self.__thread is not None:
