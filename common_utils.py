@@ -27,3 +27,7 @@ def sleep():
 
 def currentTimeMillis():
     return int(round(time.time() * 1000))
+
+
+def strip_loglevel(args):
+    return {k: args[k] for k in args.keys() if k != "loglevel"}
