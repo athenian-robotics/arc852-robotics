@@ -39,5 +39,5 @@ class ContourFinder(object):
 
         # Return max contours
         eligible = [c for c in contours if cv2.moments(c)["m00"] > self.__minimum_pixels]
-        val = sorted(eligible, key=lambda c: cv2.moments(c)["m00"], reverse=True)[:count]
+        val = sorted(eligible, key=lambda v: cv2.moments(v)["m00"], reverse=True)[:count]
         return val if val else None

@@ -1,8 +1,9 @@
 import argparse
 import logging
+import os
+import sys
 
 import grpc_support
-from  image_server import http_file_default
 
 
 def setup_cli_args(*args):
@@ -102,6 +103,10 @@ def http_delay_secs(parser):
                         help="HTTP delay secs [0.25]")
 
 
+path = os.path.abspath(sys.modules[__name__].__file__)
+dirname = os.path.dirname(path)
+
+
 def http_file(parser):
-    parser.add_argument("-i", "--file", default=http_file_default, type=str, dest="http_file",
+    parser.add_argument("-i", "--file", default=dirname + "/html/image-reader.html", type=str, dest="http_file",
                         help="HTTP template file")

@@ -13,20 +13,16 @@ class MqttConnection(object):
         self.__hostname = hostname
         self.__port = port
         self.__retry = True
-        self.__client = paho.Client(userdata=userdata)
         self.__thread = None
-
-    @property
-    def client(self):
-        return self.__client
+        self.client = paho.Client(userdata=userdata)
 
     def connect(self):
         def connect_to_mqtt():
             while self.__retry:
                 try:
                     logger.info("Connecting to MQTT broker {0}:{1}...".format(self.__hostname, self.__port))
-                    self.__client.connect(self.__hostname, port=self.__port, keepalive=60)
-                    self.__client.loop_forever()
+                    self.client.connect(self.__hostname, port=self.__port, keepalive=60)
+                    self.client.loop_forever()
                 except socket.error:
                     logger.error("Cannot connect to MQTT broker {0}:{1}".format(self.__hostname, self.__port))
                     time.sleep(1)
@@ -43,4 +39,4 @@ class MqttConnection(object):
 
     def disconnect(self):
         self.__retry = False
-        self.__client.disconnect()
+        self.client.disconnect()

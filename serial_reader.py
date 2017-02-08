@@ -31,11 +31,11 @@ class SerialReader(object):
                 try:
                     # Read data from serial port.  Ignore the trailing two chars with [:-2]
                     # Do not call readline() inside mutex because it might block
-                    bytes = ser.readline()[:-2]
+                    b = ser.readline()[:-2]
 
                     # Update data with mutex
                     with self.lock:
-                        self.data = bytes.decode("utf-8")
+                        self.data = b.decode("utf-8")
 
                     # Notify consumer data is ready
                     self.event.set()
@@ -65,10 +65,10 @@ class SerialReader(object):
 
                 # Read data with mutex
                 with self.lock:
-                    str = self.data
+                    val = self.data
 
                 # Call func with data
-                func(str)
+                func(val)
 
             except BaseException as e:
                 logger.error("Error while calling func [{0}]".format(e), exc_info=True)

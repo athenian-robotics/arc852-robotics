@@ -1,6 +1,4 @@
 import logging
-import os
-import sys
 import time
 from threading import Lock
 from threading import Thread
@@ -15,11 +13,8 @@ from werkzeug.wrappers import Response
 http_host_default = "localhost:8080"
 http_delay_secs_default = 0.5
 
-path = os.path.abspath(sys.modules[__name__].__file__)
-dir = os.path.dirname(path)
-http_file_default = dir + "/html/image-reader.html"
-
 logger = logging.getLogger(__name__)
+
 
 class ImageServer(object):
     def __init__(self, camera_name, http_host, http_delay_secs, http_file):
