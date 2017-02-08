@@ -13,15 +13,17 @@ def setup_cli_args(*args):
 
 
 def bgr(parser):
-    parser.add_argument("-b", "--bgr", type=str, required=True, help="BGR target value, e.g., -b \"174, 56, 5\"")
+    parser.add_argument("-b", "--bgr", required=True, type=str, help="BGR target value, e.g., -b \"174, 56, 5\"")
 
 
 def usb(parser):
-    parser.add_argument("-u", "--usb", default=False, action="store_true", help="Use USB Raspi camera [false]")
+    parser.add_argument("-u", "--usb", default=False, required=False, action="store_true",
+                        help="Use USB Raspi camera [false]")
 
 
 def flip_x(parser):
-    parser.add_argument("-x", "--flipx", default=False, action="store_true", help="Flip image on X axis[false]")
+    parser.add_argument("-x", "--flipx", default=False, required=False, action="store_true",
+                        help="Flip image on X axis[false]")
 
 
 def flip_y(parser):
@@ -72,7 +74,7 @@ def camera(parser):
 
 
 def camera_optional(parser):
-    parser.add_argument("-c", "--camera", required=False, help="Camera name")
+    parser.add_argument("-c", "--camera", required=False, default="", help="Camera name")
 
 
 def mqtt(parser):
@@ -80,11 +82,12 @@ def mqtt(parser):
 
 
 def calib(parser):
-    parser.add_argument("-c", "--calib", default=False, action="store_true", help="Calibration mode [false]")
+    parser.add_argument("-c", "--calib", default=False, type=bool, action="store_true", help="Calibration mode [false]")
 
 
 def alternate(parser):
-    parser.add_argument("-a", "--alternate", default=False, action="store_true", help="Alternate servo actions [false]")
+    parser.add_argument("-a", "--alternate", default=False, type=bool, action="store_true",
+                        help="Alternate servo actions [false]")
 
 
 def http_host(parser):
@@ -97,4 +100,4 @@ def http_delay(parser):
 
 
 def http_file(parser):
-    parser.add_argument("-i", "--file", default=http_file_default, help="HTTP template file")
+    parser.add_argument("-i", "--file", default=http_file_default, type=str, help="HTTP template file")
