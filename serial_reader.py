@@ -6,7 +6,7 @@ from threading import Lock
 from threading import Thread
 
 import serial
-from common_utils import is_windows
+from utils import is_windows
 
 DEFAULT_BAUD = 115200
 

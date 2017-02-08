@@ -63,11 +63,6 @@ def display(parser):
     parser.add_argument("-d", "--display", default=False, action="store_true", help="Display image [false]")
 
 
-def verbose(parser):
-    parser.add_argument("-v", "--verbose", dest="loglevel", default=logging.INFO, action="store_const",
-                        const=logging.DEBUG, help="Include debugging info", )
-
-
 def grpc_host(parser):
     parser.add_argument("-g", "--grpc", dest="grpc_host", required=True, help="gRPC location server hostname")
 
@@ -103,6 +98,7 @@ def http_delay_secs(parser):
                         help="HTTP delay secs [0.25]")
 
 
+# Find where this package is installed
 path = os.path.abspath(sys.modules[__name__].__file__)
 dirname = os.path.dirname(path)
 
@@ -110,3 +106,8 @@ dirname = os.path.dirname(path)
 def http_file(parser):
     parser.add_argument("-i", "--file", default=dirname + "/html/image-reader.html", type=str, dest="http_file",
                         help="HTTP template file")
+
+
+def verbose(parser):
+    parser.add_argument("-v", "--verbose", dest="loglevel", default=logging.INFO, action="store_const",
+                        const=logging.DEBUG, help="Include debugging info", )

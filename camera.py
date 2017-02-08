@@ -1,8 +1,7 @@
 import time
 
 import cv2
-
-from common_utils import is_raspi
+from utils import is_raspi
 
 
 class Camera(object):

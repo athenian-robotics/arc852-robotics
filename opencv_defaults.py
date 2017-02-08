@@ -1,6 +1,6 @@
 import cv2
 
-from common_utils import is_raspi
+from utils import is_raspi
 
 TEXT_LOC = (10, 25)
 

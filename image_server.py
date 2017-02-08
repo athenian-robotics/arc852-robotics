@@ -15,9 +15,11 @@ http_delay_secs_default = 0.5
 
 logger = logging.getLogger(__name__)
 
+IMAGE_FNAME = "/image.jpg"
+
 
 class ImageServer(object):
-    def __init__(self, camera_name, http_host, http_delay_secs, http_file):
+    def __init__(self, camera_name, http_host, http_delay_secs, http_file, verbose=False):
         self.__camera_name = camera_name
         self.__http_host = http_host
         self.__http_delay_secs = http_delay_secs
@@ -32,6 +34,17 @@ class ImageServer(object):
         self.__launched = False
         self.__stopped = False
         self.__ready_to_stop = False
+
+        if not verbose:
+            class FlaskFilter(logging.Filter):
+                def __init__(self, fname):
+                    super(FlaskFilter, self).__init__()
+                    self.__fname = "GET {0}".format(fname)
+
+                def filter(self, record):
+                    return self.__fname not in record.msg
+
+            logging.getLogger('werkzeug').addFilter(FlaskFilter(IMAGE_FNAME))
 
     @property
     def enabled(self):
@@ -63,22 +76,6 @@ class ImageServer(object):
         def index():
             return redirect("/image?delay=.5")
 
-        def get_page(delay):
-            delay_secs = float(delay) if delay else self.__http_delay_secs
-            try:
-                with open(self.__http_file) as f:
-                    html = f.read()
-
-                name = self.__camera_name if self.__camera_name else "Unnamed"
-                return html.replace("_TITLE_", name + " camera") \
-                    .replace("_DELAY_SECS_", str(delay_secs)) \
-                    .replace("_NAME_", name) \
-                    .replace("_WIDTH_", str(width)) \
-                    .replace("_HEIGHT_", str(height))
-            except BaseException as e:
-                logger.error("Unable to create template file with {0} [{1}]".format(self.__http_file, e), exc_info=True)
-                time.sleep(1)
-
         @flask.route('/image')
         def image_option():
             return get_page(request.args.get("delay"))
@@ -87,7 +84,7 @@ class ImageServer(object):
         def image_path(delay):
             return get_page(delay)
 
-        @flask.route("/image.jpg")
+        @flask.route(IMAGE_FNAME)
         def image_jpg():
             response = Response(self.image, mimetype="image/jpeg")
             response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
@@ -104,6 +101,23 @@ class ImageServer(object):
                 shutdown_func()
             return "Shutting down..."
 
+        def get_page(delay):
+            delay_secs = float(delay) if delay else self.__http_delay_secs
+            try:
+                with open(self.__http_file) as f:
+                    html = f.read()
+
+                name = self.__camera_name if self.__camera_name else "Unnamed"
+                return html.replace("_TITLE_", name + " camera") \
+                    .replace("_DELAY_SECS_", str(delay_secs)) \
+                    .replace("_NAME_", name) \
+                    .replace("_WIDTH_", str(width)) \
+                    .replace("_HEIGHT_", str(height)) \
+                    .replace("_IMAGE_FNAME_", IMAGE_FNAME)
+            except BaseException as e:
+                logger.error("Unable to create template file with {0} [{1}]".format(self.__http_file, e), exc_info=True)
+                time.sleep(1)
+
         def run_http(flask_server, host, port):
             while not self.__stopped:
                 try:
@@ -117,7 +131,7 @@ class ImageServer(object):
         # Run HTTP server in a thread
         Thread(target=run_http, kwargs={"flask_server": flask, "host": self.__host, "port": self.__port}).start()
         self.__launched = True
-        logger.info("Started HTTP server listening on {0}:{1}".format(self.__host, self.__port))
+        logger.info("Running HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
 
     def stop(self):
         self.__ready_to_stop = True

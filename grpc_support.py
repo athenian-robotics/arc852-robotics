@@ -2,7 +2,7 @@ import logging
 from threading import Event
 from threading import Lock
 
-from dict_utils import itervalues
+from utils import itervalues
 
 grpc_port_default = 50051
 
