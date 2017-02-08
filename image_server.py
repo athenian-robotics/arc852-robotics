@@ -126,4 +126,6 @@ class ImageServer(object):
 
     def stop(self):
         self.__ready_to_stop = True
-        requests.post("http://{0}:{1}/__shutdown__".format(self.__host, self.__port))
+        url = "http://{0}:{1}".format(self.__host, self.__port)
+        logger.info("Shutting down {0}".format(url))
+        requests.post("{0}/__shutdown__".format(url))
