@@ -34,10 +34,10 @@ def strip_loglevel(args):
     return {k: args[k] for k in args.keys() if k != "loglevel"}
 
 
-def setup_logging(level=None):
-    logging.basicConfig(**{"stream": sys.stderr,
-                           "level": level if level else logging.INFO,
-                           "format": "%(asctime)s %(name)-10s %(funcName)-10s():%(lineno)i: %(levelname)-6s %(message)s"})
+def setup_logging(stream=sys.stderr,
+                  level=logging.INFO,
+                  format="%(asctime)s %(name)-10s %(funcName)-10s():%(lineno)i: %(levelname)-6s %(message)s"):
+    logging.basicConfig(stream=stream, level=level, format=format)
 
 
 # As described at http://legacy.python.org/dev/peps/pep-0469/
