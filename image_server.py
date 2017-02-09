@@ -19,7 +19,7 @@ IMAGE_FNAME = "/image.jpg"
 
 
 class ImageServer(object):
-    def __init__(self, camera_name, http_host, http_delay_secs, http_file, verbose=False):
+    def __init__(self, http_file, camera_name="Unnamed", http_host=None, http_delay_secs=0.5, http_verbose=False):
         self.__camera_name = camera_name
         self.__http_host = http_host
         self.__http_delay_secs = http_delay_secs
@@ -36,7 +36,7 @@ class ImageServer(object):
         self.started = False
         self.stopped = False
 
-        if not verbose:
+        if not http_verbose:
             class FlaskFilter(logging.Filter):
                 def __init__(self, fname):
                     super(FlaskFilter, self).__init__()
@@ -80,7 +80,7 @@ class ImageServer(object):
 
         @flask.route('/')
         def index():
-            return redirect("/image?delay=.5")
+            return redirect("/image?delay={0}".format(self.__http_delay_secs))
 
         @flask.route('/image')
         def image_option():
@@ -113,7 +113,7 @@ class ImageServer(object):
                 with open(self.__http_file) as f:
                     html = f.read()
 
-                name = self.__camera_name if self.__camera_name else "Unnamed"
+                name = self.__camera_name
                 return html.replace("_TITLE_", name + " camera") \
                     .replace("_DELAY_SECS_", str(delay_secs)) \
                     .replace("_NAME_", name) \
@@ -140,8 +140,6 @@ class ImageServer(object):
         logger.info("Running HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
 
     def start(self):
-        # We cannot start the flask server until we know the dimensions of the image
-        # So we do not fire up the thread until the first image is available
         if self.__flask_launched or not self.enabled:
             return
 
@@ -149,6 +147,8 @@ class ImageServer(object):
             logger.error("ImageServer.start() already called")
             return
 
+        # We cannot start the flask server until we know the dimensions of the image
+        # So we do not fire up the thread until the first image is available
         logger.info("Using template file {0}".format(self.__http_file))
         logger.info("Starting HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
         self.started = True

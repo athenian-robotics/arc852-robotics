@@ -72,7 +72,7 @@ def camera_name(parser):
 
 
 def camera_name_optional(parser):
-    parser.add_argument("-c", "--camera", dest="camera_name", required=False, default="", help="Camera name")
+    parser.add_argument("-c", "--camera", dest="camera_name", required=False, default="Unnamed", help="Camera name")
 
 
 def mqtt_host(parser):
@@ -80,11 +80,11 @@ def mqtt_host(parser):
 
 
 def calib(parser):
-    parser.add_argument("-c", "--calib", default=False, type=bool, action="store_true", help="Calibration mode [false]")
+    parser.add_argument("-c", "--calib", default=False, action="store_true", help="Calibration mode [false]")
 
 
 def alternate(parser):
-    parser.add_argument("-a", "--alternate", default=False, type=bool, action="store_true",
+    parser.add_argument("-a", "--alternate", default=False, action="store_true",
                         help="Alternate servo actions [false]")
 
 
@@ -108,6 +108,11 @@ def http_file(parser):
                         help="HTTP template file")
 
 
+def verbose_http(parser):
+    parser.add_argument("-o", "--verbose-http", default=False, action="store_true", dest="http_verbose",
+                        help="Enable verbose HTTP log [false]")
+
+
 def verbose(parser):
     parser.add_argument("-v", "--verbose", dest="loglevel", default=logging.INFO, action="store_const",
-                        const=logging.DEBUG, help="Include debugging info", )
+                        const=logging.DEBUG, help="Enable\ debugging info", )
