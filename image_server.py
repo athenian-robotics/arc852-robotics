@@ -32,7 +32,8 @@ class ImageServer(object):
         self.__current_image_lock = Lock()
         self.__current_image = None
         self.__ready_to_stop = False
-        self.launched = False
+        self.__flask_launched = False
+        self.started = False
         self.stopped = False
 
         if not verbose:
@@ -60,16 +61,20 @@ class ImageServer(object):
 
     @image.setter
     def image(self, image):
-        if self.enabled:
-            with self.__current_image_lock:
-                self.__current_image = image
-
-    def start(self, image):
-        if self.launched or not self.enabled:
+        if not self.enabled:
             return
 
-        logger.info("Using template file {0}".format(self.__http_file))
+        if not self.started:
+            logger.error("ImageServer.start() not called")
+            return
 
+        if not self.__flask_launched:
+            self._launch_flask(image)
+
+        with self.__current_image_lock:
+            self.__current_image = image
+
+    def _launch_flask(self, image):
         flask = Flask(__name__)
         height, width = image.shape[:2]
 
@@ -131,8 +136,22 @@ class ImageServer(object):
 
         # Run HTTP server in a thread
         Thread(target=run_http, kwargs={"flask_server": flask, "host": self.__host, "port": self.__port}).start()
-        self.launched = True
+        self.__flask_launched = True
         logger.info("Running HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
+
+    def start(self):
+        # We cannot start the flask server until we know the dimensions of the image
+        # So we do not fire up the thread until the first image is available
+        if self.__flask_launched or not self.enabled:
+            return
+
+        if self.started:
+            logger.error("ImageServer.start() already called")
+            return
+
+        logger.info("Using template file {0}".format(self.__http_file))
+        logger.info("Starting HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
+        self.started = True
 
     def stop(self):
         self.__ready_to_stop = True
