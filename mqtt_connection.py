@@ -4,17 +4,49 @@ import time
 from threading import Thread
 
 import paho.mqtt.client as paho
+from utils import mqtt_broker_info
 
 logger = logging.getLogger(__name__)
 
 
 class MqttConnection(object):
-    def __init__(self, hostname, port, userdata=None):
-        self.__hostname = hostname
-        self.__port = port
+    def __init__(self,
+                 hostname,
+                 userdata=None,
+                 on_connect=None,
+                 on_disconnect=None,
+                 on_publish=None,
+                 on_subscribe=None,
+                 on_message=None,
+                 on_message_filtered=None,
+                 on_log=None):
+        self.__hostname, self.__port = mqtt_broker_info(hostname)
+
         self.__retry = True
         self.__thread = None
+        if userdata:
+            userdata["paho.client"] = self.client
+            if not userdata["hostname"]:
+                userdata["hostname"] = self.__hostname
+            if not userdata["port"]:
+                userdata["port"] = self.__port
+        # Create Paho client
         self.client = paho.Client(userdata=userdata)
+
+        if on_connect:
+            self.client.on_connect = on_connect
+        if on_disconnect:
+            self.client.on_disconnect = on_disconnect
+        if on_subscribe:
+            self.client.on_subscribe = on_subscribe
+        if on_publish:
+            self.client.on_publish = on_publish
+        if on_message:
+            self.client.on_message = on_message
+        if on_message_filtered:
+            self.client.on_message_filtered = on_message_filtered
+        if on_log:
+            self.client.on_log = on_log
 
     def connect(self):
         def connect_to_mqtt():
@@ -32,10 +64,11 @@ class MqttConnection(object):
                     time.sleep(1)
 
         if self.__thread is not None:
-            logger.error("connect() already called")
+            logger.error("MqttConnection.connect() already called")
         else:
             self.__thread = Thread(target=connect_to_mqtt)
             self.__thread.start()
+        return self
 
     def disconnect(self):
         self.__retry = False

@@ -56,7 +56,7 @@ class SerialReader(object):
 
     # Process data without doing a busy wait
     # If process_data() runs faster than read_serial_port(), it will wait on self.event
-    def process_data(self, func):
+    def process_data(self, func, userdata):
         while not self.stopped:
             try:
                 # Wait for data
@@ -70,20 +70,20 @@ class SerialReader(object):
                     val = self.data
 
                 # Call func with data
-                func(val)
+                func(val, userdata)
 
             except BaseException as e:
                 logger.error("Error while calling func [{0}]".format(e), exc_info=True)
                 # Do not sleep on errors and slow down sampling
                 # time.sleep(1)
 
-    def start(self, func, port, baudrate=DEFAULT_BAUD):
+    def start(self, func, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD):
         # Start read_serial_port()
         port_path = ("" if is_windows() or "/dev/" in port else "/dev/") + port
         Thread(target=self.read_serial_port, args=(port_path, baudrate)).start()
 
         # Start process_data()
-        Thread(target=self.process_data, args=(func,)).start()
+        Thread(target=self.process_data, args=(func, userdata)).start()
 
         self.stopped = False
 
