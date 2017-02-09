@@ -64,7 +64,7 @@ class ImageServer(object):
             with self.__current_image_lock:
                 self.__current_image = image
 
-    def serve_images(self, image):
+    def start(self, image):
         if self.launched or not self.enabled:
             return
 
