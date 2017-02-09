@@ -31,9 +31,9 @@ class ImageServer(object):
 
         self.__current_image_lock = Lock()
         self.__current_image = None
-        self.__launched = False
-        self.__stopped = False
         self.__ready_to_stop = False
+        self.launched = False
+        self.stopped = False
 
         if not verbose:
             class FlaskFilter(logging.Filter):
@@ -64,13 +64,14 @@ class ImageServer(object):
             with self.__current_image_lock:
                 self.__current_image = image
 
-    def serve_images(self, width, height):
-        if self.__launched or not self.enabled:
+    def serve_images(self, image):
+        if self.launched or not self.enabled:
             return
 
         logger.info("Using template file {0}".format(self.__http_file))
 
         flask = Flask(__name__)
+        height, width = image.shape[:2]
 
         @flask.route('/')
         def index():
@@ -97,7 +98,7 @@ class ImageServer(object):
                 return "Not ready to stop"
             shutdown_func = request.environ.get('werkzeug.server.shutdown')
             if shutdown_func is not None:
-                self.__stopped = True
+                self.stopped = True
                 shutdown_func()
             return "Shutting down..."
 
@@ -119,7 +120,7 @@ class ImageServer(object):
                 time.sleep(1)
 
         def run_http(flask_server, host, port):
-            while not self.__stopped:
+            while not self.stopped:
                 try:
                     flask_server.run(host=host, port=port)
                 except BaseException as e:
@@ -130,7 +131,7 @@ class ImageServer(object):
 
         # Run HTTP server in a thread
         Thread(target=run_http, kwargs={"flask_server": flask, "host": self.__host, "port": self.__port}).start()
-        self.__launched = True
+        self.launched = True
         logger.info("Running HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
 
     def stop(self):
