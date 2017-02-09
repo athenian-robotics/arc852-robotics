@@ -74,7 +74,8 @@ class SerialReader(object):
 
             except BaseException as e:
                 logger.error("Error while calling func [{0}]".format(e), exc_info=True)
-                time.sleep(1)
+                # Do not sleep on errors and slow down sampling
+                # time.sleep(1)
 
     def start(self, func, port, baudrate=DEFAULT_BAUD):
         # Start read_serial_port()
