@@ -12,6 +12,7 @@ DEFAULT_BAUD = 115200
 
 logger = logging.getLogger(__name__)
 
+
 class SerialReader(object):
     def __init__(self):
         self.lock = Lock()
@@ -26,6 +27,7 @@ class SerialReader(object):
         try:
             # Open serial port
             ser = serial.Serial(port=port, baudrate=baudrate)
+            logger.info("Reading data from serial port {0} at {1}bps".format(port, baudrate))
 
             while not self.stopped:
                 try:
