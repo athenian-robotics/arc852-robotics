@@ -2,7 +2,7 @@ import argparse
 import logging
 
 from grpc_support import GRPC_PORT_DEFAULT
-from image_server import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
+from image_server import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT, CAMERA_NAME_DEFAULT
 
 
 def setup_cli_args(*args):
@@ -47,8 +47,8 @@ grpc_host = lambda p: p.add_argument("-g", "--grpc", dest="grpc_host", required=
 
 camera_name = lambda p: p.add_argument("-c", "--camera", dest="camera_name", required=True, help="Camera name")
 
-camera_name_optional = lambda p: p.add_argument("-c", "--camera", dest="camera_name", required=False, default="Unnamed",
-                                                help="Camera name")
+camera_name_optional = lambda p: p.add_argument("-c", "--camera", dest="camera_name", required=False,
+                                                default=CAMERA_NAME_DEFAULT, help="Camera name")
 
 mqtt_host = lambda p: p.add_argument("-m", "--mqtt", dest="mqtt_host", required=True, help="MQTT server hostname")
 

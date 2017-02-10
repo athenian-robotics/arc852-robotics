@@ -19,7 +19,7 @@ HTTP_TEMPLATE_DEFAULT = __dirname + "/html/image-reader.html"
 HTTP_PORT_DEFAULT = 8080
 HTTP_HOST_DEFAULT = "localhost:{0}".format(HTTP_PORT_DEFAULT)
 HTTP_DELAY_SECS_DEFAULT = 0.25
-
+CAMERA_NAME_DEFAULT = "Unnamed"
 _image_fname = "/image.jpg"
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 class ImageServer(object):
     def __init__(self, http_file,
-                 camera_name="Unnamed",
+                 camera_name=CAMERA_NAME_DEFAULT,
                  http_host=HTTP_HOST_DEFAULT,
                  http_delay_secs=HTTP_DELAY_SECS_DEFAULT,
                  http_verbose=False):
