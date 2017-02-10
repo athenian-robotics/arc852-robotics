@@ -4,13 +4,13 @@ from threading import Lock
 
 from utils import itervalues
 
-grpc_port_default = 50051
+GRPC_PORT_DEFAULT = 50051
 
 logger = logging.getLogger(__name__)
 
 class GenericClient(object):
     def __init__(self, hostname):
-        self._hostname = hostname if ":" in hostname else hostname + ":{0}".format(grpc_port_default)
+        self._hostname = hostname if ":" in hostname else hostname + ":{0}".format(GRPC_PORT_DEFAULT)
         self._lock = Lock()
         self._stopped = False
 

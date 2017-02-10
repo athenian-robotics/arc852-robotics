@@ -1,4 +1,6 @@
 import logging
+import os
+import sys
 import time
 from threading import Lock
 from threading import Thread
@@ -10,16 +12,25 @@ from flask import redirect
 from flask import request
 from werkzeug.wrappers import Response
 
-http_host_default = "localhost:8080"
-http_delay_secs_default = 0.5
+# Find where this package is installed
+__path = os.path.abspath(sys.modules[__name__].__file__)
+__dirname = os.path.dirname(__path)
+HTTP_TEMPLATE_DEFAULT = __dirname + "/html/image-reader.html"
+HTTP_PORT_DEFAULT = 8080
+HTTP_HOST_DEFAULT = "localhost:{0}".format(HTTP_PORT_DEFAULT)
+HTTP_DELAY_SECS_DEFAULT = 0.25
+
+_image_fname = "/image.jpg"
 
 logger = logging.getLogger(__name__)
 
-IMAGE_FNAME = "/image.jpg"
-
 
 class ImageServer(object):
-    def __init__(self, http_file, camera_name="Unnamed", http_host=None, http_delay_secs=0.5, http_verbose=False):
+    def __init__(self, http_file,
+                 camera_name="Unnamed",
+                 http_host=HTTP_HOST_DEFAULT,
+                 http_delay_secs=HTTP_DELAY_SECS_DEFAULT,
+                 http_verbose=False):
         self.__camera_name = camera_name
         self.__http_host = http_host
         self.__http_delay_secs = http_delay_secs
@@ -27,7 +38,7 @@ class ImageServer(object):
 
         vals = self.__http_host.split(":")
         self.__host = vals[0]
-        self.__port = vals[1] if len(vals) == 2 else 8080
+        self.__port = vals[1] if len(vals) == 2 else HTTP_PORT_DEFAULT
 
         self.__current_image_lock = Lock()
         self.__current_image = None
@@ -45,7 +56,7 @@ class ImageServer(object):
                 def filter(self, record):
                     return self.__fname not in record.msg
 
-            logging.getLogger('werkzeug').addFilter(FlaskFilter(IMAGE_FNAME))
+            logging.getLogger('werkzeug').addFilter(FlaskFilter(_image_fname))
 
     @property
     def enabled(self):
@@ -90,7 +101,7 @@ class ImageServer(object):
         def image_path(delay):
             return get_page(delay)
 
-        @flask.route(IMAGE_FNAME)
+        @flask.route(_image_fname)
         def image_jpg():
             response = Response(self.image, mimetype="image/jpeg")
             response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
@@ -119,7 +130,7 @@ class ImageServer(object):
                     .replace("_NAME_", name) \
                     .replace("_WIDTH_", str(width)) \
                     .replace("_HEIGHT_", str(height)) \
-                    .replace("_IMAGE_FNAME_", IMAGE_FNAME)
+                    .replace("_IMAGE_FNAME_", _image_fname)
             except BaseException as e:
                 logger.error("Unable to create template file with {0} [{1}]".format(self.__http_file, e), exc_info=True)
                 time.sleep(1)
