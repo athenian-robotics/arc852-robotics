@@ -1,7 +1,9 @@
 import argparse
 import logging
 
-from grpc_support import GRPC_PORT_DEFAULT
+GRPC_PORT_DEFAULT = 50051
+
+# from grpc_support import GRPC_PORT_DEFAULT
 from image_server import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT, CAMERA_NAME_DEFAULT
 
 
