@@ -13,7 +13,6 @@ HTTP_TEMPLATE_DEFAULT = __dirname + "/html/image-reader.html"
 
 # from image_server import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT, CAMERA_NAME_DEFAULT
 
-
 def setup_cli_args(*args):
     parser = argparse.ArgumentParser()
     for arg in args:
