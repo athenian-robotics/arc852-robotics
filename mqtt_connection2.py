@@ -8,7 +8,8 @@ from utils import mqtt_broker_info
 
 logger = logging.getLogger(__name__)
 
-class MqttConnection(object):
+
+class MqttConnection2(object):
     def __init__(self,
                  hostname="localhost",
                  userdata=None,
