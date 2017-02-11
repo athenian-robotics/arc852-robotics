@@ -24,14 +24,16 @@ class MqttConnection(object):
 
         self.__retry = True
         self.__thread = None
-        if userdata:
-            userdata["paho.client"] = self.client
-            if not userdata["hostname"]:
-                userdata["hostname"] = self.__hostname
-            if not userdata["port"]:
-                userdata["port"] = self.__port
+
         # Create Paho client
         self.client = paho.Client(userdata=userdata)
+
+        if userdata:
+            userdata["paho.client"] = self.client
+            if userdata.get("hostname"):
+                userdata["hostname"] = self.__hostname
+            if userdata.get("port"):
+                userdata["port"] = self.__port
 
         if on_connect:
             self.client.on_connect = on_connect
