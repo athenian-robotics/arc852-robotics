@@ -80,14 +80,14 @@ class ImageServer(object):
             return
 
         if not self.__flask_launched:
-            self._launch_flask(image)
+            height, width = image.shape[:2]
+            self._launch_flask(width, height)
 
         with self.__current_image_lock:
             self.__current_image = image
 
-    def _launch_flask(self, image):
+    def _launch_flask(self, width, height):
         flask = Flask(__name__)
-        height, width = image.shape[:2]
 
         @flask.route('/')
         def index():
