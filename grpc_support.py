@@ -2,9 +2,8 @@ import logging
 from threading import Event
 from threading import Lock
 
+from constants import GRPC_PORT_DEFAULT
 from utils import itervalues
-
-GRPC_PORT_DEFAULT = 50051
 
 logger = logging.getLogger(__name__)
 

@@ -29,10 +29,10 @@ class MqttConnection(object):
 
         if userdata:
             userdata["paho.client"] = self.client
-            if userdata.get("hostname"):
-                userdata["hostname"] = self.__hostname
-            if userdata.get("port"):
-                userdata["port"] = self.__port
+            if not userdata.get("paho.hostname"):
+                userdata["paho.hostname"] = self.__hostname
+            if not userdata.get("paho.port"):
+                userdata["paho.port"] = self.__port
 
         if on_connect:
             self.client.on_connect = on_connect

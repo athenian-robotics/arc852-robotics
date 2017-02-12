@@ -6,9 +6,8 @@ from threading import Lock
 from threading import Thread
 
 import serial
+from constants import DEFAULT_BAUD
 from utils import is_windows
-
-DEFAULT_BAUD = 115200
 
 logger = logging.getLogger(__name__)
 

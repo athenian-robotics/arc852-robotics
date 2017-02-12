@@ -10,6 +10,7 @@ YELLOW = (0, 255, 255)
 
 logger = logging.getLogger(__name__)
 
+
 def get_moment(contour):
     moment1 = cv2.moments(contour)
     area = int(moment1["m00"])
@@ -28,4 +29,3 @@ def write_image(frame, file_name=None, log_info=False):
 def encode_image(frame, ext=".jpg"):
     retval, buf = cv2.imencode(ext, frame)
     return retval, buf
-

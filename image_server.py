@@ -1,25 +1,17 @@
 import logging
-import os
-import sys
 import time
 from threading import Lock
 from threading import Thread
 
 import opencv_utils as utils
 import requests
+from constants import CAMERA_NAME_DEFAULT, HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
 from flask import Flask
 from flask import redirect
 from flask import request
 from werkzeug.wrappers import Response
 
 # Find where this package is installed
-__path = os.path.abspath(sys.modules[__name__].__file__)
-__dirname = os.path.dirname(__path)
-HTTP_TEMPLATE_DEFAULT = __dirname + "/html/image-reader.html"
-HTTP_PORT_DEFAULT = 8080
-HTTP_HOST_DEFAULT = "localhost:{0}".format(HTTP_PORT_DEFAULT)
-HTTP_DELAY_SECS_DEFAULT = 0.25
-CAMERA_NAME_DEFAULT = "Unnamed"
 _image_fname = "/image.jpg"
 
 logger = logging.getLogger(__name__)

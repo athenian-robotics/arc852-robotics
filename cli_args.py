@@ -1,17 +1,10 @@
 import argparse
 import logging
-import os
-import sys
-GRPC_PORT_DEFAULT = 50051
 
-# from grpc_support import GRPC_PORT_DEFAULT
-# Find where this package is installed
-__path = os.path.abspath(sys.modules[__name__].__file__)
-__dirname = os.path.dirname(__path)
-HTTP_TEMPLATE_DEFAULT = __dirname + "/html/image-reader.html"
+from constants import GRPC_PORT_DEFAULT, HSV_RANGE_DEFAULT
+from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT, CAMERA_NAME_DEFAULT
+from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT
 
-
-# from image_server import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT, CAMERA_NAME_DEFAULT
 
 def setup_cli_args(*args):
     parser = argparse.ArgumentParser()
@@ -20,63 +13,108 @@ def setup_cli_args(*args):
     return vars(parser.parse_args())
 
 
-bgr = lambda p: p.add_argument("-b", "--bgr", dest="bgr_color", required=True, type=str,
-                               help="BGR target value, e.g., -b \"174, 56, 5\"")
+def bgr(p):
+    return p.add_argument("-b", "--bgr", dest="bgr_color", required=True, type=str,
+                          help="BGR target value, e.g., -b \"174, 56, 5\"")
 
-usb = lambda p: p.add_argument("-u", "--usb", dest="usb_camera", default=False, required=False, action="store_true",
-                               help="Use USB Raspi camera [false]")
 
-flip_x = lambda p: p.add_argument("-x", "--flipx", dest="flip_x", default=False, required=False, action="store_true",
-                                  help="Flip image on X axis[false]")
+def usb(p):
+    return p.add_argument("-u", "--usb", dest="usb_camera", default=False, required=False, action="store_true",
+                          help="Use USB Raspi camera [false]")
 
-flip_y = lambda p: p.add_argument("-y", "--flipy", dest="flip_y", default=False, action="store_true",
-                                  help="Flip image on Y axis[false]")
 
-width = lambda p: p.add_argument("-w", "--width", default=400, type=int, help="Image width [400]")
+def flip_x(p):
+    return p.add_argument("-x", "--flipx", dest="flip_x", default=False, required=False, action="store_true",
+                          help="Flip image on X axis[false]")
 
-middle_percent = lambda p: p.add_argument("-e", "--percent", dest="middle_percent", default=15, type=int,
-                                          help="Middle percent [15]")
 
-minimum_pixels = lambda p: p.add_argument("-m", "--min", dest="minimum_pixels", default=100, type=int,
-                                          help="Minimum pixel area [100]")
+def flip_y(p):
+    return p.add_argument("-y", "--flipy", dest="flip_y", default=False, action="store_true",
+                          help="Flip image on Y axis[false]")
 
-hsv_range = lambda p: p.add_argument("-r", "--range", dest="hsv_range", default=20, type=int, help="HSV range")
 
-grpc_port = lambda p: p.add_argument("-p", "--port", dest="grpc_port", default=GRPC_PORT_DEFAULT, type=int,
-                                     help="gRPC port [{0}]".format(GRPC_PORT_DEFAULT))
+def width(p):
+    return p.add_argument("-w", "--width", default=WIDTH_DEFAULT, type=int,
+                          help="Image width [{0}]".format(WIDTH_DEFAULT))
 
-leds = lambda p: p.add_argument("-l", "--leds", default=False, action="store_true",
-                                help="Enable Blinkt led feedback [false]")
 
-display = lambda p: p.add_argument("-d", "--display", default=False, action="store_true", help="Display image [false]")
+def middle_percent(p):
+    return p.add_argument("-e", "--percent", dest="middle_percent", default=MIDDLE_PERCENT_DEFAULT,
+                          type=int, help="Middle percent [{0}]".format(MIDDLE_PERCENT_DEFAULT))
 
-grpc_host = lambda p: p.add_argument("-g", "--grpc", dest="grpc_host", required=True,
-                                     help="gRPC location server hostname")
 
-camera_name = lambda p: p.add_argument("-c", "--camera", dest="camera_name", required=True, help="Camera name")
+def minimum_pixels(p):
+    return p.add_argument("-m", "--min", dest="minimum_pixels", default=MINIMUM_PIXELS_DEFAULT,
+                          type=int,
+                          help="Minimum pixel area [{0}]".format(MINIMUM_PIXELS_DEFAULT))
 
-camera_name_optional = lambda p: p.add_argument("-c", "--camera", dest="camera_name", required=False,
-                                                default="Unnamed", help="Camera name")
 
-mqtt_host = lambda p: p.add_argument("-m", "--mqtt", dest="mqtt_host", required=True, help="MQTT server hostname")
+def hsv_range(p):
+    return p.add_argument("-r", "--range", dest="hsv_range", default=HSV_RANGE_DEFAULT, type=int,
+                          help="HSV range [{0}]".format(HSV_RANGE_DEFAULT))
 
-calib = lambda p: p.add_argument("-c", "--calib", default=False, action="store_true", help="Calibration mode [false]")
 
-alternate = lambda p: p.add_argument("-a", "--alternate", default=False, action="store_true",
-                                     help="Alternate servo actions [false]")
+def grpc_port(p):
+    return p.add_argument("-p", "--port", dest="grpc_port", default=GRPC_PORT_DEFAULT, type=int,
+                          help="gRPC port [{0}]".format(GRPC_PORT_DEFAULT))
 
-http_host = lambda p: p.add_argument("-t", "--http", dest="http_host", default="localhost:8080", required=False,
-                                     help="HTTP hostname:port [{0}]".format("localhost:8080"))
 
-http_delay_secs = lambda p: p.add_argument("-s", "--delay", default=0.25, type=float,
-                                           dest="http_delay_secs",
-                                           help="HTTP delay secs [{0}]".format(0.25))
+def leds(p):
+    return p.add_argument("-l", "--leds", default=False, action="store_true",
+                          help="Enable Blinkt led feedback [false]")
 
-http_file = lambda p: p.add_argument("-i", "--file", default=HTTP_TEMPLATE_DEFAULT, type=str,
-                                     dest="http_file", help="HTTP template file")
 
-verbose_http = lambda p: p.add_argument("-o", "--verbose-http", default=False, action="store_true", dest="http_verbose",
-                                        help="Enable verbose HTTP log [false]")
+def display(p):
+    return p.add_argument("-d", "--display", default=False, action="store_true", help="Display image [false]")
 
-verbose = lambda p: p.add_argument("-v", "--verbose", dest="loglevel", default=logging.INFO, action="store_const",
-                                   const=logging.DEBUG, help="Enable\ debugging info", )
+
+def grpc_host(p):
+    return p.add_argument("-g", "--grpc", dest="grpc_host", required=True,
+                          help="gRPC location server hostname")
+
+
+def camera_name(p):
+    return p.add_argument("-c", "--camera", dest="camera_name", required=True, help="Camera name")
+
+
+def camera_name_optional(p):
+    return p.add_argument("-c", "--camera", dest="camera_name", required=False,
+                          default=CAMERA_NAME_DEFAULT, help="Camera name")
+
+
+def mqtt_host(p):
+    return p.add_argument("-m", "--mqtt", dest="mqtt_host", required=True, help="MQTT server hostname")
+
+
+def calib(p):
+    return p.add_argument("-c", "--calib", default=False, action="store_true", help="Calibration mode [false]")
+
+
+def alternate(p):
+    return p.add_argument("-a", "--alternate", default=False, action="store_true",
+                          help="Alternate servo actions [false]")
+
+
+def http_host(p):
+    return p.add_argument("-t", "--http", dest="http_host", default=HTTP_HOST_DEFAULT, required=False,
+                          help="HTTP hostname:port [{0}]".format(HTTP_HOST_DEFAULT))
+
+
+def http_delay_secs(p):
+    return p.add_argument("-s", "--delay", default=HTTP_DELAY_SECS_DEFAULT, type=float, dest="http_delay_secs",
+                          help="HTTP delay secs [{0}]".format(HTTP_DELAY_SECS_DEFAULT))
+
+
+def http_file(p):
+    return p.add_argument("-i", "--file", default=HTTP_TEMPLATE_DEFAULT, type=str,
+                          dest="http_file", help="HTTP template file")
+
+
+def verbose_http(p):
+    return p.add_argument("-o", "--verbose-http", default=False, action="store_true", dest="http_verbose",
+                          help="Enable verbose HTTP log [false]")
+
+
+def verbose(p):
+    return p.add_argument("-v", "--verbose", dest="loglevel", default=logging.INFO, action="store_const",
+                          const=logging.DEBUG, help="Enable debugging info")
