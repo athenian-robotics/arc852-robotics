@@ -79,7 +79,7 @@ class SerialReader(object):
 
     def start(self, func, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD):
         # Start read_serial_port()
-        port_path = ("" if is_windows() or "/dev/" in port else "/dev/") + str(port)
+        port_path = ("" if (is_windows() or "/dev/" in str(port)) else "/dev/") + str(port)
         Thread(target=self.read_serial_port, args=(port_path, baudrate)).start()
 
         # Start process_data()
