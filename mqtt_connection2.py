@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class MqttConnection2(object):
     def __init__(self,
-                 hostname="localhost",
+                 hostname,
                  userdata=None,
                  on_connect=None,
                  on_disconnect=None,
@@ -20,7 +20,6 @@ class MqttConnection2(object):
                  on_message=None,
                  on_message_filtered=None,
                  on_log=None):
-        logging.info("I am here")
         self.__hostname, self.__port = mqtt_broker_info(hostname)
 
         self.__retry = True
