@@ -19,7 +19,7 @@ class MqttConnection(object):
                  on_message=None,
                  on_message_filtered=None,
                  on_log=None):
-        logging.info("I am here")
+        logging.info("I am here 2")
         self.__hostname, self.__port = mqtt_broker_info(hostname)
 
         self.__retry = True
