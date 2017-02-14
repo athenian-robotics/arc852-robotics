@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from constants import GRPC_PORT_DEFAULT, HSV_RANGE_DEFAULT
+from constants import GRPC_PORT_DEFAULT, HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD
 from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT, CAMERA_NAME_DEFAULT
 from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT
 
@@ -59,6 +59,11 @@ def grpc_port(p):
                           help="gRPC port [{0}]".format(GRPC_PORT_DEFAULT))
 
 
+def grpc_host(p):
+    return p.add_argument("-g", "--grpc", dest="grpc_host", required=True,
+                          help="gRPC location server hostname")
+
+
 def leds(p):
     return p.add_argument("-l", "--leds", default=False, action="store_true",
                           help="Enable Blinkt led feedback [false]")
@@ -68,9 +73,14 @@ def display(p):
     return p.add_argument("-d", "--display", default=False, action="store_true", help="Display image [false]")
 
 
-def grpc_host(p):
-    return p.add_argument("-g", "--grpc", dest="grpc_host", required=True,
-                          help="gRPC location server hostname")
+def serial_port(p):
+    return p.add_argument("-s", "--serial", dest="serial_port", default=SERIAL_PORT_DEFAULT,
+                          help="Serial port [{0}]".format(SERIAL_PORT_DEFAULT))
+
+
+def baud_rate(p):
+    return p.add_argument("--baud", dest="baud_rate", default=DEFAULT_BAUD,
+                          help="Baud rate [{0}]".format(DEFAULT_BAUD))
 
 
 def camera_name(p):
@@ -101,7 +111,7 @@ def http_host(p):
 
 
 def http_delay_secs(p):
-    return p.add_argument("-s", "--delay", default=HTTP_DELAY_SECS_DEFAULT, type=float, dest="http_delay_secs",
+    return p.add_argument("--delay", default=HTTP_DELAY_SECS_DEFAULT, type=float, dest="http_delay_secs",
                           help="HTTP delay secs [{0}]".format(HTTP_DELAY_SECS_DEFAULT))
 
 
