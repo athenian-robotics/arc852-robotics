@@ -101,3 +101,5 @@ class SerialReader(object):
                 return port_info[0]
             else:
                 return port_info.device
+
+        return None
