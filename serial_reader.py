@@ -6,6 +6,7 @@ from threading import Lock
 from threading import Thread
 
 import serial
+import serial.tools.list_ports
 from constants import DEFAULT_BAUD
 from utils import is_windows
 
@@ -88,3 +89,15 @@ class SerialReader(object):
 
     def stop(self):
         self.stopped = True
+
+    @staticmethod
+    def lookup_port(pid):
+        """Get port info from a given PID"""
+        ports = [i for i in serial.tools.list_ports.grep(pid)]
+        if len(ports) == 1:
+            port_info = ports[0]
+            # Is returned as a tuple on raspis, otherwise as an obj
+            if isinstance(port_info, tuple):
+                return port_info[0]
+            else:
+                return port_info.device
