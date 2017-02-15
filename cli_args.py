@@ -2,7 +2,7 @@ import argparse
 import logging
 
 from constants import GRPC_PORT_DEFAULT, HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD
-from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT, CAMERA_NAME_DEFAULT
+from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
 from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT
 
 
@@ -59,8 +59,11 @@ def grpc_port(p):
                           help="gRPC port [{0}]".format(GRPC_PORT_DEFAULT))
 
 
+GRPC_HOST = "grpc_host"
+
+
 def grpc_host(p):
-    return p.add_argument("-g", "--grpc", dest="grpc_host", required=True,
+    return p.add_argument("-g", "--grpc", dest=GRPC_HOST, required=True,
                           help="gRPC location server hostname")
 
 
@@ -73,27 +76,40 @@ def display(p):
     return p.add_argument("-d", "--display", default=False, action="store_true", help="Display image [false]")
 
 
+SERIAL_PORT = "serial_port"
+
+
 def serial_port(p):
-    return p.add_argument("-s", "--serial", dest="serial_port", default=SERIAL_PORT_DEFAULT,
+    return p.add_argument("-s", "--serial", dest=SERIAL_PORT, default=SERIAL_PORT_DEFAULT,
                           help="Serial port [{0}]".format(SERIAL_PORT_DEFAULT))
 
 
+BAUD_RATE = "baud_rate"
+
+
 def baud_rate(p):
-    return p.add_argument("--baud", dest="baud_rate", default=DEFAULT_BAUD,
+    return p.add_argument("--baud", dest=BAUD_RATE, default=DEFAULT_BAUD,
                           help="Baud rate [{0}]".format(DEFAULT_BAUD))
 
 
+CAMERA_NAME = "camera_name"
+CAMERA_NAME_DEFAULT = "Unnamed"
+
+
 def camera_name(p):
-    return p.add_argument("-c", "--camera", dest="camera_name", required=True, help="Camera name")
+    return p.add_argument("-c", "--camera", dest=CAMERA_NAME, required=True, help="Camera name")
 
 
 def camera_name_optional(p):
-    return p.add_argument("-c", "--camera", dest="camera_name", required=False,
+    return p.add_argument("-c", "--camera", dest=CAMERA_NAME, required=False,
                           default=CAMERA_NAME_DEFAULT, help="Camera name")
 
 
+MQTT_HOST = "mqtt_host"
+
+
 def mqtt_host(p):
-    return p.add_argument("-m", "--mqtt", dest="mqtt_host", required=True, help="MQTT server hostname")
+    return p.add_argument("-m", "--mqtt", dest=MQTT_HOST, required=True, help="MQTT server hostname")
 
 
 def calib(p):
@@ -105,26 +121,38 @@ def alternate(p):
                           help="Alternate servo actions [false]")
 
 
+HTTP_HOST = "http_host"
+
+
 def http_host(p):
-    return p.add_argument("-t", "--http", dest="http_host", default=HTTP_HOST_DEFAULT, required=False,
+    return p.add_argument("-t", "--http", dest=HTTP_HOST, default=HTTP_HOST_DEFAULT, required=False,
                           help="HTTP hostname:port [{0}]".format(HTTP_HOST_DEFAULT))
 
 
+HTTP_DELAY_SECS = "http_delay_secs"
+
+
 def http_delay_secs(p):
-    return p.add_argument("--delay", default=HTTP_DELAY_SECS_DEFAULT, type=float, dest="http_delay_secs",
+    return p.add_argument("--delay", dest=HTTP_DELAY_SECS, default=HTTP_DELAY_SECS_DEFAULT, type=float,
                           help="HTTP delay secs [{0}]".format(HTTP_DELAY_SECS_DEFAULT))
 
 
+HTTP_FILE = "http_file"
+
+
 def http_file(p):
-    return p.add_argument("-i", "--file", default=HTTP_TEMPLATE_DEFAULT, type=str,
-                          dest="http_file", help="HTTP template file")
+    return p.add_argument("-i", "--file", dest=HTTP_FILE, default=HTTP_TEMPLATE_DEFAULT, type=str,
+                          help="HTTP template file")
 
 
 def verbose_http(p):
-    return p.add_argument("-o", "--verbose-http", default=False, action="store_true", dest="http_verbose",
+    return p.add_argument("-o", "--verbose-http", dest="http_verbose", default=False, action="store_true",
                           help="Enable verbose HTTP log [false]")
 
 
+LOG_LEVEL = "loglevel"
+
+
 def verbose(p):
-    return p.add_argument("-v", "--verbose", dest="loglevel", default=logging.INFO, action="store_const",
+    return p.add_argument("-v", "--verbose", dest=LOG_LEVEL, default=logging.INFO, action="store_const",
                           const=logging.DEBUG, help="Enable debugging info")

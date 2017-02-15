@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class MqttConnection(object):
     def __init__(self,
                  hostname,
-                 userdata=None,
+                 userdata={},
                  on_connect=None,
                  on_disconnect=None,
                  on_publish=None,
