@@ -73,9 +73,13 @@ def display(p):
     return p.add_argument("-d", "--display", default=False, action="store_true", help="Display image [false]")
 
 
-def serial_port(p):
+def serial_port_optional(p):
     return p.add_argument("-s", "--serial", dest="serial_port", default=SERIAL_PORT_DEFAULT,
                           help="Serial port [{0}]".format(SERIAL_PORT_DEFAULT))
+
+
+def serial_port(p):
+    return p.add_argument("-s", "--serial", dest="serial_port", required=True, help="Serial port")
 
 
 def baud_rate(p):
