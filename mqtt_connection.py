@@ -6,12 +6,16 @@ from threading import Thread
 import paho.mqtt.client as paho
 from utils import mqtt_broker_info
 
+PAHO_CLIENT = "paho.client"
+PAHO_HOSTNAME = "paho.hostname"
+PAHO_PORT = "paho.port"
+
 logger = logging.getLogger(__name__)
 
 class MqttConnection(object):
     def __init__(self,
                  hostname,
-                 userdata={},
+                 userdata=None,
                  on_connect=None,
                  on_disconnect=None,
                  on_publish=None,
@@ -28,11 +32,11 @@ class MqttConnection(object):
         self.client = paho.Client(userdata=userdata)
 
         if userdata:
-            userdata["paho.client"] = self.client
-            if not userdata.get("paho.hostname"):
-                userdata["paho.hostname"] = self.__hostname
-            if not userdata.get("paho.port"):
-                userdata["paho.port"] = self.__port
+            userdata[PAHO_CLIENT] = self.client
+            if not userdata.get(PAHO_HOSTNAME):
+                userdata[PAHO_HOSTNAME] = self.__hostname
+            if not userdata.get(PAHO_PORT):
+                userdata[PAHO_PORT] = self.__port
 
         if on_connect:
             self.client.on_connect = on_connect
