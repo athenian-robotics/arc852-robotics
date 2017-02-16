@@ -43,7 +43,7 @@ def width(p):
 
 
 def middle_percent(p):
-    return p.add_argument("-e", "--percent", dest=MIDDLE_PERCENT, default=MIDDLE_PERCENT_DEFAULT,
+    return p.add_argument("--percent", dest=MIDDLE_PERCENT, default=MIDDLE_PERCENT_DEFAULT,
                           type=int, help="Middle percent [{0}]".format(MIDDLE_PERCENT_DEFAULT))
 
 

@@ -12,14 +12,39 @@ PAHO_PORT = "paho.port"
 
 logger = logging.getLogger(__name__)
 
+
+def on_connect(client, userdata, flags, rc):
+    if userdata:
+        logging.info("{0} connecting to {1}:{2}".format("Success" if rc == 0 else "Failure",
+                                                        userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
+    else:
+        logger.info("{0} connecting to MQTT broker".format("Success" if rc == 0 else "Failure"))
+
+
+def on_subscribe(client, userdata, mid, granted_qos):
+    logger.info("Subscribed with message id: {0} QOS: {1}".format(mid, granted_qos))
+
+
+def on_publish(client, userdata, mid):
+    logger.debug("Published value with message id {0}".format(mid))
+
+
+def on_disconnect(client, userdata, rc):
+    if userdata:
+        logging.info("{0} disconecting to {1}:{2}".format("Success" if rc == 0 else "Failure",
+                                                          userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
+    else:
+        logging.info("{0} disconecting from MQTT broker".format("Success" if rc == 0 else "Failure"))
+
+
 class MqttConnection(object):
     def __init__(self,
                  hostname,
                  userdata=None,
-                 on_connect=None,
-                 on_disconnect=None,
-                 on_publish=None,
-                 on_subscribe=None,
+                 on_connect=on_connect,
+                 on_disconnect=on_disconnect,
+                 on_publish=on_publish,
+                 on_subscribe=on_subscribe,
                  on_message=None,
                  on_message_filtered=None,
                  on_log=None):
