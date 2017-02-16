@@ -7,6 +7,7 @@ from utils import itervalues
 
 logger = logging.getLogger(__name__)
 
+
 class GenericClient(object):
     def __init__(self, hostname):
         self._hostname = hostname if ":" in hostname else hostname + ":{0}".format(GRPC_PORT_DEFAULT)
@@ -48,6 +49,8 @@ class GenericServer(object):
                             yield val
                     else:
                         logger.info("Skipped sending data to client {0}".format(name))
+        except GeneratorExit:
+            logger.info("gRPC client disconnected {0}".format(name))
         except BaseException as e:
             logger.error("Unknown error generating values [{0}]".format(e), exc_info=True)
         finally:
