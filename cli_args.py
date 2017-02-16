@@ -2,7 +2,8 @@ import argparse
 import logging
 
 from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST, CAMERA_NAME, \
-    CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL
+    CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, \
+    MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS, HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
 from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
 from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT
 
@@ -15,48 +16,48 @@ def setup_cli_args(*args):
 
 
 def bgr(p):
-    return p.add_argument("-b", "--bgr", dest="bgr_color", required=True, type=str,
+    return p.add_argument("-b", "--bgr", dest=BGR_COLOR, required=True, type=str,
                           help="BGR target value, e.g., -b \"174, 56, 5\"")
 
 
 def usb(p):
-    return p.add_argument("-u", "--usb", dest="usb_camera", default=False, required=False, action="store_true",
+    return p.add_argument("-u", "--usb", dest=USB_CAMERA, default=False, required=False, action="store_true",
                           help="Use USB Raspi camera [false]")
 
 
 def flip_x(p):
-    return p.add_argument("-x", "--flipx", dest="flip_x", default=False, required=False, action="store_true",
+    return p.add_argument("-x", "--flipx", dest=FLIP_X, default=False, required=False, action="store_true",
                           help="Flip image on X axis[false]")
 
 
 def flip_y(p):
-    return p.add_argument("-y", "--flipy", dest="flip_y", default=False, action="store_true",
+    return p.add_argument("-y", "--flipy", dest=FLIP_Y, default=False, action="store_true",
                           help="Flip image on Y axis[false]")
 
 
 def width(p):
-    return p.add_argument("-w", "--width", default=WIDTH_DEFAULT, type=int,
+    return p.add_argument("-w", "--width", dest=WIDTH, default=WIDTH_DEFAULT, type=int,
                           help="Image width [{0}]".format(WIDTH_DEFAULT))
 
 
 def middle_percent(p):
-    return p.add_argument("-e", "--percent", dest="middle_percent", default=MIDDLE_PERCENT_DEFAULT,
+    return p.add_argument("-e", "--percent", dest=MIDDLE_PERCENT, default=MIDDLE_PERCENT_DEFAULT,
                           type=int, help="Middle percent [{0}]".format(MIDDLE_PERCENT_DEFAULT))
 
 
 def minimum_pixels(p):
-    return p.add_argument("-m", "--min", dest="minimum_pixels", default=MINIMUM_PIXELS_DEFAULT,
+    return p.add_argument("-m", "--min", dest=MINIMUM_PIXELS, default=MINIMUM_PIXELS_DEFAULT,
                           type=int,
                           help="Minimum pixel area [{0}]".format(MINIMUM_PIXELS_DEFAULT))
 
 
 def hsv_range(p):
-    return p.add_argument("-r", "--range", dest="hsv_range", default=HSV_RANGE_DEFAULT, type=int,
+    return p.add_argument("-r", "--range", dest=HSV_RANGE, default=HSV_RANGE_DEFAULT, type=int,
                           help="HSV range [{0}]".format(HSV_RANGE_DEFAULT))
 
 
 def grpc_port(p):
-    return p.add_argument("-p", "--port", dest="grpc_port", default=GRPC_PORT_DEFAULT, type=int,
+    return p.add_argument("-p", "--port", dest=GRPC_PORT, default=GRPC_PORT_DEFAULT, type=int,
                           help="gRPC port [{0}]".format(GRPC_PORT_DEFAULT))
 
 
@@ -66,12 +67,13 @@ def grpc_host(p):
 
 
 def leds(p):
-    return p.add_argument("-l", "--leds", default=False, action="store_true",
+    return p.add_argument("-l", "--leds", dest=LEDS, default=False, action="store_true",
                           help="Enable Blinkt led feedback [false]")
 
 
 def display(p):
-    return p.add_argument("-d", "--display", default=False, action="store_true", help="Display image [false]")
+    return p.add_argument("-d", "--display", dest=DISPLAY, default=False, action="store_true",
+                          help="Display image [false]")
 
 
 def serial_port(p):
