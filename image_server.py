@@ -5,7 +5,7 @@ from threading import Thread
 
 import opencv_utils as utils
 import requests
-from cli_args import CAMERA_NAME_DEFAULT
+from constants import CAMERA_NAME_DEFAULT
 from constants import HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
 from flask import Flask
 from flask import redirect

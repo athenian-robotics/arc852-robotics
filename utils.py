@@ -30,6 +30,9 @@ def current_time_millis():
     return int(round(time.time() * 1000))
 
 
+def strip_args(args, *excludes):
+    return {k: args[k] for k in args.keys() if k not in excludes}
+
 def strip_loglevel(args):
     return {k: args[k] for k in args.keys() if k != "loglevel"}
 
