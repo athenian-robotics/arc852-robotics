@@ -96,7 +96,8 @@ class SerialReader(object):
         ports = [i for i in serial.tools.list_ports.grep(pid)]
         if len(ports) == 1:
             port_info = ports[0]
-            # Is returned as a tuple on raspis, otherwise as an obj
+            # PySerial v.2.7 is packaged along with raspis. It returns data from list_ports in the form of a tuple.
+            # v.3.x is the latest, and it returns objects instead.
             if isinstance(port_info, tuple):
                 return port_info[0]
             else:
