@@ -41,5 +41,8 @@ WIDTH = "width"
 MIDDLE_PERCENT = "middle_percent"
 FLIP_X = "flip_x"
 FLIP_Y = "flip_y"
+HTTP_DELAY_SECS = "http_delay_secs"
+HTTP_FILE = "http_file"
+HTTP_VERBOSE = "http_verbose"
 
 SERIAL_PORT_DEFAULT = "/dev/ttyACM0"
