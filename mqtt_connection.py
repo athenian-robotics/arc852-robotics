@@ -31,8 +31,8 @@ def on_publish(client, userdata, mid):
 
 def on_disconnect(client, userdata, rc):
     if userdata:
-        logging.info("{0} disconecting to {1}:{2}".format("Success" if rc == 0 else "Failure",
-                                                          userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
+        logging.info("{0} disconecting from {1}:{2}".format("Success" if rc == 0 else "Failure",
+                                                            userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
     else:
         logging.info("{0} disconecting from MQTT broker".format("Success" if rc == 0 else "Failure"))
 

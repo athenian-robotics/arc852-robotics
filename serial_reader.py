@@ -30,6 +30,7 @@ class SerialReader(object):
             logger.info("Reading data from serial port {0} at {1}bps".format(port, baudrate))
 
             while not self.stopped:
+                b = None
                 try:
                     # Read data from serial port.  Ignore the trailing two chars with [:-2]
                     # Do not call readline() inside mutex because it might block
@@ -42,8 +43,8 @@ class SerialReader(object):
                     # Notify consumer data is ready
                     self.event.set()
 
-                except BaseException as e:
-                    logger.error("Unable to read serial data [{0}]".format(e), exc_info=True)
+                except BaseException:
+                    logger.error("Unable to read serial data [{0}]".format(b), exc_info=True)
                     time.sleep(1)
 
         except serial.serialutil.SerialException as e:
@@ -91,16 +92,15 @@ class SerialReader(object):
         self.stopped = True
 
     @staticmethod
-    def lookup_port(pid):
+    def lookup_port(id):
         """Get port info from a given PID"""
-        ports = [i for i in serial.tools.list_ports.grep(pid)]
+        ports = [i for i in serial.tools.list_ports.grep(id)]
         if len(ports) == 1:
-            port_info = ports[0]
             # PySerial v.2.7 is packaged along with raspis. It returns data from list_ports in the form of a tuple.
             # v.3.x is the latest, and it returns objects instead.
-            if isinstance(port_info, tuple):
-                return port_info[0]
-            else:
-                return port_info.device
-
-        return None
+            port_info = ports[0]
+            return port_info[0] if isinstance(port_info, tuple) else port_info.device
+        elif len(ports) > 1:
+            logger.error("Multiple matches found for device id {0}".format(id))
+        else:
+            return None

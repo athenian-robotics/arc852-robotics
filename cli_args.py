@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST
+from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, DEVICE_ID
 from constants import DRAW_CONTOUR, DRAW_BOX
 from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
 from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST
@@ -95,6 +95,10 @@ def serial_port(p):
 def baud_rate(p):
     return p.add_argument("--baud", dest=BAUD_RATE, default=DEFAULT_BAUD,
                           help="Baud rate [{0}]".format(DEFAULT_BAUD))
+
+
+def device_id(p):
+    return p.add_argument("--device_id", dest=DEVICE_ID, help="USB device ID")
 
 
 def camera_name(p):
