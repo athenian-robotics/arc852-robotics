@@ -55,7 +55,7 @@ def minimum_pixels(p):
 
 
 def hsv_range(p):
-    return p.add_argument("--range", dest=HSV_RANGE, default=HSV_RANGE_DEFAULT, type=int,
+    return p.add_argument("--range", "--hsv_range", dest=HSV_RANGE, default=HSV_RANGE_DEFAULT, type=int,
                           help="HSV range [{0}]".format(HSV_RANGE_DEFAULT))
 
 
@@ -65,7 +65,7 @@ def grpc_port(p):
 
 
 def grpc_host(p):
-    return p.add_argument("-g", "--grpc", dest=GRPC_HOST, required=True,
+    return p.add_argument("-g", "--grpc", "--grpc_host", dest=GRPC_HOST, required=True,
                           help="gRPC location server hostname")
 
 
@@ -94,7 +94,7 @@ def serial_port(p):
 
 
 def baud_rate(p):
-    return p.add_argument("--baud", dest=BAUD_RATE, default=DEFAULT_BAUD,
+    return p.add_argument("--baud", "--baud_rate", dest=BAUD_RATE, default=DEFAULT_BAUD,
                           help="Baud rate [{0}]".format(DEFAULT_BAUD))
 
 
@@ -110,17 +110,18 @@ def led_brightness(p):
     return p.add_argument("--brightness", "--led_brightness", dest=LED_BRIGHTNESS, default=LED_BRIGHTNESS_DEFAULT,
                           help="LED brightness [{0}]".format(LED_BRIGHTNESS_DEFAULT))
 
+
 def camera_name(p):
-    return p.add_argument("-c", "--camera", dest=CAMERA_NAME, required=True, help="Camera name")
+    return p.add_argument("-c", "--camera", "--camera_name", dest=CAMERA_NAME, required=True, help="Camera name")
 
 
 def camera_name_optional(p):
-    return p.add_argument("-c", "--camera", dest=CAMERA_NAME, required=False,
+    return p.add_argument("-c", "--camera", "--camera_name", dest=CAMERA_NAME, required=False,
                           default=CAMERA_NAME_DEFAULT, help="Camera name")
 
 
 def mqtt_host(p):
-    return p.add_argument("-m", "--mqtt", dest=MQTT_HOST, required=True, help="MQTT server hostname")
+    return p.add_argument("-m", "--mqtt", "--mqtt_host", dest=MQTT_HOST, required=True, help="MQTT server hostname")
 
 
 def calib(p):
