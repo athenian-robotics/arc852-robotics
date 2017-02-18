@@ -99,7 +99,7 @@ def baud_rate(p):
 
 
 def device_id(p):
-    return p.add_argument("--device_id", dest=DEVICE_ID, help="USB device ID")
+    return p.add_argument("--did", "--device_id", dest=DEVICE_ID, help="USB device ID")
 
 
 def led_name(p):
