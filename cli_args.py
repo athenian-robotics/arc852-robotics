@@ -19,7 +19,7 @@ def setup_cli_args(*args):
 
 
 def bgr(p):
-    return p.add_argument("--bgr", dest=BGR_COLOR, required=True,
+    return p.add_argument("--bgr", "--bgr_color", dest=BGR_COLOR, required=True,
                           help="BGR target value, e.g., -b \"174, 56, 5\"")
 
 
