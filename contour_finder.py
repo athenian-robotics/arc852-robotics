@@ -9,19 +9,20 @@ class ContourFinder(object):
         # Convert into a tuple if it is a string
         bgr_tuple = eval(bgr_color if "[" in bgr_color else "[{0}]".format(bgr_color))
         bgr_img = np.uint8([[bgr_tuple]])
-
         hsv_img = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2HSV)
         hsv_value = hsv_img[0, 0, 0]
 
         self.__lower = np.array([hsv_value - hsv_range, 100, 100])
         self.__upper = np.array([hsv_value + hsv_range, 255, 255])
 
-    def get_max_contours(self, image, count=1):
+    def get_max_contours(self, image, lower=None, upper=None, count=1):
         # Convert from BGR to HSV colorspace
         hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
         # Threshold the HSV image to get only target colors
-        in_range_mask = cv2.inRange(hsv_image, self.__lower, self.__upper)
+        in_range_mask = cv2.inRange(hsv_image,
+                                    lower if lower else self.__lower,
+                                    upper if upper else self.__upper)
 
         # Bitwise-AND mask and original image
         in_range_result = cv2.bitwise_and(image, image, mask=in_range_mask)
@@ -38,6 +39,6 @@ class ContourFinder(object):
         # cv2.imshow("Grayscale", grayscale)
 
         # Return max contours
-        eligible = [c for c in contours if cv2.moments(c)["m00"] > self.__minimum_pixels]
+        eligible = [c for c in contours if cv2.moments(c)["m00"] >= self.__minimum_pixels]
         val = sorted(eligible, key=lambda v: cv2.moments(v)["m00"], reverse=True)[:count]
         return val if val else None
