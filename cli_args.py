@@ -74,12 +74,12 @@ def leds(p):
 
 
 def draw_contour(p):
-    return p.add_argument("--contour", dest=DRAW_CONTOUR, default=False, action="store_true",
+    return p.add_argument("--draw_contour", "--contour", dest=DRAW_CONTOUR, default=False, action="store_true",
                           help="Draw contour box [false]")
 
 
 def draw_box(p):
-    return p.add_argument("--box", dest=DRAW_BOX, default=False, action="store_true",
+    return p.add_argument("--draw_box", "--box", dest=DRAW_BOX, default=False, action="store_true",
                           help="Draw bounding box [false]")
 
 

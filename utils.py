@@ -1,4 +1,5 @@
 import logging
+import math
 import platform
 import sys
 import time
@@ -41,6 +42,12 @@ def setup_logging(stream=sys.stderr,
                   level=logging.INFO,
                   format="%(asctime)s %(name)-10s %(funcName)-10s():%(lineno)i: %(levelname)-6s %(message)s"):
     logging.basicConfig(stream=stream, level=level, format=format)
+
+
+def distance(point1, point2):
+    xsqr = (point2[0] - point1[0]) ** 2
+    ysqr = (point2[1] - point1[1]) ** 2
+    return int(math.sqrt(xsqr + ysqr))
 
 
 # As described at http://legacy.python.org/dev/peps/pep-0469/
