@@ -49,7 +49,7 @@ def middle_percent(p):
 
 
 def minimum_pixels(p):
-    return p.add_argument("--min", dest=MINIMUM_PIXELS, default=MINIMUM_PIXELS_DEFAULT,
+    return p.add_argument("--min", "--min_pixels", dest=MINIMUM_PIXELS, default=MINIMUM_PIXELS_DEFAULT,
                           type=int,
                           help="Minimum pixel area [{0}]".format(MINIMUM_PIXELS_DEFAULT))
 
