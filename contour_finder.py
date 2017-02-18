@@ -1,9 +1,12 @@
 import cv2
 import numpy as np
+from constants import MINIMUM_PIXELS_DEFAULT, HSV_RANGE_DEFAULT
 
 
 class ContourFinder(object):
-    def __init__(self, bgr_color, hsv_range, minimum_pixels):
+    def __init__(self, bgr_color,
+                 hsv_range=HSV_RANGE_DEFAULT,
+                 minimum_pixels=MINIMUM_PIXELS_DEFAULT):
         self.__minimum_pixels = minimum_pixels
 
         # Convert into a tuple if it is a string

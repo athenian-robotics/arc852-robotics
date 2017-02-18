@@ -22,6 +22,8 @@ GRPC_HOST = "grpc_host"
 GRPC_PORT = "grpc_port"
 SERIAL_PORT = "serial_port"
 BAUD_RATE = "baud_rate"
+LED_NAME = "led_name"
+LED_BRIGHTNESS = "led_brightness"
 CAMERA_NAME = "camera_name"
 CAMERA_NAME_DEFAULT = "Unnamed"
 MQTT_HOST = "mqtt_host"
@@ -45,3 +47,4 @@ FLIP_Y = "flip_y"
 DEVICE_ID = "device_id"
 
 SERIAL_PORT_DEFAULT = "/dev/ttyACM0"
+LED_BRIGHTNESS_DEFAULT = 0.10
