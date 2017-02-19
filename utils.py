@@ -39,11 +39,15 @@ def strip_loglevel(args):
 
 
 # PRA FIXME
-def setup_logging(stream=sys.stderr,
+def setup_logging(filename=None,
+                  filemode="a",
+                  stream=sys.stderr,
                   level=logging.INFO,
                   format="%(asctime)s %(name)-10s %(funcName)-10s():%(lineno)i: %(levelname)-6s %(message)s"):
-    # logging.basicConfig(filename=filename, filemode=filemode, stream=stream, level=level, format=format)
-    logging.basicConfig(stream=stream, level=level, format=format)
+    if filename:
+        logging.basicConfig(filename=filename, filemode=filemode, stream=stream, level=level, format=format)
+    else:
+        logging.basicConfig(stream=stream, level=level, format=format)
 
 
 # As described at http://legacy.python.org/dev/peps/pep-0469/
