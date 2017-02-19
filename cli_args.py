@@ -5,8 +5,8 @@ from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, 
     LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS
 from constants import DRAW_CONTOUR, DRAW_BOX
 from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
-from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST
-from constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
+from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST, MQTT_TOPIC
+from constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
 from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
 from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT
 
@@ -156,3 +156,11 @@ def verbose_http(p):
 def verbose(p):
     return p.add_argument("-v", "--verbose", dest=LOG_LEVEL, default=logging.INFO, action="store_const",
                           const=logging.DEBUG, help="Enable debugging info")
+
+def log_file(p):
+    return p.add_argument("-l", "--log-file", dest=LOG_FILE, default=None,
+                          help="Logging output to file")
+
+def mqtt_topic(p):
+    return p.add_argument("--topic", "--mqtt-topic", dest=MQTT_TOPIC, required=True,
+                          help="Desired MQTT topic")
