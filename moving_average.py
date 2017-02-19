@@ -14,3 +14,6 @@ class MovingAverage(object):
         if len(self.values) <= 1:
             return None
         return np.average(self.values)
+
+    def clear(self):
+        self.values.clear()
