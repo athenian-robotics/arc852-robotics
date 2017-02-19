@@ -1,6 +1,6 @@
 from collections import deque
 
-import numpy as np
+from numpy import average
 
 
 class MovingAverage(object):
@@ -13,7 +13,7 @@ class MovingAverage(object):
     def average(self):
         if len(self.values) <= 1:
             return None
-        return np.average(self.values)
+        return average(self.values)
 
     def clear(self):
         self.values.clear()
