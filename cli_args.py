@@ -157,7 +157,7 @@ def http_delay_secs(p):
 def http_startup_sleep_secs(p):
     return p.add_argument("--sleep", "--startup_sleep", dest=HTTP_STARTUP_SLEEP_SECS, type=int,
                           default=HTTP_STARTUP_SLEEP_SECS_DEFAULT,
-                          help="HTTP startup pause secs [{0}]".format(HTTP_STARTUP_SLEEP_SECS_DEFAULT))
+                          help="HTTP startup sleep secs [{0}]".format(HTTP_STARTUP_SLEEP_SECS_DEFAULT))
 
 
 def http_file(p):
