@@ -2,7 +2,7 @@ import argparse
 import logging
 
 from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, \
-    HTTP_STARTUP_SLEEP_SECS_DEFAULT, HTTP_STARTUP_SLEEP_SECS
+    HTTP_STARTUP_SLEEP_SECS_DEFAULT, HTTP_STARTUP_SLEEP_SECS, MASK_X, MASK_Y
 from constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
 from constants import DRAW_CONTOUR, DRAW_BOX
 from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
@@ -31,12 +31,22 @@ def usb(p):
 
 def flip_x(p):
     return p.add_argument("-x", "--flipx", dest=FLIP_X, default=False, action="store_true",
-                          help="Flip image on X axis[false]")
+                          help="Flip image on X axis [false]")
 
 
 def flip_y(p):
     return p.add_argument("-y", "--flipy", dest=FLIP_Y, default=False, action="store_true",
-                          help="Flip image on Y axis[false]")
+                          help="Flip image on Y axis [false]")
+
+
+def mask_x(p):
+    return p.add_argument("--mask_x", "--maskx", dest=MASK_X, default=0, type=int,
+                          help="Mask image on X axis [0]")
+
+
+def mask_y(p):
+    return p.add_argument("--mask_y", "--masky", dest=MASK_Y, default=0, type=int,
+                          help="Mask image on Y axis [0]")
 
 
 def width(p):
