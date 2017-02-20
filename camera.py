@@ -18,7 +18,7 @@ class Camera(object):
             time.sleep(2.0)
         else:
             self.__vc = VideoCapture(0)
-            self.__vc.set(15, -11)
+            # self.__vc.set(15, -11)
 
     def is_open(self):
         return True if self._use_picamera else self.__vc.isOpened()
