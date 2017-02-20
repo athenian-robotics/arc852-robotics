@@ -92,15 +92,15 @@ class SerialReader(object):
         self.stopped = True
 
     @staticmethod
-    def lookup_port(id):
-        """Get port info from a given PID"""
-        ports = [i for i in serial.tools.list_ports.grep(id)]
+    def lookup_port(did):
+        """Get port info from a given DID"""
+        ports = [i for i in serial.tools.list_ports.grep(did)]
         if len(ports) == 1:
             # PySerial v.2.7 is packaged along with raspis. It returns data from list_ports in the form of a tuple.
             # v.3.x is the latest, and it returns objects instead.
             port_info = ports[0]
             return port_info[0] if isinstance(port_info, tuple) else port_info.device
         elif len(ports) > 1:
-            logger.error("Multiple matches found for device id {0}".format(id))
+            logger.error("Multiple matches found for device id {0}".format(did))
         else:
             return None

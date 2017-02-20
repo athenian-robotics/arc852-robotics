@@ -1,7 +1,8 @@
 import argparse
 import logging
 
-from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST
+from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, \
+    HTTP_STARTUP_SLEEP_SECS_DEFAULT, HTTP_STARTUP_SLEEP_SECS
 from constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
 from constants import DRAW_CONTOUR, DRAW_BOX
 from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
@@ -149,8 +150,14 @@ def http_host(p):
 
 
 def http_delay_secs(p):
-    return p.add_argument("--delay", dest=HTTP_DELAY_SECS, default=HTTP_DELAY_SECS_DEFAULT, type=float,
+    return p.add_argument("--delay", "--http_delay", dest=HTTP_DELAY_SECS, default=HTTP_DELAY_SECS_DEFAULT, type=float,
                           help="HTTP delay secs [{0}]".format(HTTP_DELAY_SECS_DEFAULT))
+
+
+def http_startup_sleep_secs(p):
+    return p.add_argument("--sleep", "--startup_sleep", dest=HTTP_STARTUP_SLEEP_SECS, type=int,
+                          default=HTTP_STARTUP_SLEEP_SECS_DEFAULT,
+                          help="HTTP startup pause secs [{0}]".format(HTTP_STARTUP_SLEEP_SECS_DEFAULT))
 
 
 def http_file(p):
@@ -158,8 +165,8 @@ def http_file(p):
                           help="HTTP template file")
 
 
-def verbose_http(p):
-    return p.add_argument("--verbose-http", dest="http_verbose", default=False, action="store_true",
+def http_verbose(p):
+    return p.add_argument("--http_verbose", "--verbose_http", dest="http_verbose", default=False, action="store_true",
                           help="Enable verbose HTTP log [false]")
 
 

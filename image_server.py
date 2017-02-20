@@ -5,7 +5,7 @@ from threading import Thread
 
 import opencv_utils as utils
 import requests
-from constants import CAMERA_NAME_DEFAULT
+from constants import CAMERA_NAME_DEFAULT, HTTP_STARTUP_SLEEP_SECS_DEFAULT
 from constants import HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
 from flask import Flask
 from flask import redirect
@@ -19,15 +19,18 @@ logger = logging.getLogger(__name__)
 
 
 class ImageServer(object):
-    def __init__(self, http_file,
+    def __init__(self,
+                 http_file,
                  camera_name=CAMERA_NAME_DEFAULT,
                  http_host=HTTP_HOST_DEFAULT,
                  http_delay_secs=HTTP_DELAY_SECS_DEFAULT,
+                 http_startup_sleep_secs=HTTP_STARTUP_SLEEP_SECS_DEFAULT,
                  http_verbose=False):
+        self.__http_file = http_file
         self.__camera_name = camera_name
         self.__http_host = http_host
         self.__http_delay_secs = http_delay_secs
-        self.__http_file = http_file
+        self.__http_startup_sleep_secs = http_startup_sleep_secs
 
         vals = self.__http_host.split(":")
         self.__host = vals[0]
@@ -37,6 +40,7 @@ class ImageServer(object):
         self.__current_image = None
         self.__ready_to_stop = False
         self.__flask_launched = False
+        self.__ready_to_start = False
         self.started = False
         self.stopped = False
 
@@ -66,6 +70,10 @@ class ImageServer(object):
     @image.setter
     def image(self, image):
         if not self.enabled:
+            return
+
+        # Wait until potential sleep in start() has completed
+        if not self.__ready_to_start:
             return
 
         if not self.started:
@@ -144,12 +152,18 @@ class ImageServer(object):
         logger.info("Running HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
 
     def start(self):
-        if self.__flask_launched or not self.enabled:
-            return
-
         if self.started:
             logger.error("ImageServer.start() already called")
             return
+
+        if self.__flask_launched or not self.enabled:
+            return
+
+        if self.__http_startup_sleep_secs > 0:
+            logger.info("Delaying HTTP startup by {0} secs".format(self.__http_startup_sleep_secs))
+            time.sleep(self.__http_startup_sleep_secs)
+
+        self.__ready_to_start = True
 
         # We cannot start the flask server until we know the dimensions of the image
         # So we do not fire up the thread until the first image is available
