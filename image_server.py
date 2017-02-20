@@ -40,7 +40,7 @@ class ImageServer(object):
         self.__current_image = None
         self.__ready_to_stop = False
         self.__flask_launched = False
-        self.__ready_to_start = False
+        self.__ready_to_serve = False
         self.started = False
         self.stopped = False
 
@@ -73,7 +73,7 @@ class ImageServer(object):
             return
 
         # Wait until potential sleep in start() has completed
-        if not self.__ready_to_start:
+        if not self.__ready_to_serve:
             return
 
         if not self.started:
@@ -151,6 +151,18 @@ class ImageServer(object):
         self.__flask_launched = True
         logger.info("Running HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
 
+    def _start(self):
+        if self.__http_startup_sleep_secs > 0:
+            logger.info("Delaying HTTP startup by {0} secs".format(self.__http_startup_sleep_secs))
+            time.sleep(self.__http_startup_sleep_secs)
+
+        # We cannot start the flask server until we know the dimensions of the image
+        # So we do not fire up the thread until the first image is available
+        logger.info("Using template file {0}".format(self.__http_file))
+        logger.info("Starting HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
+        self.__ready_to_serve = True
+        self.started = True
+
     def start(self):
         if self.started:
             logger.error("ImageServer.start() already called")
@@ -159,17 +171,8 @@ class ImageServer(object):
         if self.__flask_launched or not self.enabled:
             return
 
-        if self.__http_startup_sleep_secs > 0:
-            logger.info("Delaying HTTP startup by {0} secs".format(self.__http_startup_sleep_secs))
-            time.sleep(self.__http_startup_sleep_secs)
+        Thread(target=self._start).start()
 
-        self.__ready_to_start = True
-
-        # We cannot start the flask server until we know the dimensions of the image
-        # So we do not fire up the thread until the first image is available
-        logger.info("Using template file {0}".format(self.__http_file))
-        logger.info("Starting HTTP server on http://{0}:{1}/".format(self.__host, self.__port))
-        self.started = True
 
     def stop(self):
         self.__ready_to_stop = True

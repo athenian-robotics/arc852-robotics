@@ -6,7 +6,7 @@ from utils import is_raspi
 
 class Camera(object):
     def __init__(self, src=0, use_picamera=True, resolution=(320, 240), framerate=32):
-        if is_raspi():
+        if is_raspi() and False:
             from imutils.video import VideoStream
             # Initialize the video stream
             self.__vs = VideoStream(src=src,
