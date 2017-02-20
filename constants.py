@@ -47,6 +47,8 @@ MIDDLE_PERCENT = "middle_percent"
 FLIP_X = "flip_x"
 FLIP_Y = "flip_y"
 DEVICE_ID = "device_id"
+VERTICAL_LINES = "vertical_lines"
+HORIZONTAL_LINES = "horizontal_lines"
 
 SERIAL_PORT_DEFAULT = "/dev/ttyACM0"
 LED_BRIGHTNESS_DEFAULT = 0.10

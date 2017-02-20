@@ -1,8 +1,8 @@
 import argparse
 import logging
 
-from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, DEVICE_ID, \
-    LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS
+from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST
+from constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
 from constants import DRAW_CONTOUR, DRAW_BOX
 from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
 from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST, MQTT_TOPIC
@@ -133,6 +133,16 @@ def alternate(p):
                           help="Alternate servo actions [false]")
 
 
+def vertical_lines(p):
+    return p.add_argument("--vertical", "--vertical_lines", dest=VERTICAL_LINES, default=False, action="store_true",
+                          help="Draw vertical lines [false]")
+
+
+def horizontal_lines(p):
+    return p.add_argument("--horizontal", "--horizontal_lines", dest=HORIZONTAL_LINES, default=False,
+                          action="store_true", help="Draw horizontal lines [false]")
+
+
 def http_host(p):
     return p.add_argument("--http", dest=HTTP_HOST, default=HTTP_HOST_DEFAULT,
                           help="HTTP hostname:port [{0}]".format(HTTP_HOST_DEFAULT))
@@ -157,9 +167,11 @@ def verbose(p):
     return p.add_argument("-v", "--verbose", dest=LOG_LEVEL, default=logging.INFO, action="store_const",
                           const=logging.DEBUG, help="Enable debugging info")
 
+
 def log_file(p):
     return p.add_argument("-l", "--log-file", dest=LOG_FILE, default=None,
                           help="Logging output to file")
+
 
 def mqtt_topic(p):
     return p.add_argument("--topic", "--mqtt-topic", dest=MQTT_TOPIC, required=True,
