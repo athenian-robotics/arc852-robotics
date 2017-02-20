@@ -38,7 +38,6 @@ def strip_loglevel(args):
     return {k: args[k] for k in args.keys() if k != "loglevel"}
 
 
-# PRA FIXME
 def setup_logging(filename=None,
                   filemode="a",
                   stream=sys.stderr,
