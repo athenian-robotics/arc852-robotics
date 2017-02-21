@@ -1,14 +1,14 @@
 import argparse
 import logging
 
-from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, \
-    HTTP_STARTUP_SLEEP_SECS_DEFAULT, HTTP_STARTUP_SLEEP_SECS, MASK_X, MASK_Y
+from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST
 from constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
 from constants import DRAW_CONTOUR, DRAW_BOX
 from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
 from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST, MQTT_TOPIC
 from constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
 from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
+from constants import HTTP_STARTUP_SLEEP_SECS_DEFAULT, HTTP_STARTUP_SLEEP_SECS, MASK_X, MASK_Y, USB_ID
 from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT
 
 
@@ -26,7 +26,11 @@ def bgr(p):
 
 def usb(p):
     return p.add_argument("-u", "--usb", dest=USB_CAMERA, default=False, action="store_true",
-                          help="Use USB Raspi camera [false]")
+                          help="Use USB camera [false]")
+
+
+def usb_id(p):
+    return p.add_argument("--usb_id", dest=USB_ID, default=-1, type=int, help="USB camera id ")
 
 
 def flip_x(p):
