@@ -5,32 +5,34 @@ from utils import is_raspi
 
 
 class Camera(object):
-    def __init__(self, src=0, use_picamera=True, resolution=(320, 240), framerate=32):
-        self._use_picamera = use_picamera
+    def __init__(self, src=0, usb_camera=False, resolution=(320, 240), framerate=32):
+        self._usb_camera = usb_camera
 
-        if self.use_vs():
+        if self.use_video_stream():
             from imutils.video import VideoStream
             # Initialize the video stream
             self.__vs = VideoStream(src=src,
-                                    usePiCamera=use_picamera,
+                                    usePiCamera=usb_camera,
                                     resolution=resolution,
                                     framerate=framerate).start()
             # Allow the cammera sensor to warmup
             time.sleep(2.0)
         else:
-            self.__vc = VideoCapture(0)
+            # On OSX, built-in camera use 0, usb cameras use 1
+            camera_num = 0 if is_raspi() or not self._usb_camera else 1
+            self.__vc = VideoCapture(camera_num)
 
-    def use_vs(self):
-        return self._use_picamera and is_raspi()
+    def use_video_stream(self):
+        return not self._usb_camera and is_raspi()
 
     def is_open(self):
-        return True if self.use_vs() else self.__vc.isOpened()
+        return True if self.use_video_stream() else self.__vc.isOpened()
 
     def read(self):
-        return self.__vs.read() if self.use_vs() else self.__vc.read()[1]
+        return self.__vs.read() if self.use_video_stream() else self.__vc.read()[1]
 
     def close(self):
-        if self.use_vs():
+        if self.use_video_stream():
             self.__vs.stop()
         else:
             self.__vc.release()
