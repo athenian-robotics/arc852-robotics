@@ -11,11 +11,8 @@ class BadValuesQueue(object):
     def mark(self):
         self.values.append(current_time_millis())
 
-    def is_invalid(self, max_elapsed_time):
-        if len(self.values) < self._size:
-            return False
-        else:
-            return abs(self.values[0] - self.values[-1]) > max_elapsed_time
+    def is_invalid(self, max_elapsed_millis):
+        return abs(self.values[0] - self.values[-1]) > max_elapsed_millis if len(self.values) == self._size  else False
 
     def clear(self):
         self.values.clear()

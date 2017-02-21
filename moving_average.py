@@ -11,9 +11,7 @@ class MovingAverage(object):
         self.values.append(val)
 
     def average(self):
-        if len(self.values) <= 1:
-            return None
-        return average(self.values)
+        return average(self.values) if len(self.values) > 0 else None
 
     def clear(self):
         self.values.clear()
