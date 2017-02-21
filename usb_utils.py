@@ -7,9 +7,9 @@ __DEVICE_NUM = "device_num"
 def usb_devices():
     device_re = re.compile("Bus\s+(?P<bus>\d+)\s+Device\s+(?P<device>\d+).+ID\s(?P<id>\w+:\w+)\s(?P<tag>.+)$", re.I)
     df = subprocess.check_output("lsusb")
-    for lines in df.split("\n"):
-        if lines:
-            info = device_re.match(lines)
+    for line in df.split("\n"):
+        if line:
+            info = device_re.match(line)
             if info:
                 dinfo = info.groupdict()
                 bus = dinfo.pop("bus")
