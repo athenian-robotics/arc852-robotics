@@ -14,11 +14,14 @@ logger = logging.getLogger(__name__)
 
 
 class SerialReader(object):
-    def __init__(self):
+    def __init__(self, debug=False):
         self.lock = Lock()
         self.event = Event()
         self.stopped = False
         self.data = None
+
+        if debug:
+            logging.info(SerialReader.all_ports)
 
     # Read data from serial port and pass it along to the consumer
     # If the consumer runs slower than the producer, then values will be dropped
