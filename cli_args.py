@@ -175,7 +175,7 @@ def http_startup_sleep_secs(p):
 
 
 def http_file(p):
-    return p.add_argument("-i", "--file", dest=HTTP_FILE, default=HTTP_TEMPLATE_DEFAULT,
+    return p.add_argument("-i", "--file", "--http_file", dest=HTTP_FILE, default=HTTP_TEMPLATE_DEFAULT,
                           help="HTTP template file")
 
 
