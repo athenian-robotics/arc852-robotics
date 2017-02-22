@@ -104,3 +104,8 @@ class SerialReader(object):
             logger.error("Multiple matches found for device id {0}".format(did))
         else:
             return None
+
+    @staticmethod
+    def all_ports():
+        """Get all ports"""
+        return [i for i in serial.tools.list_ports.grep(".*")]
