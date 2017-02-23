@@ -190,10 +190,10 @@ def verbose(p):
 
 
 def log_file(p):
-    return p.add_argument("-l", "--log-file", dest=LOG_FILE, default=None,
+    return p.add_argument("-l", "--log_file", dest=LOG_FILE, default=None,
                           help="Logging output to file")
 
 
 def mqtt_topic(p):
-    return p.add_argument("--topic", "--mqtt-topic", dest=MQTT_TOPIC, required=True,
+    return p.add_argument("--topic", "--mqtt_topic", dest=MQTT_TOPIC, required=True,
                           help="Desired MQTT topic")
