@@ -85,7 +85,7 @@
         var green = '#14CC06'
 
         window.onload = function () {
-            header = document.getElementById('header0');
+            var header = document.getElementById('header_0');
             header.innerHTML = "_NAME_ (_DELAY_SECS_ secs)";
             setButton();
             loadImage();
@@ -93,13 +93,13 @@
 
         function loadImage() {
             if (!paused) {
-                warning = document.getElementById('status0')
-                image = new Image();
+                var warning = document.getElementById('status_0')
+                var image = new Image();
                 image.onload = function(){
                     warning.innerHTML = "Connected to image server";
                     warning.style.backgroundColor = green
-                    ctx = document.getElementById('image0').getContext('2d');
-                    ctx.drawImage(image, 0, 0);
+                    img = document.getElementById('image_0');
+                    img.getContext('2d').drawImage(image, 0, 0);
                     setTimeout(loadImage, _DELAY_SECS_ * 1000);
                 };
                 image.onerror = function(){
@@ -112,12 +112,12 @@
         }
 
         function setButton() {
-            button = document.getElementById('pause0');
+            var button = document.getElementById('pause_0');
             button.style.backgroundColor = paused ? red : green;
             button.value = paused ? 'Resume' : 'Pause';
 
-            image = document.getElementById('image0');
-            image.style.borderColor = paused ? red : green;
+            var img = document.getElementById('image_0');
+            img.style.borderColor = paused ? red : green;
         }
 
         function togglePause() {
@@ -161,20 +161,20 @@
 <table border="0">
     <tr>
         <td>
-            <p class="header" id="header0"></p>
+            <p class="header" id="header_0"></p>
         </td>
         <td>
-            <p class="status" id="status0"></p>
+            <p class="status" id="status_0"></p>
         </td>
     </tr>
 </table>
 
 <div>
-    <canvas class="image" id="image0" width="_WIDTH_px" height="_HEIGHT_px" onclick="togglePause()"></canvas>
+    <canvas class="image" id="image_0" width="_WIDTH_px" height="_HEIGHT_px" onclick="togglePause()"></canvas>
 </div>
 
 <div>
-    <input type="button" class="pause" id="pause0" value="Pause" onclick="togglePause()">
+    <input type="button" class="pause" id="pause_0" value="Pause" onclick="togglePause()">
 </div>
 
 </body>
