@@ -1,7 +1,7 @@
 import argparse
 import logging
 
-from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST
+from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, USB_PORT
 from constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
 from constants import DRAW_CONTOUR, DRAW_BOX
 from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
@@ -30,7 +30,11 @@ def usb(p):
 
 
 def usb_id(p):
-    return p.add_argument("--usb_id", dest=USB_ID, default=-1, type=int, help="USB camera id ")
+    return p.add_argument("--usb_id", dest=USB_ID, default=-1, type=int, help="USB camera id")
+
+
+def usb_port(p):
+    return p.add_argument("--usb_port", dest=USB_PORT, default=-1, type=int, help="USB camera port")
 
 
 def flip_x(p):

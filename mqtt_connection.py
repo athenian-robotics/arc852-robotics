@@ -15,8 +15,8 @@ logger = logging.getLogger(__name__)
 
 def on_connect(client, userdata, flags, rc):
     if userdata:
-        logging.info("{0} connecting to {1}:{2}".format("Success" if rc == 0 else "Failure",
-                                                        userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
+        logger.info("{0} connecting to {1}:{2}".format("Success" if rc == 0 else "Failure",
+                                                       userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
     else:
         logger.info("{0} connecting to MQTT broker".format("Success" if rc == 0 else "Failure"))
 
@@ -31,9 +31,9 @@ def on_publish(client, userdata, mid):
 
 def on_disconnect(client, userdata, rc):
     if userdata:
-        logging.info("Disconecting from {0}:{1}".format(userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
+        logger.info("Disconecting from {0}:{1}".format(userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
     else:
-        logging.info("Disconecting from MQTT broker")
+        logger.info("Disconecting from MQTT broker")
 
 
 class MqttConnection(object):

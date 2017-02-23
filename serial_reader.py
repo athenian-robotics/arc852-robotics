@@ -21,9 +21,9 @@ class SerialReader(object):
         self.data = None
 
         if debug:
-            logging.info("Serial port info:")
+            logger.info("Serial port info:")
             for i in SerialReader.all_ports():
-                logging.info(i)
+                logger.info(i)
 
     # Read data from serial port and pass it along to the consumer
     # If the consumer runs slower than the producer, then values will be dropped

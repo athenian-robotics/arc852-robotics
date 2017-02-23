@@ -175,7 +175,14 @@ class ImageServer(object):
 
 
     def stop(self):
+        if not self.__flask_launched:
+            return
+
         self.__ready_to_stop = True
         url = "http://{0}:{1}".format(self.__host, self.__port)
         logger.info("Shutting down {0}".format(url))
-        requests.post("{0}/__shutdown__".format(url))
+
+        try:
+            requests.post("{0}/__shutdown__".format(url))
+        except requests.exceptions.ConnectionError:
+            logger.error("Unable to stop ImageServer")
