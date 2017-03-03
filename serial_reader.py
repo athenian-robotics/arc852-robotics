@@ -12,6 +12,10 @@ from utils import is_windows
 
 logger = logging.getLogger(__name__)
 
+DEVICE = "Device"
+MANF = "Manufacturer"
+HWID = "HWID"
+SN = "SN"
 
 class SerialReader(object):
     def __init__(self, debug=False):
@@ -99,7 +103,7 @@ class SerialReader(object):
     @staticmethod
     def lookup_port(did):
         """Get port info from a given DID"""
-        ports = [i for i in serial.tools.list_ports.grep(did)]
+        ports = [p for p in serial.tools.list_ports.grep(did)]
         if len(ports) == 1:
             # PySerial v.2.7 is packaged along with raspis. It returns data from list_ports in the form of a tuple.
             # v.3.x is the latest, and it returns objects instead.
@@ -113,5 +117,10 @@ class SerialReader(object):
     @staticmethod
     def all_ports():
         """Get all ports"""
-        return [{"Device": i.device, "manufacturer": i.manufacturer, "Device": i.device, "HWID": i.hwid,
-                 "SN": i.serial_number} for i in serial.tools.list_ports.grep(".*")]
+        return [{DEVICE: p.device, MANF: p.manufacturer, HWID: p.hwid, SN: p.serial_number}
+                for p in serial.tools.list_ports.grep(".*")]
+
+    @staticmethod
+    def metro_minis():
+        """Get all Metro Mini ports"""
+        return [p for p in SerialReader.all_ports() if p[MANF] == "Silicon Labs"]
