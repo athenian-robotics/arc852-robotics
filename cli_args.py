@@ -8,7 +8,7 @@ from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, F
 from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST, MQTT_TOPIC
 from constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
 from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
-from constants import HTTP_STARTUP_SLEEP_SECS_DEFAULT, HTTP_STARTUP_SLEEP_SECS, MASK_X, MASK_Y, USB_ID
+from constants import MASK_X, MASK_Y, USB_ID
 from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT
 
 
@@ -170,13 +170,6 @@ def http_host(p):
 def http_delay_secs(p):
     return p.add_argument("--delay", "--http_delay", dest=HTTP_DELAY_SECS, default=HTTP_DELAY_SECS_DEFAULT, type=float,
                           help="HTTP delay secs [{0}]".format(HTTP_DELAY_SECS_DEFAULT))
-
-
-def http_startup_sleep_secs(p):
-    return p.add_argument("--sleep", "--startup_sleep", dest=HTTP_STARTUP_SLEEP_SECS, type=int,
-                          default=HTTP_STARTUP_SLEEP_SECS_DEFAULT,
-                          help="HTTP startup sleep secs [{0}]".format(HTTP_STARTUP_SLEEP_SECS_DEFAULT))
-
 
 def http_file(p):
     return p.add_argument("-i", "--file", "--http_file", dest=HTTP_FILE, default=HTTP_TEMPLATE_DEFAULT,

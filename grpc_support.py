@@ -58,7 +58,7 @@ class GenericServer(object):
         self.__stopped = False
         self.__clients_lock = Lock()
         self.__cnt_lock = Lock()
-        self._invoke_cnt = 0
+        self.__invoke_cnt = 0
         self._clients = {}
         self._grpc_server = None
         self._currval = None
@@ -72,13 +72,20 @@ class GenericServer(object):
     def stopped(self):
         return self.__stopped
 
-    @property
-    def cnt_lock(self):
-        return self.__cnt_lock
-
     @stopped.setter
     def stopped(self, val):
         self.__stopped = val
+
+    def _init_values_on_start(self):
+        raise NotImplementedError('Method not implemented!')
+
+    def _start_server(self):
+        raise NotImplementedError('Method not implemented!')
+
+    def increment_cnt(self):
+        with self.__cnt_lock:
+            self.__invoke_cnt += 1
+        return self.__invoke_cnt
 
     def set_currval(self, val):
         with self.__clients_lock:
@@ -112,12 +119,6 @@ class GenericServer(object):
             with self.__clients_lock:
                 if self._clients.pop(name, None) is None:
                     logger.error("Error releasing {0}".format(client_desc))
-
-    def _init_values_on_start(self):
-        raise NotImplementedError('Method not implemented!')
-
-    def _start_server(self):
-        raise NotImplementedError('Method not implemented!')
 
     def start(self):
         logger.info("Starting {0}".format(self.desc))
