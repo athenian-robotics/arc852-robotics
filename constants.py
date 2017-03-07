@@ -16,6 +16,9 @@ HSV_RANGE_DEFAULT = 20
 MINIMUM_PIXELS_DEFAULT = 100
 
 DEFAULT_BAUD = 115200
+OOR_SIZE_DEFAULT = 3
+OOR_TIME_DEFAULT = 1000
+OOR_UPPER_DEFAULT = -1
 
 GRPC_PORT_DEFAULT = 50051
 GRPC_HOST = "grpc_host"
@@ -34,6 +37,9 @@ HTTP_VERBOSE = "http_verbose"
 LOG_LEVEL = "loglevel"
 LOG_FILE = "logfile"
 MQTT_TOPIC = "mqtt_topic"
+OOR_SIZE = "oor_size"
+OOR_TIME = "oor_time"
+OOR_UPPER = "oor_upper"
 MINIMUM_PIXELS = "minimum_pixels"
 LEDS = "leds"
 DRAW_CONTOUR = "draw_contour"

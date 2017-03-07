@@ -112,7 +112,7 @@ class ImageServer(object):
             if not self.__ready_to_stop:
                 return "Not ready to stop"
             shutdown_func = request.environ.get('werkzeug.server.shutdown')
-            if shutdown_func is not None:
+            if shutdown_func:
                 self.stopped = True
                 shutdown_func()
             return "Shutting down..."

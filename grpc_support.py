@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 
 
 class GenericClient(object):
-    def __init__(self, hostname, desc):
-        self.__desc = desc
+    def __init__(self, hostname, desc=None):
+        self.__desc = desc if desc else "client"
         self._hostname = hostname if ":" in hostname else hostname + ":{0}".format(GRPC_PORT_DEFAULT)
         self.__stopped = False
         self.__value_lock = Lock()
@@ -52,9 +52,9 @@ class GenericClient(object):
 
 
 class GenericServer(object):
-    def __init__(self, port, desc):
-        self.__desc = desc
-        self._hostname = "[::]:" + str(port)
+    def __init__(self, port=None, desc=None):
+        self.__desc = desc if desc else "server"
+        self._hostname = "[::]:{0}".format(port if port else GRPC_PORT_DEFAULT)
         self.__stopped = False
         self.__clients_lock = Lock()
         self.__cnt_lock = Lock()
@@ -63,6 +63,12 @@ class GenericServer(object):
         self._grpc_server = None
         self._currval = None
         self._id = 0
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
 
     @property
     def desc(self):
@@ -76,11 +82,33 @@ class GenericServer(object):
     def stopped(self, val):
         self.__stopped = val
 
+    @property
+    def grpc_server(self):
+        return self._grpc_server
+
+    @grpc_server.setter
+    def grpc_server(self, val):
+        self._grpc_server = val
+
     def _init_values_on_start(self):
         raise NotImplementedError('Method not implemented!')
 
     def _start_server(self):
         raise NotImplementedError('Method not implemented!')
+
+    def start(self):
+        logger.info("Starting {0}".format(self.desc))
+        self._init_values_on_start()
+        Thread(target=self._start_server).start()
+        time.sleep(1)
+        return self
+
+    def stop(self):
+        if not self.stopped:
+            logger.info("Stopping {0}".format(self.desc))
+            self.stopped = True
+            self.set_currval(None)
+            self.grpc_server.stop(0)
 
     def increment_cnt(self):
         with self.__cnt_lock:
@@ -106,7 +134,7 @@ class GenericServer(object):
                     if ready.is_set() and not self.stopped:
                         ready.clear()
                         val = self._currval
-                        if val is not None:
+                        if val:
                             yield val
                     else:
                         logger.info("Skipped sending data to {0}".format(client_desc))
@@ -120,19 +148,13 @@ class GenericServer(object):
                 if self._clients.pop(name, None) is None:
                     logger.error("Error releasing {0}".format(client_desc))
 
-    def start(self):
-        logger.info("Starting {0}".format(self.desc))
-        self._init_values_on_start()
-        Thread(target=self._start_server).start()
-        time.sleep(1)
-        return self
 
-    def stop(self):
-        if not self.stopped:
-            logger.info("Stopping {0}".format(self.desc))
-            self.stopped = True
-            self.set_currval(None)
-            self._grpc_server.stop(0)
+class CannotConnectException(Exception):
+    def __init__(self, hostname, *args, **kwargs):
+        self._hostname = hostname
+
+    def __str__(self):
+        return "Cannot connect to server at {0}".format(self._hostname)
 
 
 class TimeoutException(Exception):

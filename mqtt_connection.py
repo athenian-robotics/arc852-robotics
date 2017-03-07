@@ -92,7 +92,7 @@ class MqttConnection(object):
                                  exc_info=True)
                     time.sleep(1)
 
-        if self.__thread is not None:
+        if self.__thread:
             logger.error("MqttConnection.connect() already called")
         else:
             self.__thread = Thread(target=connect_to_mqtt)

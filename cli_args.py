@@ -1,7 +1,9 @@
 import argparse
 import logging
 
-from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, USB_PORT
+from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, USB_PORT, \
+    OOR_SIZE, \
+    OOR_SIZE_DEFAULT, OOR_TIME, OOR_TIME_DEFAULT, OOR_UPPER, OOR_UPPER_DEFAULT
 from constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
 from constants import DRAW_CONTOUR, DRAW_BOX
 from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
@@ -194,3 +196,18 @@ def log_file(p):
 def mqtt_topic(p):
     return p.add_argument("--topic", "--mqtt_topic", dest=MQTT_TOPIC, required=True,
                           help="Desired MQTT topic")
+
+
+def oor_size(p):
+    return p.add_argument("--oor_size", dest=OOR_SIZE, type=int, default=OOR_SIZE_DEFAULT,
+                          help="Out of range buffer size [{0}]".format(OOR_SIZE_DEFAULT))
+
+
+def oor_time(p):
+    return p.add_argument("--oor_time", dest=OOR_TIME, type=int, default=OOR_TIME_DEFAULT,
+                          help="Out of range time [{0}]".format(OOR_TIME_DEFAULT))
+
+
+def oor_upper(p):
+    return p.add_argument("--oor_upper", dest=OOR_UPPER, type=int, default=OOR_UPPER_DEFAULT,
+                          help="Out of range upper boundary [{0}]".format(OOR_UPPER_DEFAULT))

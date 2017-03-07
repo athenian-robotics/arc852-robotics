@@ -61,7 +61,7 @@ class SerialReader(object):
             sys.exit(0)
 
         finally:
-            if ser is not None:
+            if ser:
                 ser.close()
 
     # Process data without doing a busy wait
@@ -96,9 +96,11 @@ class SerialReader(object):
         Thread(target=self.process_data, args=(func, userdata)).start()
 
         self.stopped = False
+        return self
 
     def stop(self):
         self.stopped = True
+        return self
 
     @staticmethod
     def lookup_port(did):
