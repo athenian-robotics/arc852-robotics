@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class GenericClient(object):
     def __init__(self, hostname, desc=None):
         self.__desc = desc if desc else "client"
-        self._hostname = hostname if ":" in hostname else hostname + ":{0}".format(GRPC_PORT_DEFAULT)
+        self.__hostname = hostname if ":" in hostname else hostname + ":{0}".format(GRPC_PORT_DEFAULT)
         self.__stopped = False
         self.__value_lock = Lock()
 
@@ -59,10 +59,10 @@ class GenericServer(object):
         self.__clients_lock = Lock()
         self.__cnt_lock = Lock()
         self.__invoke_cnt = 0
-        self._clients = {}
-        self._grpc_server = None
-        self._currval = None
-        self._id = 0
+        self.__clients = {}
+        self.__grpc_server = None
+        self.__currval = None
+        self.__id = 0
 
     def __enter__(self):
         return self
@@ -84,11 +84,11 @@ class GenericServer(object):
 
     @property
     def grpc_server(self):
-        return self._grpc_server
+        return self.__grpc_server
 
     @grpc_server.setter
     def grpc_server(self, val):
-        self._grpc_server = val
+        self.__grpc_server = val
 
     def _init_values_on_start(self):
         raise NotImplementedError('Method not implemented!')
@@ -117,8 +117,8 @@ class GenericServer(object):
 
     def set_currval(self, val):
         with self.__clients_lock:
-            self._currval = val
-            for v in itervalues(self._clients):
+            self.__currval = val
+            for v in itervalues(self.__clients):
                 v.set()
 
     def currval_generator(self, name):
@@ -126,14 +126,14 @@ class GenericServer(object):
         try:
             ready = Event()
             with self.__clients_lock:
-                self._clients[name] = ready
+                self.__clients[name] = ready
 
             while not self.stopped:
                 ready.wait()
                 with self.__clients_lock:
                     if ready.is_set() and not self.stopped:
                         ready.clear()
-                        val = self._currval
+                        val = self.__currval
                         if val:
                             yield val
                     else:
@@ -145,7 +145,7 @@ class GenericServer(object):
         finally:
             logger.info("Discontinued streaming values for {0}".format(client_desc))
             with self.__clients_lock:
-                if self._clients.pop(name, None) is None:
+                if self.__clients.pop(name, None) is None:
                     logger.error("Error releasing {0}".format(client_desc))
 
 
