@@ -18,6 +18,10 @@ class GenericClient(object):
         self.__value_lock = Lock()
 
     @property
+    def hostname(self):
+        return self.__hostname
+
+    @property
     def desc(self):
         return self.__desc
 
@@ -54,7 +58,7 @@ class GenericClient(object):
 class GenericServer(object):
     def __init__(self, port=None, desc=None):
         self.__desc = desc if desc else "server"
-        self._hostname = "[::]:{0}".format(port if port else GRPC_PORT_DEFAULT)
+        self.__hostname = "[::]:{0}".format(port if port else GRPC_PORT_DEFAULT)
         self.__stopped = False
         self.__clients_lock = Lock()
         self.__cnt_lock = Lock()
@@ -71,6 +75,10 @@ class GenericServer(object):
         self.stop()
 
     @property
+    def hostname(self):
+        return self.__hostname
+
+    @property
     def desc(self):
         return self.__desc
 
@@ -81,6 +89,14 @@ class GenericServer(object):
     @stopped.setter
     def stopped(self, val):
         self.__stopped = val
+
+    @property
+    def id(self):
+        return self.__id
+
+    @id.setter
+    def id(self, val):
+        self.__id = val
 
     @property
     def grpc_server(self):
@@ -151,10 +167,10 @@ class GenericServer(object):
 
 class CannotConnectException(Exception):
     def __init__(self, hostname, *args, **kwargs):
-        self._hostname = hostname
+        self.__hostname = hostname
 
     def __str__(self):
-        return "Cannot connect to server at {0}".format(self._hostname)
+        return "Cannot connect to server at {0}".format(self.__hostname)
 
 
 class TimeoutException(Exception):
