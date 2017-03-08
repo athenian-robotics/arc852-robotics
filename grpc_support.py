@@ -10,10 +10,14 @@ from utils import itervalues
 logger = logging.getLogger(__name__)
 
 
+def grpc_url(hostname):
+    return hostname if ":" in hostname else hostname + ":{0}".format(GRPC_PORT_DEFAULT)
+
+
 class GenericClient(object):
     def __init__(self, hostname, desc=None):
         self.__desc = desc if desc else "client"
-        self.__hostname = hostname if ":" in hostname else hostname + ":{0}".format(GRPC_PORT_DEFAULT)
+        self.__hostname = grpc_url(hostname)
         self.__stopped = False
         self.__value_lock = Lock()
 

@@ -19,7 +19,7 @@ def usb_devices():
                 yield dinfo
 
 
-def lookup_device(id):
+def lookup_device(did):
     for i in usb_devices():
-        if i["id"] == id:
+        if i["id"] == did:
             return i[__DEVICE_NUM]
