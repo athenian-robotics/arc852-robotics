@@ -105,7 +105,8 @@ class SerialReader(object):
     @staticmethod
     def lookup_port(did):
         """Get port info from a given DID"""
-        ports = [p for p in serial.tools.list_ports.grep(str(did))]
+        logger.info("Using DID = {0}".format(did))
+        ports = [p for p in serial.tools.list_ports.grep(did)]
         if len(ports) == 1:
             # PySerial v.2.7 is packaged along with raspis. It returns data from list_ports in the form of a tuple.
             # v.3.x is the latest, and it returns objects instead.
