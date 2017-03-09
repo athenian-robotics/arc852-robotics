@@ -18,7 +18,7 @@ class MovingAverage(object):
     def max_size(self):
         return self._max_size
 
-    def size(self):
+    def __len__(self):
         return len(self.values)
 
     def clear(self):
