@@ -1,19 +1,24 @@
+import logging
 import time
 from cv2 import VideoCapture, destroyAllWindows
 
 from utils import is_raspi
 
+logger = logging.getLogger(__name__)
 
 class Camera(object):
     def __init__(self, src=0, usb_camera=False, usb_port=-1, resolution=(320, 240), framerate=32):
         self._usb_camera = usb_camera
         self._usb_port = usb_port
 
+        logger.info("Camera args: usb_camera {0} usb_port: {1}".format(usb_camera, usb_port))
+
         if self.use_video_stream():
+            logger.info("Using video stream")
             from imutils.video import VideoStream
             # Initialize the video stream
             self.__vs = VideoStream(src=src,
-                                    usePiCamera=usb_camera,
+                                    usePiCamera=not usb_camera,
                                     resolution=resolution,
                                     framerate=framerate).start()
             # Allow the cammera sensor to warmup
@@ -24,6 +29,7 @@ class Camera(object):
                 camera_num = 0 if is_raspi() or not self._usb_camera else 1
             else:
                 camera_num = usb_port
+            logger.info("Not using video stream - camera_num {0}".format(camera_num))
             self.__vc = VideoCapture(camera_num)
 
     def use_video_stream(self):
