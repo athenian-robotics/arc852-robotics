@@ -141,6 +141,10 @@ class GenericServer(object):
             for v in itervalues(self.__clients):
                 v.set()
 
+    def get_currval(self):
+        with self.__clients_lock:
+            return self.__currval
+
     def currval_generator(self, name):
         client_desc = "{0} client {1}".format(self.desc, name)
         try:

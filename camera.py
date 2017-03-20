@@ -20,7 +20,8 @@ class Camera(object):
             self.__vs = VideoStream(src=src,
                                     usePiCamera=not usb_camera,
                                     resolution=resolution,
-                                    framerate=framerate).start()
+                                    framerate=framerate)
+            self.__vs.start()
             # Allow the cammera sensor to warmup
             time.sleep(2.0)
         else:
