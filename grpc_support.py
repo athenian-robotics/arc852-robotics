@@ -18,8 +18,16 @@ class GenericClient(object):
     def __init__(self, hostname, desc=None):
         self.__desc = desc if desc else "client"
         self.__hostname = grpc_url(hostname)
+        self.__started = False
         self.__stopped = False
         self.__value_lock = Lock()
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
 
     @property
     def hostname(self):
@@ -48,8 +56,12 @@ class GenericClient(object):
         raise NotImplementedError('Method not implemented!')
 
     def start(self):
-        logger.info("Starting {0}".format(self.desc))
-        Thread(target=self._get_values).start()
+        if not self.__started:
+            logger.info("Starting {0}".format(self.desc))
+            Thread(target=self._get_values).start()
+            self.__started = True
+        else:
+            logger.error("{0} alreader started".format(self.desc))
         return self
 
     def stop(self):
@@ -57,12 +69,16 @@ class GenericClient(object):
             logger.info("Stopping {0}".format(self.desc))
             self.stopped = True
             self._mark_ready()
+        else:
+            logger.error("{0} alreader stopped".format(self.desc))
+        return self
 
 
 class GenericServer(object):
     def __init__(self, port=None, desc=None):
         self.__desc = desc if desc else "server"
         self.__hostname = "[::]:{0}".format(port if port else GRPC_PORT_DEFAULT)
+        self.__started = False
         self.__stopped = False
         self.__clients_lock = Lock()
         self.__cnt_lock = Lock()
@@ -71,8 +87,10 @@ class GenericServer(object):
         self.__grpc_server = None
         self.__currval = None
         self.__id = 0
+        self.__currval_cnt = 0
 
     def __enter__(self):
+        self.start()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -117,10 +135,14 @@ class GenericServer(object):
         raise NotImplementedError('Method not implemented!')
 
     def start(self):
-        logger.info("Starting {0}".format(self.desc))
-        self._init_values_on_start()
-        Thread(target=self._start_server).start()
-        time.sleep(1)
+        if not self.__started:
+            logger.info("Starting {0}".format(self.desc))
+            self._init_values_on_start()
+            Thread(target=self._start_server).start()
+            self.__started = True
+            time.sleep(1)
+        else:
+            logger.error("{0} alreader started".format(self.desc))
         return self
 
     def stop(self):
@@ -129,6 +151,9 @@ class GenericServer(object):
             self.stopped = True
             self.set_currval(None)
             self.grpc_server.stop(0)
+        else:
+            logger.error("{0} alreader stopped".format(self.desc))
+        return self
 
     def increment_cnt(self):
         with self.__cnt_lock:
@@ -145,13 +170,19 @@ class GenericServer(object):
         with self.__clients_lock:
             return self.__currval
 
-    def currval_generator(self, name):
-        client_desc = "{0} client {1}".format(self.desc, name)
-        try:
-            ready = Event()
-            with self.__clients_lock:
-                self.__clients[name] = ready
+    def currval_generator(self, client_id):
+        ready = Event()
 
+        with self.__clients_lock:
+            self.__currval_cnt += 1
+            unique_id = "{0}/{1}".format(client_id, self.__currval_cnt)
+            self.__clients[unique_id] = ready
+
+        client_desc = "{0} client {1}".format(self.desc, unique_id)
+
+        logger.info("Starting to stream values for {0}".format(client_desc))
+
+        try:
             while not self.stopped:
                 ready.wait()
                 with self.__clients_lock:
@@ -169,7 +200,7 @@ class GenericServer(object):
         finally:
             logger.info("Discontinued streaming values for {0}".format(client_desc))
             with self.__clients_lock:
-                if self.__clients.pop(name, None) is None:
+                if self.__clients.pop(unique_id, None) is None:
                     logger.error("Error releasing {0}".format(client_desc))
 
 
