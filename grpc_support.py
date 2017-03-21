@@ -190,7 +190,7 @@ class GenericServer(object):
                     else:
                         logger.info("Skipped sending data to {0}".format(client_desc))
         except GeneratorExit:
-            logger.info("gRPC {0} disconnected".format(client_desc))
+            logger.info("Disconnected {0}".format(client_desc))
         except BaseException as e:
             logger.error("Unknown error generating values [{0}]".format(e), exc_info=True)
         finally:
