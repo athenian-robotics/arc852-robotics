@@ -61,7 +61,7 @@ class GenericClient(object):
             Thread(target=self._get_values).start()
             self.__started = True
         else:
-            logger.error("{0} alreader started".format(self.desc))
+            logger.error("{0} already started".format(self.desc))
         return self
 
     def stop(self):
@@ -69,8 +69,6 @@ class GenericClient(object):
             logger.info("Stopping {0}".format(self.desc))
             self.stopped = True
             self._mark_ready()
-        else:
-            logger.error("{0} alreader stopped".format(self.desc))
         return self
 
 
@@ -142,7 +140,7 @@ class GenericServer(object):
             self.__started = True
             time.sleep(1)
         else:
-            logger.error("{0} alreader started".format(self.desc))
+            logger.error("{0} already started".format(self.desc))
         return self
 
     def stop(self):
@@ -151,8 +149,6 @@ class GenericServer(object):
             self.stopped = True
             self.set_currval(None)
             self.grpc_server.stop(0)
-        else:
-            logger.error("{0} alreader stopped".format(self.desc))
         return self
 
     def increment_cnt(self):
