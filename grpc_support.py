@@ -5,6 +5,7 @@ from threading import Lock
 from threading import Thread
 
 from constants import GRPC_PORT_DEFAULT
+from utils import current_time_millis
 from utils import itervalues, add_http_prefix
 
 logger = logging.getLogger(__name__)
@@ -198,10 +199,14 @@ class GenericServer(object):
         with self.__clients_lock:
             return self.__currval
 
+    def _adjust_currval(self, currval, start_time):
+        return currval
+
     def currval_generator(self, client_id):
         ready = Event()
 
         with self.__clients_lock:
+            start_time = current_time_millis()
             self.__currval_cnt += 1
             unique_id = "{0}/{1}".format(client_id, self.__currval_cnt)
             self.__clients[unique_id] = ready
@@ -216,7 +221,7 @@ class GenericServer(object):
                 with self.__clients_lock:
                     if ready.is_set() and not self.stopped:
                         ready.clear()
-                        val = self.__currval
+                        val = self._adjust_currval(self.__currval, start_time)
                         if val:
                             yield val
                     else:
