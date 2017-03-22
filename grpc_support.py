@@ -5,7 +5,7 @@ from threading import Lock
 from threading import Thread
 
 from constants import GRPC_PORT_DEFAULT
-from utils import itervalues
+from utils import itervalues, add_http_prefix
 
 logger = logging.getLogger(__name__)
 
@@ -15,9 +15,9 @@ def grpc_url(hostname):
 
 
 class GenericClient(object):
-    def __init__(self, hostname, desc=None):
+    def __init__(self, hostname, http_hostname=False, desc=None):
         self.__desc = desc if desc else "client"
-        self.__hostname = grpc_url(hostname)
+        self.__hostname = grpc_url(hostname) if not http_hostname else add_http_prefix(hostname)
         self.__started = False
         self.__stopped = False
         self.__value_lock = Lock()
@@ -70,6 +70,38 @@ class GenericClient(object):
             self.stopped = True
             self._mark_ready()
         return self
+
+
+class SingleValueClient(GenericClient):
+    def __init__(self, hostname, http_hostname=False, desc=None):
+        super(SingleValueClient, self).__init__(hostname=hostname, desc=desc, http_hostname=http_hostname)
+        self.__ready = Event()
+        self.__currval = None
+
+    @property
+    def currval(self):
+        return self.__currval
+
+    @currval.setter
+    def currval(self, val):
+        self.__currval = val
+
+    def _mark_ready(self):
+        self.__ready.set()
+
+    # Blocking
+    def value(self, timeout=None):
+        while not self.stopped:
+            if not self.__ready.wait(timeout):
+                raise TimeoutException
+            with self.value_lock:
+                if self.__ready.is_set() and not self.stopped:
+                    self.__ready.clear()
+                    return self.currval
+
+    def values(self):
+        while not self.stopped:
+            yield self.value()
 
 
 class GenericServer(object):
