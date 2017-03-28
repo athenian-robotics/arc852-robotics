@@ -77,6 +77,14 @@ class MqttConnection(object):
         if on_log:
             self.client.on_log = on_log
 
+    def __enter__(self):
+        self.connect()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.disconnect()
+        return self
+
     def connect(self):
         def connect_to_mqtt():
             while self.__retry:

@@ -7,6 +7,7 @@ import time
 def add_http_prefix(url):
     return url if url.startswith("http://") or url.startswith("https://") else "http://" + url
 
+
 def mqtt_broker_info(val):
     # Broker hostname can be either "localhost" or "localhost:999"
     return (val[:val.index(":")], int(val[val.index(":") + 1:])) if ":" in val else (val, 1883)
@@ -22,6 +23,13 @@ def is_windows():
 
 def is_python3():
     return sys.version_info[0] >= 3
+
+
+def waitForKeyboardInterrupt():
+    try:
+        sleep()
+    except KeyboardInterrupt:
+        pass
 
 
 def sleep():

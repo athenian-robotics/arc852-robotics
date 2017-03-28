@@ -127,6 +127,7 @@ class GenericServer(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
+        return self
 
     @property
     def hostname(self):
@@ -200,6 +201,7 @@ class GenericServer(object):
         with self.__clients_lock:
             return self.__currval
 
+    # This is overridden by sub-class if adjustment necessary
     def _adjust_currval(self, currval, start_time):
         return currval
 
