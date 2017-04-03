@@ -18,16 +18,28 @@ HWID = "HWID"
 SN = "SN"
 
 class SerialReader(object):
-    def __init__(self, debug=False):
-        self.lock = Lock()
-        self.event = Event()
-        self.stopped = False
-        self.data = None
+    def __init__(self, func, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD, debug=False):
+        self.__func = func
+        self.__userdata = userdata
+        self.__baudrate = baudrate
+        self.__port_path = ("" if (is_windows() or "/dev/" in str(port)) else "/dev/") + str(port)
+        self.__lock = Lock()
+        self.__event = Event()
+        self.__stopped = False
+        self.__data = None
 
         if debug:
             logger.info("Serial port info:")
             for i in SerialReader.all_ports():
                 logger.info(i)
+
+    def __enter__(self):
+        self.start()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
+        return self
 
     # Read data from serial port and pass it along to the consumer
     # If the consumer runs slower than the producer, then values will be dropped
@@ -38,7 +50,7 @@ class SerialReader(object):
             ser = serial.Serial(port=port, baudrate=baudrate)
             logger.info("Reading data from serial port {0} at {1}bps".format(port, baudrate))
 
-            while not self.stopped:
+            while not self.__stopped:
                 b = None
                 try:
                     # Read data from serial port.  Ignore the trailing two chars with [:-2]
@@ -46,11 +58,11 @@ class SerialReader(object):
                     b = ser.readline()[:-2]
 
                     # Update data with mutex
-                    with self.lock:
-                        self.data = b.decode("utf-8")
+                    with self.__lock:
+                        self.__data = b.decode("utf-8")
 
                     # Notify consumer data is ready
-                    self.event.set()
+                    self.__event.set()
 
                 except BaseException:
                     logger.error("Unable to read serial data [{0}]".format(b), exc_info=True)
@@ -67,17 +79,17 @@ class SerialReader(object):
     # Process data without doing a busy wait
     # If process_data() runs faster than read_serial_port(), it will wait on self.event
     def process_data(self, func, userdata):
-        while not self.stopped:
+        while not self.__stopped:
             try:
                 # Wait for data
-                self.event.wait()
+                self.__event.wait()
 
                 # Reset event to trigger wait on net iteration
-                self.event.clear()
+                self.__event.clear()
 
                 # Read data with mutex
-                with self.lock:
-                    val = self.data
+                with self.__lock:
+                    val = self.__data
 
                 # Call func with data
                 func(val, userdata)
@@ -87,19 +99,18 @@ class SerialReader(object):
                 # Do not sleep on errors and slow down sampling
                 # time.sleep(1)
 
-    def start(self, func, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD):
+    def start(self):
         # Start read_serial_port()
-        port_path = ("" if (is_windows() or "/dev/" in str(port)) else "/dev/") + str(port)
-        Thread(target=self.read_serial_port, args=(port_path, baudrate)).start()
+        Thread(target=self.read_serial_port, args=(self.__port_path, self.__baudrate)).start()
 
         # Start process_data()
-        Thread(target=self.process_data, args=(func, userdata)).start()
+        Thread(target=self.process_data, args=(self.__func, self.__userdata)).start()
 
-        self.stopped = False
+        self.__stopped = False
         return self
 
     def stop(self):
-        self.stopped = True
+        self.__stopped = True
         return self
 
     @staticmethod
