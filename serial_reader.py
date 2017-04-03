@@ -17,6 +17,7 @@ MANF = "Manufacturer"
 HWID = "HWID"
 SN = "SN"
 
+
 class SerialReader(object):
     def __init__(self, func, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD, debug=False):
         self.__func = func
@@ -123,10 +124,9 @@ class SerialReader(object):
             # v.3.x is the latest, and it returns objects instead.
             port_info = ports[0]
             return port_info[0] if isinstance(port_info, tuple) else port_info.device
-        elif len(ports) > 1:
-            logger.error("Multiple matches found for device id {0}".format(did))
-        else:
-            return None
+
+        logger.error("{0} matches found for device id {1}".format("No" if len(ports) == 0 else "Multiple", did))
+        return None
 
     @staticmethod
     def all_ports():
