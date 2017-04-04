@@ -49,7 +49,7 @@ class SerialReader(object):
         try:
             # Open serial port
             ser = serial.Serial(port=port, baudrate=baudrate)
-            logger.info("Reading data from serial port {0} at {1}bps".format(port, baudrate))
+            logger.info("Reading data from serial port %s at %sbps", port, baudrate)
 
             while not self.__stopped:
                 b = None
@@ -66,11 +66,11 @@ class SerialReader(object):
                     self.__event.set()
 
                 except BaseException:
-                    logger.error("Unable to read serial data [{0}]".format(b), exc_info=True)
+                    logger.error("Unable to read serial data [%s]", b, exc_info=True)
                     time.sleep(1)
 
         except serial.serialutil.SerialException as e:
-            logger.error("Unable to open serial port [{0}]".format(e), exc_info=True)
+            logger.error("Unable to open serial port [%s]", e, exc_info=True)
             sys.exit(0)
 
         finally:
@@ -96,7 +96,7 @@ class SerialReader(object):
                 func(val, userdata)
 
             except BaseException as e:
-                logger.error("Error while calling func [{0}]".format(e), exc_info=True)
+                logger.error("Error while calling func [%s]", e, exc_info=True)
                 # Do not sleep on errors and slow down sampling
                 # time.sleep(1)
 
@@ -117,7 +117,7 @@ class SerialReader(object):
     @staticmethod
     def lookup_port(did):
         """Get port info from a given DID"""
-        logger.info("Using DID = {0}".format(did))
+        logger.info("Using DID = %s", did)
         ports = [p for p in serial.tools.list_ports.grep(did)]
         if len(ports) == 1:
             # PySerial v.2.7 is packaged along with raspis. It returns data from list_ports in the form of a tuple.
@@ -125,7 +125,7 @@ class SerialReader(object):
             port_info = ports[0]
             return port_info[0] if isinstance(port_info, tuple) else port_info.device
 
-        logger.error("{0} matches found for device id {1}".format("No" if len(ports) == 0 else "Multiple", did))
+        logger.error("%s matches found for device id %s", "No" if len(ports) == 0 else "Multiple", did)
         return None
 
     @staticmethod

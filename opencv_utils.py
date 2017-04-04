@@ -24,7 +24,7 @@ def write_image(frame, file_name=None, log_info=False):
     fname = file_name if file_name else "ct-{0}.png".format(datetime.datetime.now().strftime("%H-%M-%S"))
     cv2.imwrite(file_name, frame)
     if log_info:
-        logger.info("Wrote image to {0}".format(fname))
+        logger.info("Wrote image to %s", fname)
 
 
 def encode_image(frame, ext=".jpg"):

@@ -15,23 +15,25 @@ logger = logging.getLogger(__name__)
 
 def on_connect(mqtt_client, userdata, flags, rc):
     if userdata:
-        logger.info("{0} connecting to {1}:{2}".format("Success" if rc == 0 else "Failure",
-                                                       userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
+        logger.info("%s connecting to %s:%s",
+                    "Success" if rc == 0 else "Failure",
+                    userdata[PAHO_HOSTNAME],
+                    userdata[PAHO_PORT])
     else:
-        logger.info("{0} connecting to MQTT broker".format("Success" if rc == 0 else "Failure"))
+        logger.info("%s connecting to MQTT broker", "Success" if rc == 0 else "Failure")
 
 
 def on_subscribe(mqtt_client, userdata, mid, granted_qos):
-    logger.info("Subscribed with message id: {0} QOS: {1}".format(mid, granted_qos))
+    logger.info("Subscribed with message id: %s QOS: %s", mid, granted_qos)
 
 
 def on_publish(mqtt_client, userdata, mid):
-    logger.debug("Published value with message id {0}".format(mid))
+    logger.debug("Published value with message id %s", mid)
 
 
 def on_disconnect(mqtt_client, userdata, rc):
     if userdata:
-        logger.info("Disconecting from {0}:{1}".format(userdata[PAHO_HOSTNAME], userdata[PAHO_PORT]))
+        logger.info("Disconecting from %s:%s", userdata[PAHO_HOSTNAME], userdata[PAHO_PORT])
     else:
         logger.info("Disconecting from MQTT broker")
 
@@ -89,14 +91,14 @@ class MqttConnection(object):
         def connect_to_mqtt():
             while self.__retry:
                 try:
-                    logger.info("Connecting to MQTT broker {0}:{1}...".format(self.__hostname, self.__port))
+                    logger.info("Connecting to MQTT broker %s:%s...", self.__hostname, self.__port)
                     self.client.connect(self.__hostname, port=self.__port, keepalive=60)
                     self.client.loop_forever()
                 except socket.error:
-                    logger.error("Cannot connect to MQTT broker {0}:{1}".format(self.__hostname, self.__port))
+                    logger.error("Cannot connect to MQTT broker %s:%s", self.__hostname, self.__port)
                     time.sleep(1)
                 except BaseException as e:
-                    logger.error("Cannot connect to MQTT broker {0}:{1} [{2}]".format(self.__hostname, self.__port, e),
+                    logger.error("Cannot connect to MQTT broker %s:%s [%s]", self.__hostname, self.__port, e,
                                  exc_info=True)
                     time.sleep(1)
 

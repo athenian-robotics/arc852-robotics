@@ -58,16 +58,16 @@ class GenericClient(object):
 
     def start(self):
         if not self.__started:
-            logger.info("Starting {0}".format(self.desc))
+            logger.info("Starting %s", self.desc)
             Thread(target=self._get_values).start()
             self.__started = True
         else:
-            logger.error("{0} already started".format(self.desc))
+            logger.error("%s already started", self.desc)
         return self
 
     def stop(self):
         if not self.stopped:
-            logger.info("Stopping {0}".format(self.desc))
+            logger.info("Stopping %s", self.desc)
             self.stopped = True
             self._mark_ready()
         return self
@@ -169,18 +169,18 @@ class GenericServer(object):
 
     def start(self):
         if not self.__started:
-            logger.info("Starting {0}".format(self.desc))
+            logger.info("Starting %s", self.desc)
             self._init_values_on_start()
             Thread(target=self._start_server).start()
             self.__started = True
             time.sleep(1)
         else:
-            logger.error("{0} already started".format(self.desc))
+            logger.error("%s already started", self.desc)
         return self
 
     def stop(self):
         if not self.stopped:
-            logger.info("Stopping {0}".format(self.desc))
+            logger.info("Stopping %s", self.desc)
             self.stopped = True
             self.set_currval(None)
             self.grpc_server.stop(0)
@@ -228,16 +228,16 @@ class GenericServer(object):
                         if val:
                             yield val
                     else:
-                        logger.info("Skipped sending data to {0}".format(client_desc))
+                        logger.info("Skipped sending data to %s", client_desc)
         except GeneratorExit:
-            logger.info("Disconnected {0}".format(client_desc))
+            logger.info("Disconnected %s", client_desc)
         except BaseException as e:
-            logger.error("Unknown error generating values [{0}]".format(e), exc_info=True)
+            logger.error("Unknown error generating values [%s]", e, exc_info=True)
         finally:
-            logger.info("Discontinued streaming values for {0}".format(client_desc))
+            logger.info("Discontinued streaming values for %s", client_desc)
             with self.__clients_lock:
                 if self.__clients.pop(unique_id, None) is None:
-                    logger.error("Error releasing {0}".format(client_desc))
+                    logger.error("Error releasing %s", client_desc)
 
 
 class CannotConnectException(Exception):
