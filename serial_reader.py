@@ -8,7 +8,7 @@ from threading import Thread
 import serial
 import serial.tools.list_ports
 from constants import DEFAULT_BAUD
-from prometheus_client import Summary
+from prometheus_client import Histogram
 from utils import is_windows
 
 logger = logging.getLogger(__name__)
@@ -19,8 +19,8 @@ HWID = "HWID"
 SN = "SN"
 
 # Create a metric to track time spent and requests made.
-READ_TIME = Summary('serial_read_seconds', 'Time spent reading serial data')
-PROCESS_TIME = Summary('serial_processing_seconds', 'Time spent processing serial data')
+READ_TIME = Histogram('serial_read_seconds', 'Time spent reading serial data')
+PROCESS_TIME = Histogram('serial_processing_seconds', 'Time spent processing serial data')
 
 class SerialReader(object):
     def __init__(self, func, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD, debug=False):
