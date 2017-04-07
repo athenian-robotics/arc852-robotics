@@ -29,6 +29,7 @@ class GenericClient(object):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.stop()
+        return self
 
     @property
     def hostname(self):
@@ -201,10 +202,6 @@ class GenericServer(object):
         with self.__clients_lock:
             return self.__currval
 
-    # This is overridden by sub-class if adjustment necessary
-    def _adjust_currval(self, currval, start_time):
-        return currval
-
     def currval_generator(self, client_id):
         ready = Event()
 
@@ -224,9 +221,8 @@ class GenericServer(object):
                 with self.__clients_lock:
                     if ready.is_set() and not self.stopped:
                         ready.clear()
-                        val = self._adjust_currval(self.__currval, start_time)
-                        if val:
-                            yield val
+                        if self.__currval:
+                            yield self.__currval
                     else:
                         logger.info("Skipped sending data to %s", client_desc)
         except GeneratorExit:
