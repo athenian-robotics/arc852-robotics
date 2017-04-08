@@ -1,5 +1,5 @@
 [![Code Health](https://landscape.io/github/athenian-robotics/common-robotics/master/landscape.svg?style=flat)](https://landscape.io/github/athenian-robotics/common-robotics/master)
-
+[![Code Climate](https://codeclimate.com/github/athenian-robotics/distance-tracking/badges/gpa.svg)](https://codeclimate.com/github/athenian-robotics/distance-tracking)
 # Common robotics python code
 
 ## Package Dependencies
