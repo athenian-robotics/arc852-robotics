@@ -57,7 +57,7 @@ class MqttConnection(object):
         # Create Paho client
         self.client = paho.Client(userdata=userdata)
 
-        if userdata:
+        if userdata is not None:
             userdata[PAHO_CLIENT] = self.client
             if not userdata.get(PAHO_HOSTNAME):
                 userdata[PAHO_HOSTNAME] = self.__hostname

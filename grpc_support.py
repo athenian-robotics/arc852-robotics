@@ -109,7 +109,6 @@ class SingleValueClient(GenericClient):
 class GenericServer(object):
     def __init__(self, port=None, desc=None):
         self.__desc = desc if desc else "server"
-        # self.__hostname = "localhost:{0}".format(port if port else GRPC_PORT_DEFAULT)
         self.__hostname = "[::]:{0}".format(port if port else GRPC_PORT_DEFAULT)
         self.__started = False
         self.__stopped = False
