@@ -62,3 +62,6 @@ HORIZONTAL_LINES = "horizontal_lines"
 
 SERIAL_PORT_DEFAULT = "/dev/ttyACM0"
 LED_BRIGHTNESS_DEFAULT = 0.10
+
+#Ros Constants
+ROS_PUBLISHER = "ros.publisher"
