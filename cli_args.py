@@ -183,10 +183,9 @@ def http_verbose(p):
                           help="Enable verbose HTTP log [false]")
 
 
-def log_level(p):
+def verbose(p):
     return p.add_argument("-v", "--verbose", dest=LOG_LEVEL, default=logging.INFO, action="store_const",
                           const=logging.DEBUG, help="Enable debugging info")
-
 
 def log_file(p):
     return p.add_argument("-l", "--log_file", dest=LOG_FILE, default=None,
