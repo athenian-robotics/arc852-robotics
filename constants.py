@@ -65,3 +65,4 @@ LED_BRIGHTNESS_DEFAULT = 0.10
 
 #Ros Constants
 ROS_PUBLISHER = "ros.publisher"
+ROS_RATE = "ros.rate"

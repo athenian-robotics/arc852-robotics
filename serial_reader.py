@@ -53,7 +53,7 @@ class SerialReader(object):
         try:
             # Open serial port
             ser = serial.Serial(port=port, baudrate=baudrate)
-            logger.info("Reading data from serial port %s at %sbps", port, baudrate)
+            print("Reading data from serial port %s at %sbps", port, baudrate)
 
             while not self.__stopped:
                 with READ_TIME.time():
@@ -62,7 +62,7 @@ class SerialReader(object):
                         # Read data from serial port.  Ignore the trailing two chars with [:-2]
                         # Do not call readline() inside mutex because it might block
                         b = ser.readline()[:-2]
-
+                        print("We got DATA!!!")
                         # Update data with mutex
                         with self.__lock:
                             self.__data = b.decode("utf-8")
