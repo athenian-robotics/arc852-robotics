@@ -37,6 +37,7 @@ class SerialReader(object):
         for i in SerialReader.all_ports():
             print(i)
 
+
     def __enter__(self):
         self.start()
         return self
@@ -105,9 +106,10 @@ class SerialReader(object):
     def start(self):
         # Start read_serial_port()
         Thread(target=self.read_serial_data, args=(self.__port_path, self.__baudrate)).start()
-
+        print("Start reading thread")
         # Start process_data()
         Thread(target=self.process_data, args=(self.__func, self.__userdata)).start()
+        print("Start publish thread")
 
         self.__stopped = False
         return self
