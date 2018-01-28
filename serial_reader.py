@@ -53,6 +53,7 @@ class SerialReader(object):
         ser = None
         try:
             # Open serial port
+            print("Reading data from serial port %s at %sbps", port, baudrate)
             ser = serial.Serial(port=port, baudrate=baudrate)
             print("Reading data from serial port %s at %sbps", port, baudrate)
 
