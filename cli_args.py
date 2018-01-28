@@ -26,7 +26,7 @@ def bgr(p):
                           help="BGR target value, e.g., -b \"174, 56, 5\"")
 
 
-def usb(p):
+def usb_camera(p):
     return p.add_argument("-u", "--usb", dest=USB_CAMERA, default=False, action="store_true",
                           help="Use USB camera [false]")
 
@@ -183,7 +183,7 @@ def http_verbose(p):
                           help="Enable verbose HTTP log [false]")
 
 
-def verbose(p):
+def log_level(p):
     return p.add_argument("-v", "--verbose", dest=LOG_LEVEL, default=logging.INFO, action="store_const",
                           const=logging.DEBUG, help="Enable debugging info")
 
