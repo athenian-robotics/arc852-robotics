@@ -53,9 +53,9 @@ class SerialReader(object):
         ser = None
         try:
             # Open serial port
-            print("Reading data from serial port %s at %sbps", port, baudrate)
+            print("Reading data from serial port %s at %sbps", port, baudrate, 1)
             ser = serial.Serial(port=port, baudrate=baudrate)
-            print("Reading data from serial port %s at %sbps", port, baudrate)
+            print("Reading data from serial port %s at %sbps", port, baudrate, 2)
 
             while not self.__stopped:
                 with READ_TIME.time():
