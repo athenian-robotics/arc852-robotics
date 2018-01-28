@@ -49,6 +49,7 @@ class SerialReader(object):
     # Read data from serial port and pass it along to the consumer
     # If the consumer runs slower than the producer, then values will be dropped
     def read_serial_data(self, port, baudrate):
+        print("Got into read_serial_data")
         ser = None
         try:
             # Open serial port
