@@ -86,17 +86,22 @@ class SerialReader(object):
     # Process data without doing a busy wait
     # If process_data() runs faster than read_serial_port(), it will wait on self.event
     def process_data(self, func, userdata):
+        print('got into process_data')
         while not self.__stopped:
             with PROCESS_TIME.time():
                 try:
                     # Wait for data
+                    print("waiting for event")
                     self.__event.wait()
+                    print("the event happened")
                     # Reset event to trigger wait on net iteration
                     self.__event.clear()
                     # Read data with mutex
                     with self.__lock:
                         val = self.__data
+                        print("got the data")
                     # Call func with data
+
                     func(val, userdata)
                 except BaseException as e:
                     logger.error("Error while calling func [%s]", e, exc_info=True)
@@ -112,6 +117,7 @@ class SerialReader(object):
         print("Start publish thread")
 
         self.__stopped = False
+        print("Self.stopped is false")
         return self
 
     def stop(self):
