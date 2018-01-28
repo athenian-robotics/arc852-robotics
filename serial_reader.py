@@ -62,7 +62,7 @@ class SerialReader(object):
                         # Read data from serial port.  Ignore the trailing two chars with [:-2]
                         # Do not call readline() inside mutex because it might block
                         b = ser.readline()[:-2]
-
+                        logger.info("We got DATA!!!")
                         # Update data with mutex
                         with self.__lock:
                             self.__data = b.decode("utf-8")
