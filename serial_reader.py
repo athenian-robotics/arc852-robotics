@@ -33,10 +33,9 @@ class SerialReader(object):
         self.__stopped = False
         self.__data = None
 
-        if debug:
-            logger.info("Serial port info:")
-            for i in SerialReader.all_ports():
-                logger.info(i)
+        print("Serial port info:")
+        for i in SerialReader.all_ports():
+            print(i)
 
     def __enter__(self):
         self.start()
