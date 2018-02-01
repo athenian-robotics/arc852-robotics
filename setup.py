@@ -15,8 +15,8 @@ from setuptools import setup
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-# with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
-#    long_description = f.read()
+with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
+    long_description = f.read()
 
 # Arguments marked as "Required" below must be included for upload to PyPI.
 # Fields marked as "Optional" may be commented out.
@@ -29,7 +29,7 @@ setup(
     author='The Athenian School',
     author_email='pambrose@mac.com',
 
-    long_description=open('README.md').read(),
+    # long_description=open('README.md').read(),
 
     classifiers=[  # Optional
         'Development Status :: 4 - Beta',
