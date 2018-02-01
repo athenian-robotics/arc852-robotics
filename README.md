@@ -22,6 +22,7 @@ sudo -H pip uninstall arc852-robotics
 
 ## Gemfury Setup
 
+Add 
 Push to gemfury.io with:
 ```bash
 git remote add fury https://pambrose@git.fury.io/pambrose/arc852-robotics.git

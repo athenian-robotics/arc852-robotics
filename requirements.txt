@@ -2,5 +2,6 @@ opencv-python
 numpy
 prometheus_client
 flask
+requests
 pyserial
 paho-mqtt
