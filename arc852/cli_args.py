@@ -10,20 +10,50 @@ from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, F
 from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST, MQTT_TOPIC
 from constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
 from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
-from constants import MASK_X, MASK_Y, USB_ID
-from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT
+from constants import MASK_X, MASK_Y, USB_ID, IMAGE_TOPIC, SO_TOPIC, COMPRESSED, FORMAT, FILENAME, FPS, DRAW_LINE
+from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT, MAXIMUM_OBJECTS_DEFAULT, \
+    MAXIMUM_OBJECTS
 
 
 def setup_cli_args(*args):
     parser = argparse.ArgumentParser()
     for arg in args:
-        arg(parser)
+        if type(arg) is list:
+            for a in arg:
+                a(parser)
+        else:
+            arg(parser)
     return vars(parser.parse_args())
-
 
 def bgr(p):
     return p.add_argument("--bgr", "--bgr_color", dest=BGR_COLOR, required=True,
                           help="BGR target value, e.g., -b \"174, 56, 5\"")
+
+
+def image_topic(p):
+    return p.add_argument("--img_topic", dest=IMAGE_TOPIC, required=True, help="ROS image topic")
+
+
+def so_topic(p):
+    return p.add_argument("--so_topic", dest=SO_TOPIC, default="/single_object",
+                          help="Single Object topic")
+
+
+def compressed(p):
+    return p.add_argument("--compressed", dest=COMPRESSED, default=False, action="store_true",
+                          help="Use CompressedImage [false]")
+
+
+def format(p):
+    return p.add_argument("--format", dest=FORMAT, default="bgr8", help="Image format [bgr8]")
+
+
+def filename(p):
+    return p.add_argument("-f", "--filename", dest=FILENAME, required=True, help="Source filename")
+
+
+def fps(p):
+    return p.add_argument("--fps", dest=FPS, default=30, type=int, help="Frames per second [30]")
 
 
 def usb_camera(p):
@@ -55,13 +85,11 @@ def flip_y(p):
 
 
 def mask_x(p):
-    return p.add_argument("--mask_x", "--maskx", dest=MASK_X, default=0, type=int,
-                          help="Mask image on X axis [0]")
+    return p.add_argument("--mask_x", "--maskx", dest=MASK_X, default=0, type=int, help="Image mask on X axis [0]")
 
 
 def mask_y(p):
-    return p.add_argument("--mask_y", "--masky", dest=MASK_Y, default=0, type=int,
-                          help="Mask image on Y axis [0]")
+    return p.add_argument("--mask_y", "--masky", dest=MASK_Y, default=0, type=int, help="Image mask on Y axis [0]")
 
 
 def width(p):
@@ -75,13 +103,17 @@ def middle_percent(p):
 
 
 def minimum_pixels(p):
-    return p.add_argument("--min", "--min_pixels", dest=MINIMUM_PIXELS, default=MINIMUM_PIXELS_DEFAULT,
-                          type=int,
+    return p.add_argument("--min_pixels", dest=MINIMUM_PIXELS, default=MINIMUM_PIXELS_DEFAULT, type=int,
                           help="Minimum pixel area [{0}]".format(MINIMUM_PIXELS_DEFAULT))
 
 
+def max_objects(p):
+    return p.add_argument("--max_objects", dest=MAXIMUM_OBJECTS, default=MAXIMUM_OBJECTS_DEFAULT, type=int,
+                          help="Maximum objects [{0}]".format(MAXIMUM_OBJECTS_DEFAULT))
+
+
 def hsv_range(p):
-    return p.add_argument("--range", "--hsv_range", dest=HSV_RANGE, default=HSV_RANGE_DEFAULT, type=int,
+    return p.add_argument("--range", "--hsv", "--hsv_range", dest=HSV_RANGE, default=HSV_RANGE_DEFAULT, type=int,
                           help="HSV range [{0}]".format(HSV_RANGE_DEFAULT))
 
 
@@ -99,6 +131,10 @@ def leds(p):
     return p.add_argument("--leds", dest=LEDS, default=False, action="store_true",
                           help="Enable Blinkt led feedback [false]")
 
+
+def draw_line(p):
+    return p.add_argument("--draw_line", "--line", dest=DRAW_LINE, default=False, action="store_true",
+                          help="Draw fitted line [false]")
 
 def draw_contour(p):
     return p.add_argument("--draw_contour", "--contour", dest=DRAW_CONTOUR, default=False, action="store_true",
@@ -200,8 +236,7 @@ def log_level(p):
 
 
 def log_file(p):
-    return p.add_argument("-l", "--log_file", dest=LOG_FILE, default=None,
-                          help="Logging output to file")
+    return p.add_argument("-l", "--log_file", dest=LOG_FILE, default=None, help="Logging output to file")
 
 
 def mqtt_topic(p):
