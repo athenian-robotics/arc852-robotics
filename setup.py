@@ -23,7 +23,7 @@ with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
 
 setup(
     name='common-robotics',
-    version='1.0.4',
+    version='1.0.5',
     description='ARC Common Robotic Code',
     url='https://github.com/athenian-robotics/common-robotics',
     author='The Athenian School',
@@ -63,7 +63,7 @@ setup(
     #   py_modules=["my_module"],
     #
     # packages=find_packages(where='common-robotics', exclude=['contrib', 'docs', 'tests']),  # Required
-    packages=['common-robotics', ],  # Required
+    packages=['common_robotics', ],  # Required
 
     # This field lists other packages that your project depends on to run.
     # Any package you put here will be installed by pip when your project is
