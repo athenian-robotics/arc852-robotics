@@ -10,7 +10,7 @@ from codecs import open
 from os import path
 
 # Always prefer setuptools over distutils
-from setuptools import setup, find_packages
+from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
 
@@ -27,12 +27,8 @@ setup(
     description='ARC Common Robotic Code',
     url='https://github.com/athenian-robotics/common-robotics',
     author='The Athenian School',
-    author_email='pambrose@mac.com', 
+    author_email='pambrose@mac.com',
 
-    # Classifiers help users find your project by categorizing it.
-    #
-    # For a list of valid classifiers, see
-    # https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[  # Optional
         # How mature is this project? Common values are
         #   3 - Alpha
@@ -57,10 +53,6 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
 
-    # This field adds keywords for your project which will appear on the
-    # project page. What does your project relate to?
-    #
-    # Note that this is a string of words separated by whitespace, not a list.
     keywords='robotics',  # Optional
 
     # You can just specify package directories manually here if your project is
@@ -72,9 +64,8 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=find_packages(where='common-robotics', exclude=['contrib', 'docs', 'tests']),  # Required
-
-    include_package_data=True,
+    # packages=find_packages(where='common-robotics', exclude=['contrib', 'docs', 'tests']),  # Required
+    packages='common-robotics',  # Required
 
     # This field lists other packages that your project depends on to run.
     # Any package you put here will be installed by pip when your project is
