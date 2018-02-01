@@ -19,3 +19,6 @@ as described [here](http://www.athenian-robotics.org/numpy/)
 ```bash
 $ export PYTHONPATH=${PYTHONPATH}:~/git/common_robotics
 ```
+
+
+pip install common-robotics --extra-index-url https://pypi.fury.io/N2f8N1MCmujcumus6Sfn/pambrose/
