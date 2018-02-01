@@ -30,10 +30,6 @@ setup(
     author_email='pambrose@mac.com',
 
     classifiers=[  # Optional
-        # How mature is this project? Common values are
-        #   3 - Alpha
-        #   4 - Beta
-        #   5 - Production/Stable
         'Development Status :: 4 - Beta',
 
         # Indicate who your project is intended for
@@ -65,7 +61,7 @@ setup(
     #   py_modules=["my_module"],
     #
     # packages=find_packages(where='common-robotics', exclude=['contrib', 'docs', 'tests']),  # Required
-    packages='common-robotics',  # Required
+    packages=['common-robotics'],  # Required
 
     # This field lists other packages that your project depends on to run.
     # Any package you put here will be installed by pip when your project is
