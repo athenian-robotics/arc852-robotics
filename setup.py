@@ -18,7 +18,7 @@ with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
 
 setup(
     name='arc852-robotics',
-    version='1.0.3',
+    version='1.0.4',
     description='ARC852  Robotic Code',
     url='https://github.com/athenian-robotics/arc852-robotics',
     author='The Athenian School',
@@ -32,7 +32,7 @@ setup(
         'Topic :: Software Development :: Build Tools',
 
         # Pick your license as you wish
-        'License :: OSI Approved :: Apache License',
+        'License :: OSI Approved :: MIT License',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
