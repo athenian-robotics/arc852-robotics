@@ -7,7 +7,7 @@
 
 Install with:
 ```bash
-sudo -H pip install --upgrade arc852-robotics --extra-index-url https://pypi.fury.io/N2f8N1MCmujcumus6Sfn/pambrose/
+sudo -H pip install arc852-robotics --extra-index-url https://pypi.fury.io/N2f8N1MCmujcumus6Sfn/pambrose/
 ```
 
 Update with:
