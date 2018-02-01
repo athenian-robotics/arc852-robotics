@@ -23,7 +23,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='common-robotics',
-    version='1.0.0',
+    version='1.0.1',
     description='ARC Common Robotic Code',
     url='https://github.com/athenian-robotics/common-robotics',
     author='The Athenian School',
