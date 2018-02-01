@@ -124,7 +124,7 @@ setup(
         'opencv-python>=3.4.0.12',
         'numpy>=1.14.0',
         'prometheus_client>=0.1.1',
-        'flask>=0.14.1',
+        'flask>=0.12.2',
         'pyserial>=3.4',
     ],
 
