@@ -22,50 +22,12 @@ with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
 # Fields marked as "Optional" may be commented out.
 
 setup(
-    # This is the name of your project. The first time you publish this
-    # package, this name will be registered for you. It will determine how
-    # users can install this project, e.g.:
-    #
-    # $ pip install sampleproject
-    #
-    # And where it will live on PyPI: https://pypi.org/project/sampleproject/
-    #
-    # There are some restrictions on what makes a valid project name
-    # specification here:
-    # https://packaging.python.org/specifications/core-metadata/#name
-    name='common-robotics',  # Required
-
-    # Versions should comply with PEP 440:
-    # https://www.python.org/dev/peps/pep-0440/
-    #
-    # For a discussion on single-sourcing the version across setup.py and the
-    # project code, see
-    # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.3',  # Required
-
-    # This is a one-line description or tagline of what your project does. This
-    # corresponds to the "Summary" metadata field:
-    # https://packaging.python.org/specifications/core-metadata/#summary
-    description='ARC Common Robotic Code',  # Required
-
-    # This is an optional longer description of your project that represents
-    # the body of text which users will see when they visit PyPI.
-    #
-    # Often, this is the same as your README, so you can just read it in from
-    # that file directly (as we have already done above)
-    #
-    # This field corresponds to the "Description" metadata field:
-    # https://packaging.python.org/specifications/core-metadata/#description-optional
-    ##long_description=long_description,  # Optional
-
-    # This should be a valid link to your project's main homepage.
-    #
-    # This field corresponds to the "Home-Page" metadata field:
-    # https://packaging.python.org/specifications/core-metadata/#home-page-optional
-    url='https://github.com/athenian-robotics/common-robotics',  # Optional
-
-    author='The Athenian School',  # Optional
-    author_email='pambrose@mac.com',  # Optional
+    name='common-robotics',
+    version='1.0.0',
+    description='ARC Common Robotic Code',
+    url='https://github.com/athenian-robotics/common-robotics',
+    author='The Athenian School',
+    author_email='pambrose@mac.com', 
 
     # Classifiers help users find your project by categorizing it.
     #
@@ -110,7 +72,9 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=find_packages('common-robotics', exclude=['contrib', 'docs', 'tests']),  # Required
+    packages=find_packages(where='common-robotics', exclude=['contrib', 'docs', 'tests']),  # Required
+
+    include_package_data=True,
 
     # This field lists other packages that your project depends on to run.
     # Any package you put here will be installed by pip when your project is
