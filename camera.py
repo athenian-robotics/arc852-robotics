@@ -1,7 +1,7 @@
 import logging
 import time
-from cv2 import VideoCapture, destroyAllWindows
 
+from cv2 import VideoCapture, destroyAllWindows
 from utils import is_raspi
 
 logger = logging.getLogger(__name__)
