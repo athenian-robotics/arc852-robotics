@@ -107,9 +107,9 @@ class ColorPicker(object):
         # Display image
         cv2.imshow("Image", image)
 
-        print("Start wait 1")
+        # print("Start wait 1")
         key = cv2.waitKey(1) & 0xFF
-        print("End wait 1")
+        # print("End wait 1")
 
         if key == 255:
             pass
