@@ -23,7 +23,7 @@ with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
 
 setup(
     name='common-robotics',
-    version='1.0.1',
+    version='1.0.2',
     description='ARC Common Robotic Code',
     url='https://github.com/athenian-robotics/common-robotics',
     author='The Athenian School',
