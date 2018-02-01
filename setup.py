@@ -18,7 +18,7 @@ with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
 
 setup(
     name='arc852-robotics',
-    version='1.0.5',
+    version='1.0.6',
     description='ARC852  Robotic Code',
     url='https://github.com/athenian-robotics/arc852-robotics',
     author='The Athenian School',

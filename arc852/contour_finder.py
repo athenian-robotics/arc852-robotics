@@ -1,7 +1,8 @@
 import cv2
 import numpy as np
+
 from constants import MINIMUM_PIXELS_DEFAULT, HSV_RANGE_DEFAULT
-from opencv_utils import contour_slope_degrees
+from opencv_utils import contour_slope_degrees, contains_in_list, get_center
 
 
 class ContourFinder(object):
@@ -34,18 +35,30 @@ class ContourFinder(object):
         # Convert to grayscale
         grayscale = cv2.cvtColor(in_range_result, cv2.COLOR_BGR2GRAY)
 
-        # Get all contours
-        contours = cv2.findContours(grayscale, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
-
         # cv2.imshow("HSV", hsv_image)
         # cv2.imshow("Mask", in_range_mask)
         # cv2.imshow("Res", in_range_result)
         # cv2.imshow("Grayscale", grayscale)
 
-        # Return max contours
-        eligible = [c for c in contours if cv2.moments(c)["m00"] >= self.__minimum_pixels]
-        val = sorted(eligible, key=lambda v: cv2.moments(v)["m00"], reverse=True)[:count]
-        return val if val else None
+        # Get all contours
+        if True:
+            contours = cv2.findContours(grayscale, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
+            # Return max contours that are not overlapping
+            eligible = [c for c in contours if cv2.moments(c)["m00"] >= self.__minimum_pixels]
+            retval = []
+            for val in sorted(eligible, key=lambda v: cv2.moments(v)["m00"], reverse=True):
+                if not contains_in_list(retval, get_center(val)):
+                    retval.append(val)
+                    if len(retval) == count:
+                        break
+            return retval
+        else:
+            # Old way
+            contours = cv2.findContours(grayscale, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[1]
+            eligible = [c for c in contours if cv2.moments(c)["m00"] >= self.__minimum_pixels]
+            val = sorted(eligible, key=lambda v: cv2.moments(v)["m00"], reverse=True)[:count]
+            return val if val else None
+
 
     def get_max_vertical_contours(self, image, lower=None, upper=None, count=1):
         # Convert from BGR to HSV colorspace
@@ -69,7 +82,6 @@ class ContourFinder(object):
         # cv2.imshow("Mask", in_range_mask)
         # cv2.imshow("Res", in_range_result)
         # cv2.imshow("Grayscale", grayscale)
-
         verticals = []
         for c in contours:
             if c is None:
