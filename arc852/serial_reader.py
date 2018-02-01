@@ -33,9 +33,9 @@ class SerialReader(object):
         self.__stopped = False
         self.__data = None
 
-        print("Serial port info:")
-        for i in SerialReader.all_ports():
-            print(i)
+        # print("Serial port info:")
+        # for i in SerialReader.all_ports():
+        #    print(i)
 
 
     def __enter__(self):
@@ -49,13 +49,13 @@ class SerialReader(object):
     # Read data from serial port and pass it along to the consumer
     # If the consumer runs slower than the producer, then values will be dropped
     def read_serial_data(self, port, baudrate):
-        print("Got into read_serial_data")
+        #print("Got into read_serial_data")
         ser = None
         try:
             # Open serial port
-            print("Reading data from serial port %s at %sbps", port, baudrate, 1)
+            #print("Reading data from serial port %s at %sbps", port, baudrate, 1)
             ser = serial.Serial(port=port, baudrate=baudrate)
-            print("Reading data from serial port %s at %sbps", port, baudrate, 2)
+            #print("Reading data from serial port %s at %sbps", port, baudrate, 2)
 
             while not self.__stopped:
                 with READ_TIME.time():
@@ -64,7 +64,7 @@ class SerialReader(object):
                         # Read data from serial port.  Ignore the trailing two chars with [:-2]
                         # Do not call readline() inside mutex because it might block
                         b = ser.readline()[:-2]
-                        print("We got DATA!!!")
+                        #print("We got DATA!!!")
                         # Update data with mutex
                         with self.__lock:
                             self.__data = b.decode("utf-8")
@@ -88,20 +88,20 @@ class SerialReader(object):
     # Process data without doing a busy wait
     # If process_data() runs faster than read_serial_port(), it will wait on self.event
     def process_data(self, func, userdata):
-        print('got into process_data')
+        #print('got into process_data')
         while not self.__stopped:
             with PROCESS_TIME.time():
                 try:
                     # Wait for data
-                    print("waiting for event")
+                    #print("waiting for event")
                     self.__event.wait()
-                    print("the event happened")
+                    #print("the event happened")
                     # Reset event to trigger wait on net iteration
                     self.__event.clear()
                     # Read data with mutex
                     with self.__lock:
                         val = self.__data
-                        print("got the data")
+                        #print("got the data")
                     # Call func with data
 
                     func(val, userdata)
@@ -113,13 +113,13 @@ class SerialReader(object):
     def start(self):
         # Start read_serial_port()
         Thread(target=self.read_serial_data, args=(self.__port_path, self.__baudrate)).start()
-        print("Start reading thread")
+        #print("Start reading thread")
         # Start process_data()
         Thread(target=self.process_data, args=(self.__func, self.__userdata)).start()
-        print("Start publish thread")
+        #print("Start publish thread")
 
         self.__stopped = False
-        print("Self.stopped is false")
+        #print("Self.stopped is false")
         return self
 
     def stop(self):
