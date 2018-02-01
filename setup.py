@@ -15,8 +15,8 @@ from setuptools import setup
 here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
-with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
-    long_description = f.read()
+# with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
+#    long_description = f.read()
 
 # Arguments marked as "Required" below must be included for upload to PyPI.
 # Fields marked as "Optional" may be commented out.
@@ -28,6 +28,8 @@ setup(
     url='https://github.com/athenian-robotics/common-robotics',
     author='The Athenian School',
     author_email='pambrose@mac.com',
+
+    long_description=open('README.md').read(),
 
     classifiers=[  # Optional
         'Development Status :: 4 - Beta',
@@ -61,8 +63,7 @@ setup(
     #   py_modules=["my_module"],
     #
     # packages=find_packages(where='common-robotics', exclude=['contrib', 'docs', 'tests']),  # Required
-    # packages=['common-robotics'],  # Required
-    packages=['.'],  # Required
+    packages=['common-robotics', ],  # Required
 
     # This field lists other packages that your project depends on to run.
     # Any package you put here will be installed by pip when your project is
