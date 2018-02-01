@@ -3,3 +3,4 @@ numpy
 prometheus_client
 flask
 pyserial
+paho-mqtt

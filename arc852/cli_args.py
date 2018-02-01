@@ -31,9 +31,10 @@ def usb_camera(p):
                           help="Use USB camera [false]")
 
 
-def usb(p):
-    return p.add_argument("-u", "--usb", dest=USB_CAMERA, default=False, action="store_true",
-                          help="Use USB camera [false]")
+# usb was changed to usb_camera
+# def usb(p):
+#    return p.add_argument("-u", "--usb", dest=USB_CAMERA, default=False, action="store_true",
+#                          help="Use USB camera [false]")
 
 def usb_id(p):
     return p.add_argument("--usb_id", dest=USB_ID, default=-1, type=int, help="USB camera id")
@@ -177,6 +178,7 @@ def http_delay_secs(p):
     return p.add_argument("--delay", "--http_delay", dest=HTTP_DELAY_SECS, default=HTTP_DELAY_SECS_DEFAULT, type=float,
                           help="HTTP delay secs [{0}]".format(HTTP_DELAY_SECS_DEFAULT))
 
+
 def http_file(p):
     return p.add_argument("-i", "--file", "--http_file", dest=HTTP_FILE, default=HTTP_TEMPLATE_DEFAULT,
                           help="HTTP template file")
@@ -187,14 +189,15 @@ def http_verbose(p):
                           help="Enable verbose HTTP log [false]")
 
 
-def verbose(p):
-    return p.add_argument("-v", "--verbose", dest=LOG_LEVEL, default=logging.INFO, action="store_const",
-                          const=logging.DEBUG, help="Enable debugging info")
-
+# verbose was changed to log_level
+# def verbose(p):
+#    return p.add_argument("-v", "--verbose", dest=LOG_LEVEL, default=logging.INFO, action="store_const",
+#                          const=logging.DEBUG, help="Enable debugging info")
 
 def log_level(p):
     return p.add_argument("-v", "--verbose", dest=LOG_LEVEL, default=logging.INFO, action="store_const",
                           const=logging.DEBUG, help="Enable debugging info")
+
 
 def log_file(p):
     return p.add_argument("-l", "--log_file", dest=LOG_FILE, default=None,
