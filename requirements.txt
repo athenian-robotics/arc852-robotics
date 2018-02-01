@@ -1,7 +1,5 @@
-cv2
+opencv-python
 numpy
-
 prometheus_client
-
 flask
-serial
+pyserial

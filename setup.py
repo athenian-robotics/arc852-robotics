@@ -41,7 +41,7 @@ setup(
     # For a discussion on single-sourcing the version across setup.py and the
     # project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.1',  # Required
+    version='1.0.2',  # Required
 
     # This is a one-line description or tagline of what your project does. This
     # corresponds to the "Summary" metadata field:
@@ -64,12 +64,7 @@ setup(
     # https://packaging.python.org/specifications/core-metadata/#home-page-optional
     url='https://github.com/athenian-robotics/common-robotics',  # Optional
 
-    # This should be your name or the name of the organization which owns the
-    # project.
     author='The Athenian School',  # Optional
-
-    # This should be a valid email address corresponding to the author listed
-    # above.
     author_email='pambrose@mac.com',  # Optional
 
     # Classifiers help users find your project by categorizing it.
@@ -124,6 +119,14 @@ setup(
     # For an analysis of "install_requires" vs pip's requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
     ##install_requires=['peppercorn'],  # Optional
+
+    install_requires=[
+        'opencv-python>=3.4.0.12',
+        'numpy>=1.14.0',
+        'prometheus_client>=0.1.1',
+        'flask>=0.14.1',
+        'pyserial>=3.4',
+    ],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). Users will be able to install these using the "extras"
