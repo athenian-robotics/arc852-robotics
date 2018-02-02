@@ -141,7 +141,8 @@ class ImageServer(object):
         def run_http(flask_server, host, port):
             while not self.stopped:
                 try:
-                    flask_server.run(host=host, port=port)
+                    logger.info("Starting server with {0}:{1}".format(host, port))
+                    flask_server.run(host=host, port=int(port))
                 except BaseException as e:
                     logger.error("Restarting HTTP server [%s]", e, exc_info=True)
                     time.sleep(1)
