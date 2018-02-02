@@ -2,9 +2,9 @@ import time
 from threading import Condition
 from threading import Thread
 
-import cli_args  as cli
-from camera import Camera
-from generic_image_source import GenericImageSource
+import arc852.cli_args  as cli
+from arc852.camera import Camera
+from arc852.generic_image_source import GenericImageSource
 
 
 class CameraImageSource(GenericImageSource):

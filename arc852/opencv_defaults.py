@@ -1,6 +1,6 @@
 import cv2
 
-from utils import is_raspi
+from arc852.utils import is_raspi
 
 TEXT_LOC = (10, 25)
 

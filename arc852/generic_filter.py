@@ -1,7 +1,7 @@
 import logging
 
-from constants import MINIMUM_PIXELS_DEFAULT, HSV_RANGE_DEFAULT
-from contour_finder import ContourFinder
+from arc852.constants import MINIMUM_PIXELS_DEFAULT, HSV_RANGE_DEFAULT
+from arc852.contour_finder import ContourFinder
 
 logger = logging.getLogger(__name__)
 

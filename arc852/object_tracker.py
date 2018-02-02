@@ -5,8 +5,8 @@ import cv2
 import imutils
 import numpy as np
 
-import cli_args  as cli
-import opencv_utils as utils
+import arc852.cli_args  as cli
+import arc852.opencv_utils as utils
 
 logger = logging.getLogger(__name__)
 

@@ -9,10 +9,10 @@ from flask import redirect
 from flask import request
 from werkzeug.wrappers import Response
 
-import cli_args  as cli
-import opencv_utils as utils
-from constants import CAMERA_NAME_DEFAULT
-from constants import HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
+import arc852.cli_args  as cli
+import arc852.opencv_utils as utils
+from arc852.constants import CAMERA_NAME_DEFAULT
+from arc852.constants import HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
 
 # Find where this package is installed
 _image_fname = "/image.jpg"

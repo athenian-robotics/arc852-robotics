@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from serial_reader import SerialReader, DEVICE, HWID, SN, MANF
+from arc852.serial_reader import SerialReader, DEVICE, HWID, SN, MANF
 
 if __name__ == "__main__":
     for p in SerialReader.metro_minis():

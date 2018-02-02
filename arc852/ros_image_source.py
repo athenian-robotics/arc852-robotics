@@ -4,8 +4,8 @@ import rospy
 from cv_bridge import CvBridge
 from sensor_msgs.msg import CompressedImage, Image
 
-import cli_args  as cli
-from generic_image_source import GenericImageSource
+import arc852.cli_args  as cli
+from arc852.generic_image_source import GenericImageSource
 
 
 class RosImageSource(GenericImageSource):

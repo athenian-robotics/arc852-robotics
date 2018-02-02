@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-from constants import MINIMUM_PIXELS_DEFAULT, HSV_RANGE_DEFAULT
-from opencv_utils import contour_slope_degrees, contains_in_list, get_center
+from arc852.constants import MINIMUM_PIXELS_DEFAULT, HSV_RANGE_DEFAULT
+from arc852.opencv_utils import contour_slope_degrees, contains_in_list, get_center
 
 
 class ContourFinder(object):

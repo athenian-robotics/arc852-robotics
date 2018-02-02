@@ -5,10 +5,10 @@ import cv2
 import imutils
 import numpy as np
 
-import cli_args  as cli
-import opencv_defaults as defs
-from opencv_utils import GREEN
-from opencv_utils import RED
+import arc852.cli_args  as cli
+import arc852.opencv_defaults as defs
+from arc852.opencv_utils import GREEN
+from arc852.opencv_utils import RED
 
 logger = logging.getLogger(__name__)
 

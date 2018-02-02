@@ -4,7 +4,8 @@ import time
 from threading import Thread
 
 import paho.mqtt.client as paho
-from utils import mqtt_broker_info
+
+from arc852.utils import mqtt_broker_info
 
 PAHO_CLIENT = "paho.client"
 PAHO_HOSTNAME = "paho.hostname"

@@ -7,9 +7,10 @@ from threading import Thread
 
 import serial
 import serial.tools.list_ports
-from constants import DEFAULT_BAUD
 from prometheus_client import Histogram
-from utils import is_windows
+
+from arc852.constants import DEFAULT_BAUD
+from arc852.utils import is_windows
 
 logger = logging.getLogger(__name__)
 

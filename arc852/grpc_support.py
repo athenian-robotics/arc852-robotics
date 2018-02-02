@@ -4,9 +4,9 @@ from threading import Event
 from threading import Lock
 from threading import Thread
 
-from constants import GRPC_PORT_DEFAULT
-from utils import current_time_millis
-from utils import itervalues, add_http_prefix
+from arc852.constants import GRPC_PORT_DEFAULT
+from arc852.utils import current_time_millis
+from arc852.utils import itervalues, add_http_prefix
 
 logger = logging.getLogger(__name__)
 

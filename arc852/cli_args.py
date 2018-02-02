@@ -1,18 +1,20 @@
 import argparse
 import logging
 
-from constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST, SERIAL_PORT, BAUD_RATE, HTTP_HOST, USB_PORT, \
-    OOR_SIZE, \
-    OOR_SIZE_DEFAULT, OOR_TIME, OOR_TIME_DEFAULT, OOR_UPPER, OOR_UPPER_DEFAULT
-from constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT, LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
-from constants import DRAW_CONTOUR, DRAW_BOX
-from constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
-from constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD, GRPC_PORT_DEFAULT, GRPC_HOST, MQTT_TOPIC
-from constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
-from constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
-from constants import MASK_X, MASK_Y, USB_ID, IMAGE_TOPIC, SO_TOPIC, COMPRESSED, FORMAT, FILENAME, FPS, DRAW_LINE
-from constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT, MIDDLE_PERCENT_DEFAULT, MAXIMUM_OBJECTS_DEFAULT, \
-    MAXIMUM_OBJECTS
+from arc852.constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST
+from arc852.constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT
+from arc852.constants import DRAW_CONTOUR, DRAW_BOX
+from arc852.constants import GRPC_PORT_DEFAULT, GRPC_HOST, MQTT_TOPIC
+from arc852.constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
+from arc852.constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD
+from arc852.constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
+from arc852.constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
+from arc852.constants import LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
+from arc852.constants import MASK_X, MASK_Y, USB_ID, IMAGE_TOPIC, SO_TOPIC, COMPRESSED, FORMAT, FILENAME, FPS, DRAW_LINE
+from arc852.constants import MIDDLE_PERCENT_DEFAULT, MAXIMUM_OBJECTS_DEFAULT, MAXIMUM_OBJECTS
+from arc852.constants import MINIMUM_PIXELS_DEFAULT, WIDTH_DEFAULT
+from arc852.constants import OOR_SIZE_DEFAULT, OOR_TIME, OOR_TIME_DEFAULT, OOR_UPPER, OOR_UPPER_DEFAULT
+from arc852.constants import SERIAL_PORT, BAUD_RATE, HTTP_HOST, USB_PORT, OOR_SIZE
 
 
 def setup_cli_args(*args):
@@ -24,6 +26,7 @@ def setup_cli_args(*args):
         else:
             arg(parser)
     return vars(parser.parse_args())
+
 
 def bgr(p):
     return p.add_argument("--bgr", "--bgr_color", dest=BGR_COLOR, required=True,
@@ -135,6 +138,7 @@ def leds(p):
 def draw_line(p):
     return p.add_argument("--draw_line", "--line", dest=DRAW_LINE, default=False, action="store_true",
                           help="Draw fitted line [false]")
+
 
 def draw_contour(p):
     return p.add_argument("--draw_contour", "--contour", dest=DRAW_CONTOUR, default=False, action="store_true",

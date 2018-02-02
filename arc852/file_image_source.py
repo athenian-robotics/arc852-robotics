@@ -1,7 +1,7 @@
 import cv2
 
-import cli_args  as cli
-from generic_image_source import GenericImageSource
+import arc852.cli_args  as cli
+from arc852.generic_image_source import GenericImageSource
 
 
 class FileImageSource(GenericImageSource):

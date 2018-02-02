@@ -6,8 +6,8 @@ import cv2
 import imutils
 import rospy
 
-import cli_args  as cli
-from generic_image_source import GenericImageSource
+import arc852.cli_args  as cli
+from arc852.generic_image_source import GenericImageSource
 
 logger = logging.getLogger(__name__)
 
