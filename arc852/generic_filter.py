@@ -59,8 +59,7 @@ class GenericFilter(object):
         pass
 
     def stop(self):
-        # self.location_server.stop()
-        pass
+        logger.info("Stopping filter")
 
     def reset(self):
         self.prev_x, self.prev_y = -1, -1
