@@ -7,10 +7,9 @@ from threading import Thread
 
 import serial
 import serial.tools.list_ports
+from constants import DEFAULT_BAUD
 from prometheus_client import Histogram
-
-from arc852.constants import DEFAULT_BAUD
-from arc852.utils import is_windows
+from utils import is_windows
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ READ_TIME = Histogram('serial_read_seconds', 'Time spent reading serial data')
 PROCESS_TIME = Histogram('serial_processing_seconds', 'Time spent processing serial data')
 
 class SerialReader(object):
-    def __init__(self, func, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD, debug=False):
+    def __init__(self, func, health_pub, health_check_rate, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD, debug=False):
         self.__func = func
         self.__userdata = userdata
         self.__baudrate = baudrate
@@ -33,10 +32,13 @@ class SerialReader(object):
         self.__event = Event()
         self.__stopped = False
         self.__data = None
+        self.__health_pub = health_pub
+        self.__problem = False
+        self.__health_check_rate = health_check_rate
 
-        # print("Serial port info:")
-        # for i in SerialReader.all_ports():
-        #    print(i)
+        logger.info("Serial port info:")
+        for i in SerialReader.all_ports():
+            logger.info(i)
 
 
     def __enter__(self):
@@ -50,13 +52,11 @@ class SerialReader(object):
     # Read data from serial port and pass it along to the consumer
     # If the consumer runs slower than the producer, then values will be dropped
     def read_serial_data(self, port, baudrate):
-        #print("Got into read_serial_data")
         ser = None
         try:
             # Open serial port
-            #print("Reading data from serial port %s at %sbps", port, baudrate, 1)
             ser = serial.Serial(port=port, baudrate=baudrate)
-            #print("Reading data from serial port %s at %sbps", port, baudrate, 2)
+            logger.info("Reading data from serial port {} at %{}".format(port, baudrate))
 
             while not self.__stopped:
                 with READ_TIME.time():
@@ -65,7 +65,6 @@ class SerialReader(object):
                         # Read data from serial port.  Ignore the trailing two chars with [:-2]
                         # Do not call readline() inside mutex because it might block
                         b = ser.readline()[:-2]
-                        #print("We got DATA!!!")
                         # Update data with mutex
                         with self.__lock:
                             self.__data = b.decode("utf-8")
@@ -75,7 +74,7 @@ class SerialReader(object):
 
                     except BaseException:
                         logger.error("Unable to read serial data [%s]", b, exc_info=True)
-                        time.sleep(1)
+                        self.__problem = True
 
         except serial.serialutil.SerialException as e:
             logger.error("Unable to open serial port [%s]", e, exc_info=True)
@@ -89,38 +88,41 @@ class SerialReader(object):
     # Process data without doing a busy wait
     # If process_data() runs faster than read_serial_port(), it will wait on self.event
     def process_data(self, func, userdata):
-        #print('got into process_data')
         while not self.__stopped:
             with PROCESS_TIME.time():
                 try:
                     # Wait for data
-                    #print("waiting for event")
                     self.__event.wait()
-                    #print("the event happened")
                     # Reset event to trigger wait on net iteration
                     self.__event.clear()
                     # Read data with mutex
                     with self.__lock:
                         val = self.__data
-                        #print("got the data")
                     # Call func with data
-
+                    logger.info('Calling {}'.format(func.__name__))
                     func(val, userdata)
                 except BaseException as e:
-                    logger.error("Error while calling func [%s]", e, exc_info=True)
+                    logger.error("Error while calling {} {}".format(func.__name__, e), exc_info=True)
                     # Do not sleep on errors and slow down sampling
                     # time.sleep(1)
+
+    def health_check(self):
+        while not self.__stopped:
+            self.__health_pub.publish(self.__problem)
+            self.__health_check_rate.sleep()
+
 
     def start(self):
         # Start read_serial_port()
         Thread(target=self.read_serial_data, args=(self.__port_path, self.__baudrate)).start()
-        #print("Start reading thread")
+        logger.info("Start read_serial_data thread")
         # Start process_data()
         Thread(target=self.process_data, args=(self.__func, self.__userdata)).start()
-        #print("Start publish thread")
-
+        logger.info("Start process_data thread")
+        # Start health_check thread
+        Thread(target=self.health_check).start()
+        logger.info("Start health_check thread")
         self.__stopped = False
-        #print("Self.stopped is false")
         return self
 
     def stop(self):
