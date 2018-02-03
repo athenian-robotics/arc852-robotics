@@ -15,7 +15,6 @@ from setuptools import setup
 here = path.abspath(path.dirname(__file__))
 if os.uname()[4].startswith('arm'):
     reqs = [
-            'opencv-python>=3.4.0.12',
             'numpy>=1.14.0',
             'prometheus_client>=0.1.1',
             'flask>=0.12.2',
@@ -33,13 +32,14 @@ else:
             'paho-mqtt>=1.3.1',
             'requests>=2.18.4',
             'imutils>=0.4.5',
+            'opencv-python>=3.4.0.12',
         ]
 with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
     name='arc852-robotics',
-    version='1.0.13',
+    version='1.0.14',
     description='ARC852 Robotic Code',
     url='https://github.com/athenian-robotics/arc852-robotics',
     author='The Athenian School',
