@@ -11,6 +11,7 @@ sudo -H pip install arc852-robotics --extra-index-url https://pypi.fury.io/pambr
 or 
 sudo -H pip3 install arc852-robotics --extra-index-url https://pypi.fury.io/pambrose/
 ```
+**Warning:** if you have problems with the cache, use the `--no-cache-dir` option.
 
 Update *arc852-robotics* with:
 ```bash
