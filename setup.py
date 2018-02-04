@@ -13,7 +13,7 @@ import os
 from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
-if os.uname()[4].startswith('arm'):
+if os.uname()[4].startswith('arm'): #Rasberry Pis (ARM devices) don't support opencv-python install through pip
     reqs = [
             'numpy>=1.14.0',
             'prometheus_client>=0.1.1',
