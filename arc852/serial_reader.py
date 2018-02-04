@@ -34,9 +34,9 @@ class SerialReader(object):
         self.__stopped = False
         self.__data = None
 
-        # print("Serial port info:")
-        # for i in SerialReader.all_ports():
-        #    print(i)
+        logger.info("Serial port info:")
+        for i in SerialReader.all_ports():
+            logger.info(i)
 
 
     def __enter__(self):
@@ -50,13 +50,11 @@ class SerialReader(object):
     # Read data from serial port and pass it along to the consumer
     # If the consumer runs slower than the producer, then values will be dropped
     def read_serial_data(self, port, baudrate):
-        #print("Got into read_serial_data")
         ser = None
         try:
             # Open serial port
-            #print("Reading data from serial port %s at %sbps", port, baudrate, 1)
             ser = serial.Serial(port=port, baudrate=baudrate)
-            #print("Reading data from serial port %s at %sbps", port, baudrate, 2)
+            logger.info("Reading data from serial port {} at {}".format(port, baudrate))
 
             while not self.__stopped:
                 with READ_TIME.time():
