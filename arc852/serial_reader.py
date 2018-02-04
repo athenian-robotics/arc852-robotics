@@ -24,7 +24,15 @@ READ_TIME = Histogram('serial_read_seconds', 'Time spent reading serial data')
 PROCESS_TIME = Histogram('serial_processing_seconds', 'Time spent processing serial data')
 
 class SerialReader(object):
-    def __init__(self, func, userdata=None, port="/dev/ttyACM0", baudrate=DEFAULT_BAUD, debug=False):
+    def __init__(self,
+                 func,
+                 userdata=None,
+                 port="/dev/ttyACM0",
+                 baudrate=DEFAULT_BAUD,
+                 debug=False,
+                 log_info=logger.info,
+                 log_debug=logger.debug,
+                 log_error=logger.error,):
         self.__func = func
         self.__userdata = userdata
         self.__baudrate = baudrate
@@ -33,10 +41,13 @@ class SerialReader(object):
         self.__event = Event()
         self.__stopped = False
         self.__data = None
+        self.__log_info = log_info
+        self.__log_debug = log_debug
+        self.__log_error = log_error
 
-        logger.info("Serial port info:")
+        self.__log_info("Serial port info:")
         for i in SerialReader.all_ports():
-            logger.info(i)
+            self.__log_info(i)
 
 
     def __enter__(self):
@@ -54,7 +65,7 @@ class SerialReader(object):
         try:
             # Open serial port
             ser = serial.Serial(port=port, baudrate=baudrate)
-            logger.info("Reading data from serial port {} at {}".format(port, baudrate))
+            self.__log_info("Reading data from serial port {} at {}".format(port, baudrate))
 
             while not self.__stopped:
                 with READ_TIME.time():
@@ -72,11 +83,11 @@ class SerialReader(object):
                         self.__event.set()
 
                     except BaseException:
-                        logger.error("Unable to read serial data [%s]", b, exc_info=True)
+                        self.__log_error("Unable to read serial data [%s]", b, exc_info=True)
                         time.sleep(1)
 
         except serial.serialutil.SerialException as e:
-            logger.error("Unable to open serial port [%s]", e, exc_info=True)
+            self.__log_error("Unable to open serial port [%s]", e, exc_info=True)
             sys.exit(0)
 
         finally:
@@ -105,7 +116,7 @@ class SerialReader(object):
 
                     func(val, userdata)
                 except BaseException as e:
-                    logger.error("Error while calling func [%s]", e, exc_info=True)
+                    self.__log_error("Error while calling func [%s]", e, exc_info=True)
                     # Do not sleep on errors and slow down sampling
                     # time.sleep(1)
 
@@ -124,11 +135,10 @@ class SerialReader(object):
     def stop(self):
         self.__stopped = True
         return self
-
     @staticmethod
     def lookup_port(did):
         """Get port info from a given DID"""
-        logger.info("Using DID = %s", did)
+        #self.__log_info("Using DID = %s", did)
         ports = [p for p in serial.tools.list_ports.grep(did)]
         if len(ports) == 1:
             # PySerial v.2.7 is packaged along with raspis. It returns data from list_ports in the form of a tuple.
@@ -136,9 +146,8 @@ class SerialReader(object):
             port_info = ports[0]
             return port_info[0] if isinstance(port_info, tuple) else port_info.device
 
-        logger.error("%s matches found for device id %s", "No" if len(ports) == 0 else "Multiple", did)
+        #logger.error("%s matches found for device id %s", "No" if len(ports) == 0 else "Multiple", did)
         return None
-
     @staticmethod
     def all_ports():
         """Get all ports"""
