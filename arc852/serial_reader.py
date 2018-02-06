@@ -32,7 +32,7 @@ class SerialReader(object):
                  debug=False,
                  log_info=logger.info,
                  log_debug=logger.debug,
-                 log_error=logger.error,):
+                 log_error=logger.error):
         self.__func = func
         self.__userdata = userdata
         self.__baudrate = baudrate

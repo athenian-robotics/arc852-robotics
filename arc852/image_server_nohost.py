@@ -10,8 +10,7 @@ from flask import request
 from werkzeug.wrappers import Response
 
 import arc852.cli_args  as cli
-from arc852.constants import CAMERA_NAME_DEFAULT
-from arc852.constants import HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
+from arc852.constants import HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
 
 # Find where this package is installed
 _image_fname = "/image.jpg"
@@ -24,24 +23,18 @@ class ImageServer(object):
 
     def __init__(self,
                  template_file,
-                 camera_name=CAMERA_NAME_DEFAULT,
-                 http_host=HTTP_HOST_DEFAULT,
+                 http_port=HTTP_PORT_DEFAULT,
                  http_delay_secs=HTTP_DELAY_SECS_DEFAULT,
                  http_verbose=False,
                  log_info=logger.info,
                  log_debug=logger.debug,
                  log_error=logger.error):
         self.__template_file = template_file
-        self.__camera_name = camera_name
-        self.__http_host = http_host
+        self.__http_port = http_port
         self.__http_delay_secs = http_delay_secs
         self.__log_info = log_info
         self.__log_debug = log_debug
         self.__log_error = log_error
-
-        vals = self.__http_host.split(":")
-        self.__host = vals[0]
-        self.__port = vals[1] if len(vals) == 2 else HTTP_PORT_DEFAULT
 
         self.__current_image_lock = Lock()
         self.__current_image = None
@@ -68,7 +61,6 @@ class ImageServer(object):
             if self.__current_image is None:
                 return []
             # retval, buf = utils.encode_image(self.__current_image)
-            # return buf.tobytes()
             return self.__current_image
 
     @image.setter
@@ -82,7 +74,7 @@ class ImageServer(object):
             return
 
         if not self.__flask_launched:
-            height, width = image.shape[:2]
+            height, width = 80 * 10, 80 * 10  # image.shape[:2]
             self._launch_flask(width, height)
 
         with self.__current_image_lock:
@@ -121,15 +113,14 @@ class ImageServer(object):
             return "Shutting down..."
 
         def get_page(delay):
-            delay_secs = float(delay) if delay else self.__http_delay_secs
+            delay_secs = int(delay) if delay else self.__http_delay_secs
             try:
                 with open(self.__template_file) as f:
                     html = f.read()
 
-                name = self.__camera_name
-                return html.replace("_TITLE_", name + " camera") \
+                return html.replace("_TITLE_", "") \
                     .replace("_DELAY_SECS_", str(delay_secs)) \
-                    .replace("_NAME_", name) \
+                    .replace("_NAME_", "") \
                     .replace("_WIDTH_", str(width)) \
                     .replace("_HEIGHT_", str(height)) \
                     .replace("_IMAGE_FNAME_", _image_fname)
@@ -140,7 +131,6 @@ class ImageServer(object):
         def run_http(flask_server, host, port):
             while not self.__stopped:
                 try:
-                    self.__log_info("Starting server with {0}:{1}".format(host, port))
                     flask_server.run(host=host, port=int(port))
                 except BaseException as e:
                     self.__log_error("Restarting HTTP server [%s]", e, exc_info=True)
@@ -149,15 +139,15 @@ class ImageServer(object):
                     self.__log_info("HTTP server shutdown")
 
         # Run HTTP server in a thread
-        Thread(target=run_http, kwargs={"flask_server": flask, "host": self.__host, "port": self.__port}).start()
+        Thread(target=run_http, kwargs={"flask_server": flask, "host": "0.0.0.0", "port": self.__http_port}).start()
         self.__flask_launched = True
-        self.__log_info("Running HTTP server on http://%s:%s/", self.__host, self.__port)
+        self.__log_info("Running HTTP server listening on port %d", self.__http_port)
 
     def _start(self):
         # Cannot start the flask server until the dimensions of the image are known
         # So do not fire up the thread until the first image is available
         self.__log_info("Using template file %s", self.__template_file)
-        self.__log_info("Starting HTTP server on http://%s:%s/", self.__host, self.__port)
+        self.__log_info("Starting HTTP server listening on port %d", self.__http_port)
         self.__ready_to_serve = True
         self.__started = True
 
@@ -177,7 +167,7 @@ class ImageServer(object):
             return
 
         self.__ready_to_stop = True
-        url = "http://{0}:{1}".format(self.__host, self.__port)
+        url = "http://localhost:{0}".format(self.__http_port)
         self.__log_info("Shutting down %s", url)
 
         try:

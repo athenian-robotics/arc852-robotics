@@ -5,9 +5,9 @@ https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
 
+import os
 from codecs import open
 from os import path
-import os
 
 # Always prefer setuptools over distutils
 from setuptools import setup
@@ -39,7 +39,7 @@ with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
 
 setup(
     name='arc852-robotics',
-    version='1.0.15',
+    version='1.0.16',
     description='ARC852 Robotic Code',
     url='https://github.com/athenian-robotics/arc852-robotics',
     author='The Athenian School',

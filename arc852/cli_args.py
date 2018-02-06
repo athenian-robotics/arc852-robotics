@@ -9,6 +9,7 @@ from arc852.constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PER
 from arc852.constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD
 from arc852.constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
 from arc852.constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
+from arc852.constants import HTTP_PORT_DEFAULT, HTTP_PORT, TEMPLATE_FILE
 from arc852.constants import LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
 from arc852.constants import MASK_X, MASK_Y, USB_ID, IMAGE_TOPIC, SO_TOPIC, COMPRESSED, FORMAT, FILENAME, FPS, DRAW_LINE
 from arc852.constants import MIDDLE_PERCENT_DEFAULT, MAXIMUM_OBJECTS_DEFAULT, MAXIMUM_OBJECTS
@@ -219,11 +220,6 @@ def http_delay_secs(p):
                           help="HTTP delay secs [{0}]".format(HTTP_DELAY_SECS_DEFAULT))
 
 
-def http_file(p):
-    return p.add_argument("-i", "--file", "--http_file", dest=HTTP_FILE, default=HTTP_TEMPLATE_DEFAULT,
-                          help="HTTP template file")
-
-
 def http_verbose(p):
     return p.add_argument("--http_verbose", "--verbose_http", dest="http_verbose", default=False, action="store_true",
                           help="Enable verbose HTTP log [false]")
@@ -261,3 +257,18 @@ def oor_time(p):
 def oor_upper(p):
     return p.add_argument("--oor_upper", dest=OOR_UPPER, type=int, default=OOR_UPPER_DEFAULT,
                           help="Out of range upper boundary [{0}]".format(OOR_UPPER_DEFAULT))
+
+
+def http_port(p):
+    return p.add_argument("-p", "--port", dest=HTTP_PORT, default=HTTP_PORT_DEFAULT, type=int,
+                          help="HTTP port [{0}]".format(HTTP_PORT_DEFAULT))
+
+
+def http_file(p):
+    return p.add_argument("-i", "--file", "--http_file", dest=HTTP_FILE, default=HTTP_TEMPLATE_DEFAULT,
+                          help="HTTP template file")
+
+
+def template_file(p):
+    return p.add_argument("-i", "--file", "--template_file", "--http_file", dest=TEMPLATE_FILE,
+                          default=HTTP_TEMPLATE_DEFAULT, help="Template file name [{}]".format(HTTP_TEMPLATE_DEFAULT))
