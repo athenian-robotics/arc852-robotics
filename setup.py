@@ -5,7 +5,7 @@ https://packaging.python.org/en/latest/distributing.html
 https://github.com/pypa/sampleproject
 """
 
-import os
+import platform
 from codecs import open
 from os import path
 
@@ -13,7 +13,7 @@ from os import path
 from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
-if os.uname()[4].startswith('arm'): #Rasberry Pis (ARM devices) don't support opencv-python install through pip
+if platform.uname()[4].startswith('arm'):  # Rasberry Pis (ARM devices) don't support opencv-python install through pip
     reqs = [
             'numpy>=1.14.0',
             'prometheus_client>=0.1.1',
