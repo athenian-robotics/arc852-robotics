@@ -271,7 +271,7 @@ def http_file(p):
 
 
 def template_file(p):
-    return p.add_argument("-i", "--file", "--template_file", "--http_file", dest=TEMPLATE_FILE,
+    return p.add_argument("-t", "--template", dest=TEMPLATE_FILE,
                           default=HTTP_TEMPLATE_DEFAULT, help="Template file name [{}]".format(HTTP_TEMPLATE_DEFAULT))
 
 
