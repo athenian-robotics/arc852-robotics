@@ -52,7 +52,7 @@ class PIDControl:
         else:
             return input_amount
 
-    def get_pid(self, error: float) -> float:
+    def get_pid(self, error):
         # Reset I if it's been too long since we last read
         if 0 <= self.reading_timeout < (time.time() - self._last_reading_timestamp):
             self.reset_sum()
