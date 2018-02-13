@@ -10,6 +10,7 @@ from arc852.constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAU
 from arc852.constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
 from arc852.constants import HTTP_DELAY_SECS_DEFAULT, HTTP_HOST_DEFAULT, HTTP_TEMPLATE_DEFAULT
 from arc852.constants import HTTP_PORT_DEFAULT, HTTP_PORT, TEMPLATE_FILE
+from arc852.constants import IMAGE_X, IMAGE_Y, IMAGE_X_DEFAULT, IMAGE_Y_DEFAULT
 from arc852.constants import LED_BRIGHTNESS, VERTICAL_LINES, HORIZONTAL_LINES
 from arc852.constants import MASK_X, MASK_Y, USB_ID, IMAGE_TOPIC, SO_TOPIC, COMPRESSED, FORMAT, FILENAME, FPS, DRAW_LINE
 from arc852.constants import MIDDLE_PERCENT_DEFAULT, MAXIMUM_OBJECTS_DEFAULT, MAXIMUM_OBJECTS
@@ -272,3 +273,13 @@ def http_file(p):
 def template_file(p):
     return p.add_argument("-i", "--file", "--template_file", "--http_file", dest=TEMPLATE_FILE,
                           default=HTTP_TEMPLATE_DEFAULT, help="Template file name [{}]".format(HTTP_TEMPLATE_DEFAULT))
+
+
+def image_x(p):
+    return p.add_argument("-x", "--image_x", dest=IMAGE_X, default=IMAGE_X_DEFAULT, type=int,
+                          help="Image x [{0}]".format(IMAGE_X_DEFAULT))
+
+
+def image_y(p):
+    return p.add_argument("-y", "--image_y", dest=IMAGE_Y, default=IMAGE_Y_DEFAULT, type=int,
+                          help="Image y [{0}]".format(IMAGE_Y_DEFAULT))
