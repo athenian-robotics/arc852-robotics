@@ -1,4 +1,4 @@
-class Scale:
+class Scale(object):
     def __init__(self, old_min, old_max, new_min, new_max):
         self.old_min = old_min
         self.old_max = old_max
