@@ -13,28 +13,21 @@ from os import path
 from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
+
+reqs = [
+    'numpy>=1.14.0',
+    'prometheus_client>=0.1.1',
+    'flask>=0.12.2',
+    'pyserial>=3.4',
+    'paho-mqtt>=1.3.1',
+    'requests>=2.18.4',
+    'imutils>=0.4.5',
+]
+
 # Rasberry Pis (ARM devices) and Jetsons don't support opencv-python install through pip
-if platform.uname()[4].startswith('arm') or platform.uname()[4].startswith('aarch64'):
-    reqs = [
-            'numpy>=1.14.0',
-            'prometheus_client>=0.1.1',
-            'flask>=0.12.2',
-            'pyserial>=3.4',
-            'paho-mqtt>=1.3.1',
-            'requests>=2.18.4',
-            'imutils>=0.4.5',
-        ]
-else:
-    reqs = [
-            'numpy>=1.14.0',
-            'prometheus_client>=0.1.1',
-            'flask>=0.12.2',
-            'pyserial>=3.4',
-            'paho-mqtt>=1.3.1',
-            'requests>=2.18.4',
-            'imutils>=0.4.5',
-            'opencv-python>=3.4.0.12',
-        ]
+if not platform.uname()[4].startswith('arm') and not platform.uname()[4].startswith('aarch64'):
+    reqs.append('opencv-python>=3.4.0.12')
+
 with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
     long_description = f.read()
 
