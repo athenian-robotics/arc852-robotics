@@ -13,7 +13,8 @@ from os import path
 from setuptools import setup
 
 here = path.abspath(path.dirname(__file__))
-if platform.uname()[4].startswith('arm'):  # Rasberry Pis (ARM devices) don't support opencv-python install through pip
+# Rasberry Pis (ARM devices) and Jetsons don't support opencv-python install through pip
+if platform.uname()[4].startswith('arm') or platform.uname()[4].startswith('aarch64'):
     reqs = [
             'numpy>=1.14.0',
             'prometheus_client>=0.1.1',
@@ -39,7 +40,7 @@ with open(path.join(here, 'README.txt'), encoding='utf-8') as f:
 
 setup(
     name='arc852-robotics',
-    version='1.0.23',
+    version='1.0.24',
     description='ARC852 Robotic Code',
     url='https://github.com/athenian-robotics/arc852-robotics',
     author='The Athenian School',
