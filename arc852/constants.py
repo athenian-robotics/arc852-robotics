@@ -32,7 +32,7 @@ BAUD_RATE = "baud_rate"
 LED_NAME = "led_name"
 LED_BRIGHTNESS = "led_brightness"
 CAMERA_NAME = "camera_name"
-CAMERA_NAME_DEFAULT = "Unnamed"
+CAMERA_NAME_DEFAULT = ""
 MQTT_HOST = "mqtt_host"
 HTTP_HOST = "http_host"
 HTTP_FILE = "http_file"
@@ -71,10 +71,14 @@ MASK_Y = "mask_y"
 DEVICE_ID = "device_id"
 VERTICAL_LINES = "vertical_lines"
 HORIZONTAL_LINES = "horizontal_lines"
+IMAGE_X = "image_x"
+IMAGE_Y = "image_y"
+IMAGE_X_DEFAULT = 640
+IMAGE_Y_DEFAULT = 480
 
 SERIAL_PORT_DEFAULT = "/dev/ttyACM0"
 LED_BRIGHTNESS_DEFAULT = 0.10
 
-#Ros Constants
+# Ros Constants
 ROS_PUBLISHER = "ros.publisher"
 ROS_RATE = "ros.rate"
