@@ -39,9 +39,9 @@ class PIDControl:
         self._error_sum = 0
 
     def reverse_constants(self):
-        self.p_gain *= 1
-        self.i_gain *= 1
-        self.d_gain *= 1
+        self.p_gain *= 1.0
+        self.i_gain *= 1.0
+        self.d_gain *= 1.0
 
     @staticmethod
     def _constrain(input_amount, lower_bound, upper_bound):
@@ -57,7 +57,7 @@ class PIDControl:
         if 0 <= self.reading_timeout < (time.time() - self._last_reading_timestamp):
             self.reset_sum()
 
-        p_out = self.p_gain * error
+        p_out = self.p_gain * float(error)
 
         # The integral can be approximated with the sum of the error
         i_out = self.i_gain * self._error_sum
@@ -67,14 +67,14 @@ class PIDControl:
             i_out = self._constrain(i_out, -self._max_i, self._max_i)
 
         # d is the rate of change, and can be approximated by taking the difference in errors
-        d_out = (error - self._last_error) * -self.d_gain
+        d_out = (error - self._last_error) * -float(self.d_gain)
 
         self._last_error = error
 
         output = p_out + i_out + d_out
 
         if self.lower_bound is not None or self.upper_bound is not None:
-            output = self._constrain(output, self.upper_bound, self.lower_bound)
+            output = self._constrain(output, self.lower_bound, self.upper_bound)
 
         if self._max_i is not None:
             self._error_sum = self._constrain(self._error_sum + error, -self._max_error, self._max_error)
