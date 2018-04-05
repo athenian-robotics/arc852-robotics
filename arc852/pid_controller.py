@@ -11,9 +11,9 @@ class PIDControl:
     def __init__(self, p, i, d, upper_bound=None, lower_bound=None, reversed_constants=False,
                  reading_timeout=-1):
 
-        self.p_gain = p
-        self.i_gain = i
-        self.d_gain = d
+        self.p_gain = float(p)
+        self.i_gain = float(i)
+        self.d_gain = float(d)
 
         self._error_sum = 0
         self._last_error = 0
@@ -39,9 +39,9 @@ class PIDControl:
         self._error_sum = 0
 
     def reverse_constants(self):
-        self.p_gain *= 1.0
-        self.i_gain *= 1.0
-        self.d_gain *= 1.0
+        self.p_gain *= -1.0
+        self.i_gain *= -1.0
+        self.d_gain *= -1.0
 
     @staticmethod
     def _constrain(input_amount, lower_bound, upper_bound):
