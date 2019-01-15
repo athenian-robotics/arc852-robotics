@@ -21,6 +21,8 @@ Uninstall *arc852-robotics* with:
 sudo -H pip3 uninstall arc852-robotics
 ```
 
+Every update requires a version update in *setup.py*.
+
 ## Gemfury Setup
 
 Add the Gemfury repo with:
@@ -32,3 +34,4 @@ Push new versions to Gemfury with:
 ```bash
 git push fury master
 ```
+

@@ -68,9 +68,8 @@ class ImageServer(object):
         with self.__current_image_lock:
             if self.__current_image is None:
                 return []
-            retval, buf = encode_image(self.__current_image)
-            return buf.tobytes()
-            # return self.__current_image
+
+            return self.__current_image
 
     @image.setter
     def image(self, image):
@@ -87,7 +86,12 @@ class ImageServer(object):
             self._launch_flask(width, height)
 
         with self.__current_image_lock:
-            self.__current_image = image
+            # Encode to bytes if passed in as an nparray
+            if isinstance(image, bytes):
+                self.__current_image = image
+            else:
+                retval, buf = encode_image(image)
+                self.__current_image = buf.tobytes()
 
     def _launch_flask(self, width, height):
         flask = Flask(__name__)
