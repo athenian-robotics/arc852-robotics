@@ -7,18 +7,18 @@
 
 Install *arc852-robotics* with:
 ```bash
-sudo -H pip install arc852-robotics --extra-index-url https://pypi.fury.io/pambrose/
+sudo -H pip3 install arc852-robotics --extra-index-url https://pypi.fury.io/pambrose/
 ```
 **Warning:** if you have problems with the cache, use the `--no-cache-dir` option.
 
 Update *arc852-robotics* with:
 ```bash
-sudo -H pip install --upgrade arc852-robotics --extra-index-url https://pypi.fury.io/pambrose/
+sudo -H pip3 install --upgrade arc852-robotics --extra-index-url https://pypi.fury.io/pambrose/
 ```
 
 Uninstall *arc852-robotics* with:
 ```bash
-sudo -H pip uninstall arc852-robotics
+sudo -H pip3 uninstall arc852-robotics
 ```
 
 ## Gemfury Setup
