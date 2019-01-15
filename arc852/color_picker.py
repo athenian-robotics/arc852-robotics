@@ -55,8 +55,8 @@ class ColorPicker(object):
 
             self.__img_height, self.__img_width = cv2_img.shape[:2]
 
-            self.__roi_x = (self.__img_width / 2) - (self.roi_size / 2) + self.x_adj
-            self.__roi_y = (self.__img_height / 2) - (self.roi_size / 2) + self.y_adj
+            self.__roi_x = int((self.__img_width / 2) - (self.roi_size / 2) + self.x_adj)
+            self.__roi_y = int((self.__img_height / 2) - (self.roi_size / 2) + self.y_adj)
             roi = cv2_img[self.__roi_y:self.__roi_y + self.roi_size, self.__roi_x:self.__roi_x + self.roi_size]
 
             roi_h, roi_w = roi.shape[:2]
@@ -134,9 +134,9 @@ class ColorPicker(object):
         elif key == ord("r"):
             self.__width = self.__orig_width
             self.roi_size = self.orig_roi_size
-        elif key == ord("w"):
+        elif key == ord("<"):
             self.__width -= 10
-        elif key == ord("e"):
+        elif key == ord(">"):
             self.__width += 10
         elif key == ord("q"):
             self.__stopped = True

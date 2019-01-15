@@ -6,7 +6,8 @@ from arc852.opencv_utils import contour_slope_degrees, contains_in_list, get_cen
 
 
 class ContourFinder(object):
-    def __init__(self, bgr_color,
+    def __init__(self,
+                 bgr_color,
                  hsv_range=HSV_RANGE_DEFAULT,
                  minimum_pixels=MINIMUM_PIXELS_DEFAULT):
         self.__minimum_pixels = minimum_pixels
