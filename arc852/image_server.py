@@ -12,6 +12,7 @@ from werkzeug.wrappers import Response
 import arc852.cli_args  as cli
 from arc852.constants import CAMERA_NAME_DEFAULT
 from arc852.constants import HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
+from arc852.opencv_utils import encode_image
 
 # Find where this package is installed
 _image_fname = "/image.jpg"
@@ -67,9 +68,9 @@ class ImageServer(object):
         with self.__current_image_lock:
             if self.__current_image is None:
                 return []
-            # retval, buf = utils.encode_image(self.__current_image)
-            # return buf.tobytes()
-            return self.__current_image
+            retval, buf = encode_image(self.__current_image)
+            return buf.tobytes()
+            # return self.__current_image
 
     @image.setter
     def image(self, image):
