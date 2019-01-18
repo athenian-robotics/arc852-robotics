@@ -41,7 +41,7 @@ class ContourFinder(object):
         # cv2.imshow("Res", in_range_result)
         # cv2.imshow("Grayscale", grayscale)
 
-        # Get all contours
+        # Return requested number of contours
         if True:
             contours = cv2.findContours(grayscale, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
             # Return max contours that are not overlapping
@@ -83,6 +83,7 @@ class ContourFinder(object):
         # cv2.imshow("Mask", in_range_mask)
         # cv2.imshow("Res", in_range_result)
         # cv2.imshow("Grayscale", grayscale)
+
         verticals = []
         for c in contours:
             if c is None:

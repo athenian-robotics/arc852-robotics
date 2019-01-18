@@ -1,10 +1,12 @@
 import argparse
 import logging
 
-from arc852.constants import CAMERA_NAME, CAMERA_NAME_DEFAULT, MQTT_HOST
+from arc852.constants import CAMERA_NAME, CAMERA_NAME_DEFAULT
+# from arc852.constants import MQTT_HOST
 from arc852.constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT
 from arc852.constants import DRAW_CONTOUR, DRAW_BOX
-from arc852.constants import GRPC_PORT_DEFAULT, GRPC_HOST, MQTT_TOPIC
+from arc852.constants import GRPC_PORT_DEFAULT, GRPC_HOST
+# from arc852.constants import MQTT_TOPIC
 from arc852.constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
 from arc852.constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD
 from arc852.constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
@@ -188,8 +190,8 @@ def camera_name_optional(p):
                           default=CAMERA_NAME_DEFAULT, help="Camera name")
 
 
-def mqtt_host(p):
-    return p.add_argument("-m", "--mqtt", "--mqtt_host", dest=MQTT_HOST, required=True, help="MQTT server hostname")
+# def mqtt_host(p):
+#    return p.add_argument("-m", "--mqtt", "--mqtt_host", dest=MQTT_HOST, required=True, help="MQTT server hostname")
 
 
 def calib(p):
@@ -240,9 +242,9 @@ def log_file(p):
     return p.add_argument("-l", "--log_file", dest=LOG_FILE, default=None, help="Logging output to file")
 
 
-def mqtt_topic(p):
-    return p.add_argument("--topic", "--mqtt_topic", dest=MQTT_TOPIC, required=True,
-                          help="Desired MQTT topic")
+# def mqtt_topic(p):
+#    return p.add_argument("--topic", "--mqtt_topic", dest=MQTT_TOPIC, required=True,
+#                          help="Desired MQTT topic")
 
 
 def oor_size(p):
