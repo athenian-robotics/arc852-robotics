@@ -24,7 +24,7 @@ reqs = [
     'imutils>=0.5.2',
 ]
 
-# Rasberry Pis (ARM devices) and Jetsons don't support opencv-python install through pip
+# Raspberry Pis (ARM devices) and Jetsons don't support opencv-python install through pip
 if not platform.uname()[4].startswith('arm') and not platform.uname()[4].startswith('aarch64'):
     reqs.append('opencv-python>=3.4.0.12')
 
