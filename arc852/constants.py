@@ -7,7 +7,7 @@ __path = os.path.abspath(sys.modules[__name__].__file__)
 __dirname = os.path.dirname(__path)
 HTTP_TEMPLATE_DEFAULT = __dirname + "/html/single-image.html"
 HTTP_PORT_DEFAULT = 8080
-HTTP_HOST_DEFAULT = "localhost:{0}".format(HTTP_PORT_DEFAULT)
+HTTP_HOST_DEFAULT = "0.0.0.0:{0}".format(HTTP_PORT_DEFAULT)
 HTTP_DELAY_SECS_DEFAULT = 0.25
 
 HTTP_PORT = "http_port"

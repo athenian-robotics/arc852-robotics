@@ -15,7 +15,7 @@ from arc852.constants import HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PO
 from arc852.opencv_utils import encode_image
 
 # Find where this package is installed
-_image_fname = "/image.jpg"
+_image_endpoint_url = "/image.jpg"
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +61,7 @@ class ImageServer(object):
                 def filter(self, record):
                     return self.__fname not in record.msg
 
-            logging.getLogger('werkzeug').addFilter(FlaskFilter(_image_fname))
+            logging.getLogger('werkzeug').addFilter(FlaskFilter(_image_endpoint_url))
 
     @property
     def image(self):
@@ -108,7 +108,7 @@ class ImageServer(object):
         def image_path(delay):
             return get_page(delay)
 
-        @flask.route(_image_fname)
+        @flask.route(_image_endpoint_url)
         def image_jpg():
             response = Response(self.image, mimetype="image/jpeg")
             response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
@@ -137,7 +137,7 @@ class ImageServer(object):
                     .replace("_NAME_", name) \
                     .replace("_WIDTH_", str(width)) \
                     .replace("_HEIGHT_", str(height)) \
-                    .replace("_IMAGE_FNAME_", _image_fname)
+                    .replace("_IMAGE_FNAME_", _image_endpoint_url)
             except BaseException as e:
                 self.__log_error("Unable to create template file with %s [%s]", self.__template_file, e, exc_info=True)
                 time.sleep(1)
