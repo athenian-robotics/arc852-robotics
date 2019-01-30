@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 _image_endpoint_url = "/image.jpg"
 
 
-class ProcessImageServer(object):
+class ImageServer(object):
     args = [cli.template_file, cli.http_port, cli.http_delay_secs, cli.http_verbose]
 
     def __init__(self,
