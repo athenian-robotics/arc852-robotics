@@ -1,5 +1,7 @@
 import logging
 import time
+from multiprocessing import Manager
+from multiprocessing import Process
 from threading import Lock
 from threading import Thread
 
@@ -18,7 +20,8 @@ logger = logging.getLogger(__name__)
 
 _image_endpoint_url = "/image.jpg"
 
-class ImageServer(object):
+
+class ProcessImageServer(object):
     args = [cli.template_file, cli.http_port, cli.http_delay_secs, cli.http_verbose]
 
     def __init__(self,
@@ -31,6 +34,8 @@ class ImageServer(object):
                  log_debug=logger.debug,
                  log_error=logger.error):
         self.__template_file = template_file
+        self.__manager = Manager()
+        self.__queue = self.__manager.Queue()
         self.__camera_name = camera_name
         self.__http_host = http_host
         self.__http_delay_secs = http_delay_secs
@@ -79,6 +84,10 @@ class ImageServer(object):
             self.__log_error("ImageServer.start() not called")
             return
 
+        # Put image on queue for other process to serve up
+        self.__queue.put(image)
+
+    def __set_image(self, image):
         if not self.__flask_launched:
             height, width = image.shape[:2]
             self.__launch_flask(width, height)
@@ -131,7 +140,7 @@ class ImageServer(object):
                     html = f.read()
 
                 name = self.__camera_name
-                return html.replace("_TITLE_", name + " Camera") \
+                return html.replace("_TITLE_", name + " camera") \
                     .replace("_DELAY_SECS_", str(delay_secs)) \
                     .replace("_NAME_", name) \
                     .replace("_WIDTH_", str(width)) \
@@ -174,6 +183,13 @@ class ImageServer(object):
 
         self.__ready_to_serve = True
         self.__started = True
+
+        def read_queue():
+            # Read images from queue
+            while not self.__ready_to_stop:
+                self.__set_image(self.__queue.get())
+
+        Process(target=read_queue).start()
 
     def stop(self):
         if not self.__flask_launched:
