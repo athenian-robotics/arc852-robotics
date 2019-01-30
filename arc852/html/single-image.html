@@ -5,7 +5,7 @@
 <head>
     <meta HTTP-EQUIV="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta HTTP-EQUIV="Pragma" content="no-cache">
-    <META CONTENT="-1" HTTP-EQUIV="Expires">
+    <META HTTP-EQUIV="Expires" CONTENT="-1">
 
     <title>_TITLE_</title>
 
@@ -77,7 +77,6 @@
           transform: translateY(4px);
         }
 
-
     </style>
 
     <script>
@@ -131,31 +130,30 @@
             window.location.href = "/image?delay=" + time;
         }
 
-
     </script>
 </head>
 
 <body>
 
-<table border="0" class="buttons">
+<table class="buttons" border="0">
     <tr>
         <td>
-            <input class="refresh" onclick="refreshDelay('0')" type="button" value="0 secs">
+            <input type="button" class="refresh" value="0 secs" onclick="refreshDelay('0')">
         </td>
         <td>
-            <input class="refresh" onclick="refreshDelay('0.1')" type="button" value="0.1 secs">
+            <input type="button" class="refresh" value="0.1 secs" onclick="refreshDelay('0.1')">
         </td>
         <td>
-            <input class="refresh" onclick="refreshDelay('0.25')" type="button" value="0.25 secs">
+            <input type="button" class="refresh" value="0.25 secs" onclick="refreshDelay('0.25')">
         </td>
         <td>
-            <input class="refresh" onclick="refreshDelay('0.5')" type="button" value="0.5 secs">
+            <input type="button" class="refresh" value="0.5 secs" onclick="refreshDelay('0.5')">
         </td>
         <td>
-            <input class="refresh" onclick="refreshDelay('1')" type="button" value="1 secs">
+            <input type="button" class="refresh" value="1 secs" onclick="refreshDelay('1')">
         </td>
         <td>
-            <input class="refresh" onclick="refreshDelay('5')" type="button" value="5 secs">
+            <input type="button" class="refresh" value="5 secs" onclick="refreshDelay('5')">
         </td>
     </tr>
 </table>
@@ -172,11 +170,11 @@
 </table>
 
 <div>
-    <canvas class="image" height="_HEIGHT_px" id="image_0" onclick="togglePause()" width="_WIDTH_px"></canvas>
+    <canvas class="image" id="image_0" width="_WIDTH_px" height="_HEIGHT_px" onclick="togglePause()"></canvas>
 </div>
 
 <div>
-    <input class="pause" id="pause_0" onclick="togglePause()" type="button" value="Pause">
+    <input type="button" class="pause" id="pause_0" value="Pause" onclick="togglePause()">
 </div>
 
 </body>
