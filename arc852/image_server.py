@@ -14,11 +14,9 @@ from arc852.constants import CAMERA_NAME_DEFAULT
 from arc852.constants import HTTP_HOST_DEFAULT, HTTP_DELAY_SECS_DEFAULT, HTTP_PORT_DEFAULT
 from arc852.opencv_utils import encode_image
 
-# Find where this package is installed
-_image_endpoint_url = "/image.jpg"
-
 logger = logging.getLogger(__name__)
 
+_image_endpoint_url = "/image.jpg"
 
 class ImageServer(object):
     args = [cli.template_file, cli.http_port, cli.http_delay_secs, cli.http_verbose]
@@ -132,7 +130,7 @@ class ImageServer(object):
                     html = f.read()
 
                 name = self.__camera_name
-                return html.replace("_TITLE_", name + " camera") \
+                return html.replace("_TITLE_", name + " Camera") \
                     .replace("_DELAY_SECS_", str(delay_secs)) \
                     .replace("_NAME_", name) \
                     .replace("_WIDTH_", str(width)) \
