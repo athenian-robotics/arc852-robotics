@@ -1,5 +1,6 @@
 import logging
 import time
+import cv2
 
 from cv2 import VideoCapture, destroyAllWindows
 
@@ -9,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class Camera(object):
-    def __init__(self, src=0, usb_camera=False, usb_port=-1, resolution=(320, 240), framerate=32):
+    def __init__(self, src=0, usb_camera=False, usb_port=-1, resolution=(100, 100), framerate=32):
         self._usb_camera = usb_camera
         self._usb_port = usb_port
 
@@ -34,6 +35,8 @@ class Camera(object):
                 camera_num = usb_port
             logger.info("Not using video stream - camera_num %s", camera_num)
             self.__vc = VideoCapture(camera_num)
+            self.__vc.set(cv2.CAP_PROP_FRAME_WIDTH, resolution[0])
+            self.__vc.set(cv2.CAP_PROP_FRAME_HEIGHT, resolution[1])
 
     def use_video_stream(self):
         return not self._usb_camera and self._usb_port == -1 and is_raspi()
