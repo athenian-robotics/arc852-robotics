@@ -1,4 +1,7 @@
 
+deploy:
+	git push fury master
+
 
 clean-pyc:
 	find . -name '*.pyc' -exec rm -f {} +
