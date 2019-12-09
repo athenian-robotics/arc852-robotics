@@ -19,7 +19,6 @@ reqs = [
     'prometheus_client>=0.5.0',
     'flask>=1.0.2',
     'pyserial>=3.4',
-    # 'paho-mqtt>=1.3.1',
     'requests>=2.21.0',
     'imutils>=0.5.2',
 ]
