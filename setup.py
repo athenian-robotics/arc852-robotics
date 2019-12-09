@@ -34,7 +34,7 @@ setup(
     name='arc852-robotics',
 
     # **** Update this value with each release ****
-    version='1.0.40',
+    version='1.0.41',
 
     description='ARC852 Robotic Code',
     url='https://github.com/athenian-robotics/arc852-robotics',
