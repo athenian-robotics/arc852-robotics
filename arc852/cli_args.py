@@ -2,11 +2,9 @@ import argparse
 import logging
 
 from arc852.constants import CAMERA_NAME, CAMERA_NAME_DEFAULT
-# from arc852.constants import MQTT_HOST
 from arc852.constants import DEVICE_ID, LED_NAME, LED_BRIGHTNESS_DEFAULT
 from arc852.constants import DRAW_CONTOUR, DRAW_BOX
 from arc852.constants import GRPC_PORT_DEFAULT, GRPC_HOST
-# from arc852.constants import MQTT_TOPIC
 from arc852.constants import HSV_RANGE, WIDTH, USB_CAMERA, BGR_COLOR, MIDDLE_PERCENT, FLIP_X, FLIP_Y
 from arc852.constants import HSV_RANGE_DEFAULT, SERIAL_PORT_DEFAULT, DEFAULT_BAUD
 from arc852.constants import HTTP_DELAY_SECS, HTTP_FILE, LOG_LEVEL, LOG_FILE, MINIMUM_PIXELS, GRPC_PORT, DISPLAY, LEDS
