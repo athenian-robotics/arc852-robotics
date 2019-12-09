@@ -34,7 +34,7 @@ setup(
     name='arc852-robotics',
 
     # **** Update this value with each release ****
-    version='1.0.39',
+    version='1.0.40',
 
     description='ARC852 Robotic Code',
     url='https://github.com/athenian-robotics/arc852-robotics',
@@ -59,6 +59,7 @@ setup(
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 
     keywords='robotics',  # Optional

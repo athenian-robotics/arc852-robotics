@@ -25,6 +25,8 @@ Every update requires a version update in *setup.py*.
 
 ## Gemfury Setup
 
+Update the `version` in `setup.py` before pushing to Gemfury.
+
 Add the Gemfury repo with:
 ```bash
 git remote add fury https://<your-username>@git.fury.io/pambrose/arc852-robotics.git
